@@ -431,13 +431,18 @@ self.onmessage = async (e) => {
             const lastSelectionRef = useRef(null); // { char: string, dir: 'up'|'right'|'left' }
 
             const letters = useMemo(() => {
-                let baseProbs;
+                const trieProbs = getBaseProbabilities(text);
+                const slmProbs = slmPredictions[text] || [];
 
-                if (slmReady && slmPredictions[text] && slmPredictions[text].length > 0) {
-                    baseProbs = Array.from(new Set([...slmPredictions[text], ...defaultFreq]));
-                } else {
-                    baseProbs = getBaseProbabilities(text);
-                }
+                // Prioritize Trie results (especially for the first few slots)
+                // We combine them such that Trie takes the lead, but SLM provides variety in the fallback
+                const combined = Array.from(new Set([
+                    ...trieProbs.slice(0, 6), // Top 6 from Trie/Bigram
+                    ...slmProbs,              // Then SLM context
+                    ...trieProbs              // Then the rest
+                ]));
+
+                let baseProbs = combined;
 
                 // If we have a past selection and it's in the top 3 (layer 0)
                 if (lastSelectionRef.current && layer === 0) {
