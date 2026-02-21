@@ -341,90 +341,6 @@
             const [showLegend, setShowLegend] = useState(true);
             const [cycleKey, setCycleKey] = useState(0); // to trigger animation on cycle
 
-            // SLM State
-            const [slmReady, setSlmReady] = useState(false);
-            const [slmLoading, setSlmLoading] = useState(false);
-            const [slmPredictions, setSlmPredictions] = useState({});
-            const workerRef = useRef(null);
-
-            useEffect(() => {
-                const workerScript = `
-import { AutoTokenizer, AutoModelForCausalLM, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
-env.allowLocalModels = false;
-let tokenizer, model;
-
-self.onmessage = async (e) => {
-    if (e.data.type === 'init') {
-        try {
-            self.postMessage({ status: 'loading' });
-            tokenizer = await AutoTokenizer.from_pretrained('Xenova/distilgpt2');
-            model = await AutoModelForCausalLM.from_pretrained('Xenova/distilgpt2', { quantized: true });
-            self.postMessage({ status: 'ready' });
-        } catch(err) {
-            console.error('SLM error:', err);
-        }
-    } else if (e.data.type === 'predict') {
-        if (!tokenizer || !model || !e.data.text) return;
-        try {
-            const inputs = await tokenizer(e.data.text);
-            const { logits } = await model(inputs);
-            const seqLength = logits.dims[1];
-            const vocabSize = logits.dims[2];
-            const data = logits.data;
-            const startIndex = (seqLength - 1) * vocabSize;
-            
-            let scores = new Float32Array(vocabSize);
-            for (let i = 0; i < vocabSize; i++) {
-                scores[i] = data[startIndex + i];
-            }
-            
-            let indices = Array.from({length: vocabSize}, (_, i) => i);
-            indices.sort((a, b) => scores[b] - scores[a]);
-            
-            const predictedWords = [];
-            for (let i = 0; i < 150; i++) {
-                const token = tokenizer.decode([indices[i]]);
-                const cleaned = token.replace(/[^a-zA-Z]/g, '').toLowerCase();
-                if (cleaned.length > 0 && !predictedWords.includes(cleaned)) {
-                    predictedWords.push(cleaned);
-                }
-                if (predictedWords.length >= 25) break;
-            }
-            
-            self.postMessage({ 
-                status: 'prediction', 
-                context: e.data.text,
-                words: predictedWords 
-            });
-        } catch(err) {
-             console.error('SLM prediction error:', err);
-        }
-    }
-};
-`;
-                const blob = new Blob([workerScript], { type: 'application/javascript' });
-                workerRef.current = new Worker(URL.createObjectURL(blob), { type: 'module' });
-                workerRef.current.onmessage = (e) => {
-                    if (e.data.status === 'loading') {
-                        setSlmLoading(true);
-                    } else if (e.data.status === 'ready') {
-                        setSlmLoading(false);
-                        setSlmReady(true);
-                    } else if (e.data.status === 'prediction') {
-                        setSlmPredictions(prev => ({ ...prev, [e.data.context]: e.data.words }));
-                    }
-                };
-                workerRef.current.postMessage({ type: 'init' });
-                return () => workerRef.current.terminate();
-            }, []);
-
-            useEffect(() => {
-                // Ask the SLM for next-word predictions when completely empty or after a space
-                if (slmReady && (text === '' || text.endsWith(' '))) {
-                    workerRef.current.postMessage({ type: 'predict', text });
-                }
-            }, [text, slmReady]);
-
             const downTimerRef = useRef(null);
             const downHandledRef = useRef(false);
             const isDownPressedRef = useRef(false);
@@ -432,31 +348,7 @@ self.onmessage = async (e) => {
             const lastSelectionRef = useRef(null); // { char: string, dir: 'up'|'right'|'left' }
 
             const letters = useMemo(() => {
-                const trieProbs = getBaseProbabilities(text);
-
-                // Extract context strictly before the current word fragment
-                const wordsMatch = text.match(/(.*?\s|^)([^\s]*)$/);
-                const contextString = wordsMatch ? wordsMatch[1] : '';
-                const currentFragment = wordsMatch ? wordsMatch[2].toLowerCase() : '';
-
-                const slmPredictedWords = slmPredictions[contextString] || [];
-
-                // Identify SLM words that match our current partial word and extract the next letter
-                let slmBoostedLetters = [];
-                for (const word of slmPredictedWords) {
-                    if (word.startsWith(currentFragment) && word.length > currentFragment.length) {
-                        const nextChar = word[currentFragment.length];
-                        slmBoostedLetters.push(nextChar);
-                    }
-                }
-
-                // Combine: Contextual SLM boosts first, then backfill with safe Trie/Bigram probabilities
-                const combined = Array.from(new Set([
-                    ...slmBoostedLetters,
-                    ...trieProbs
-                ]));
-
-                let baseProbs = combined;
+                const baseProbs = getBaseProbabilities(text);
 
                 // If we have a past selection and it's in the top 3 (layer 0)
                 if (lastSelectionRef.current && layer === 0) {
@@ -478,7 +370,7 @@ self.onmessage = async (e) => {
                     }
                 }
                 return baseProbs;
-            }, [text, layer, slmReady, slmPredictions]); // Added slm dependencies
+            }, [text, layer]); // Reverted slm dependencies
 
             const handleSelect = (dir, char) => {
                 if (!char) return;
