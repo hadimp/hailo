@@ -357,8 +357,8 @@ self.onmessage = async (e) => {
     if (e.data.type === 'init') {
         try {
             self.postMessage({ status: 'loading' });
-            tokenizer = await AutoTokenizer.from_pretrained('Xenova/gpt2');
-            model = await AutoModelForCausalLM.from_pretrained('Xenova/gpt2', { quantized: true });
+            tokenizer = await AutoTokenizer.from_pretrained('Xenova/distilgpt2');
+            model = await AutoModelForCausalLM.from_pretrained('Xenova/distilgpt2', { quantized: true });
             self.postMessage({ status: 'ready' });
         } catch(err) {
             console.error('SLM error:', err);
