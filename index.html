@@ -353,7 +353,7 @@
                 // If we have a past selection and it's in the top 3 (layer 0)
                 if (lastSelectionRef.current && layer === 0) {
                     const { char, dir } = lastSelectionRef.current;
-                    const charIndex = baseProbs.indexOf(char);
+                    const charIndex = baseProbs.indexOf(char.toLowerCase()); // Ensure lowercase match
 
                     if (charIndex !== -1 && charIndex < 3) {
                         let targetIndex;
