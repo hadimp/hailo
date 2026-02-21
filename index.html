@@ -419,7 +419,8 @@ self.onmessage = async (e) => {
             }, []);
 
             useEffect(() => {
-                if (slmReady && text.length > 0) {
+                // Only ask the SLM for predictions when starting a new word (text ends in a space)
+                if (slmReady && text.length > 0 && text.endsWith(' ')) {
                     workerRef.current.postMessage({ type: 'predict', text });
                 }
             }, [text, slmReady]);
@@ -434,13 +435,18 @@ self.onmessage = async (e) => {
                 const trieProbs = getBaseProbabilities(text);
                 const slmProbs = slmPredictions[text] || [];
 
-                // Prioritize Trie results (especially for the first few slots)
-                // We combine them such that Trie takes the lead, but SLM provides variety in the fallback
-                const combined = Array.from(new Set([
-                    ...trieProbs.slice(0, 6), // Top 6 from Trie/Bigram
-                    ...slmProbs,              // Then SLM context
-                    ...trieProbs              // Then the rest
-                ]));
+                let combined;
+
+                if (text === '' || text.endsWith(' ')) {
+                    // Start of a word: Let the SLM deeply guide the very first letter based on full context
+                    combined = Array.from(new Set([
+                        ...slmProbs,
+                        ...trieProbs
+                    ]));
+                } else {
+                    // Mid-word: Hand over completely to the high-precision Trie and Bigram dictionary
+                    combined = Array.from(new Set(trieProbs));
+                }
 
                 let baseProbs = combined;
 
