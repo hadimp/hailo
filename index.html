@@ -327,10 +327,16 @@
                 setCycleKey(prev => prev + 1);
             };
 
+            const stateRef = useRef({ layer, letters, text });
+            useEffect(() => {
+                stateRef.current = { layer, letters, text };
+            }, [layer, letters, text]);
+
             useEffect(() => {
                 const handleKeyDown = (e) => {
-                    const offset = layer * 3;
-                    const getChar = (idx) => letters[idx % letters.length];
+                    const { layer: currentLayer, letters: currentLetters } = stateRef.current;
+                    const offset = currentLayer * 3;
+                    const getChar = (idx) => currentLetters[idx % currentLetters.length];
 
                     if (e.key === 'ArrowUp') {
                         e.preventDefault();
@@ -354,23 +360,20 @@
                             // Setup repeating backspace if holding down
                             downTimerRef.current = setInterval(() => {
                                 handleBackspace();
-                            }, 120);
-                        }, 400);
+                            }, 100);
+                        }, 350);
                     } else if (e.key === 'Enter') {
                         e.preventDefault();
                         const now = Date.now();
                         if (now - lastEnterRef.current < 300) {
-                            // Double tap Enter
                             setSuccess(true);
                             setTimeout(() => setSuccess(false), 1000);
                         } else {
-                            // Single press Enter
                             setText(prev => prev + " ");
                             setLayer(0);
                         }
                         lastEnterRef.current = now;
                     } else if (e.key === 'Backspace') {
-                        // Allow normal backspace for testing
                         handleBackspace();
                     }
                 };
@@ -383,10 +386,10 @@
                         clearTimeout(downTimerRef.current);
 
                         if (!downHandledRef.current) {
-                            // Short press -> Cycle letters
-                            const maxLayers = Math.ceil((letters.length || 26) / 3);
+                            const { letters: currentLetters } = stateRef.current;
+                            const maxLayers = Math.ceil((currentLetters.length || 26) / 3);
                             setLayer(prev => (prev + 1) % maxLayers);
-                            setCycleKey(prev => prev + 1); // trigger blink
+                            setCycleKey(prev => prev + 1);
                         }
                     }
                 };
@@ -399,7 +402,7 @@
                     clearInterval(downTimerRef.current);
                     clearTimeout(downTimerRef.current);
                 };
-            }, [layer, letters, text]);
+            }, []); // Empty dependency array so listeners persist across renders
 
             const offset = layer * 3;
             const getChar = (idx) => letters[idx % letters.length].toUpperCase();
