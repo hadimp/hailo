@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +14,7 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
-        
+
         body {
             font-family: 'Outfit', sans-serif;
             background-color: #0b1120;
@@ -31,11 +32,19 @@
 
         /* Animations */
         @keyframes pulse-ring {
-            0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(56, 189, 248, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(56, 189, 248, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+            }
         }
-        
+
         .focus-ring {
             width: 80px;
             height: 80px;
@@ -66,7 +75,7 @@
             box-shadow: 0 0 40px rgba(74, 222, 128, 0.6);
             transform: scale(1.1);
         }
-        
+
         .focus-ring.success::after {
             border-color: rgba(74, 222, 128, 0.4);
             animation: none;
@@ -92,7 +101,7 @@
             font-size: 1.5rem;
             font-weight: 600;
             text-transform: uppercase;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             position: absolute;
             top: -25px;
@@ -100,44 +109,113 @@
             color: #e2e8f0;
         }
 
-        .slot-up { transform: translate(0, -100px); }
-        .slot-right { transform: translate(100px, 0); }
-        .slot-left { transform: translate(-100px, 0); }
-        
+        .slot-up {
+            transform: translate(0, -100px);
+        }
+
+        .slot-right {
+            transform: translate(100px, 0);
+        }
+
+        .slot-left {
+            transform: translate(-100px, 0);
+        }
+
         .ghost {
             opacity: 0.2;
             filter: blur(1px);
             background: transparent;
-            border-color: rgba(255,255,255,0.1);
+            border-color: rgba(255, 255, 255, 0.1);
             color: #94a3b8;
             box-shadow: none;
         }
-        
-        .ghost-up { transform: translate(0, -165px) scale(0.65); }
-        .ghost-right { transform: translate(165px, 0) scale(0.65); }
-        .ghost-left { transform: translate(-165px, 0) scale(0.65); }
+
+        .ghost-up {
+            transform: translate(0, -165px) scale(0.65);
+        }
+
+        .ghost-right {
+            transform: translate(165px, 0) scale(0.65);
+        }
+
+        .ghost-left {
+            transform: translate(-165px, 0) scale(0.65);
+        }
 
         /* Particle Animations */
         @keyframes pop-up {
-            0% { transform: translate(0, -100px) scale(1); opacity: 1; }
-            40% { transform: translate(0, -50px) scale(1.2); opacity: 0.8; }
-            100% { transform: translate(0, 0) scale(0.8); opacity: 0; filter: blur(2px); }
-        }
-        @keyframes pop-right {
-            0% { transform: translate(100px, 0) scale(1); opacity: 1; }
-            40% { transform: translate(50px, 0) scale(1.2); opacity: 0.8; }
-            100% { transform: translate(0, 0) scale(0.8); opacity: 0; filter: blur(2px); }
-        }
-        @keyframes pop-left {
-            0% { transform: translate(-100px, 0) scale(1); opacity: 1; }
-            40% { transform: translate(-50px, 0) scale(1.2); opacity: 0.8; }
-            100% { transform: translate(0, 0) scale(0.8); opacity: 0; filter: blur(2px); }
+            0% {
+                transform: translate(0, -100px) scale(1);
+                opacity: 1;
+            }
+
+            40% {
+                transform: translate(0, -50px) scale(1.2);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translate(0, 0) scale(0.8);
+                opacity: 0;
+                filter: blur(2px);
+            }
         }
 
-        .particle { pointer-events: none; z-index: 50; border-color: #38bdf8; color: #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.5); }
-        .anim-up { animation: pop-up 0.25s ease-in forwards; }
-        .anim-right { animation: pop-right 0.25s ease-in forwards; }
-        .anim-left { animation: pop-left 0.25s ease-in forwards; }
+        @keyframes pop-right {
+            0% {
+                transform: translate(100px, 0) scale(1);
+                opacity: 1;
+            }
+
+            40% {
+                transform: translate(50px, 0) scale(1.2);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translate(0, 0) scale(0.8);
+                opacity: 0;
+                filter: blur(2px);
+            }
+        }
+
+        @keyframes pop-left {
+            0% {
+                transform: translate(-100px, 0) scale(1);
+                opacity: 1;
+            }
+
+            40% {
+                transform: translate(-50px, 0) scale(1.2);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translate(0, 0) scale(0.8);
+                opacity: 0;
+                filter: blur(2px);
+            }
+        }
+
+        .particle {
+            pointer-events: none;
+            z-index: 50;
+            border-color: #38bdf8;
+            color: #38bdf8;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+        }
+
+        .anim-up {
+            animation: pop-up 0.25s ease-in forwards;
+        }
+
+        .anim-right {
+            animation: pop-right 0.25s ease-in forwards;
+        }
+
+        .anim-left {
+            animation: pop-left 0.25s ease-in forwards;
+        }
 
         .type-cursor {
             display: inline-block;
@@ -152,10 +230,17 @@
         }
 
         @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
         }
-        
+
         .glass-panel {
             background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(12px);
@@ -168,11 +253,19 @@
         }
 
         @keyframes flash {
-            0% { transform: scale(0.95); filter: brightness(1.5); }
-            100% { transform: scale(1); filter: brightness(1); }
+            0% {
+                transform: scale(0.95);
+                filter: brightness(1.5);
+            }
+
+            100% {
+                transform: scale(1);
+                filter: brightness(1);
+            }
         }
     </style>
 </head>
+
 <body>
     <div id="root" class="w-full h-full relative"></div>
     <script type="text/babel">
@@ -204,7 +297,7 @@
             const [particles, setParticles] = useState([]);
             const [showLegend, setShowLegend] = useState(true);
             const [cycleKey, setCycleKey] = useState(0); // to trigger animation on cycle
-            
+
             const downTimerRef = useRef(null);
             const downHandledRef = useRef(false);
             const isDownPressedRef = useRef(false);
@@ -212,17 +305,17 @@
 
             const lastChar = text.slice(-1);
             const letters = useMemo(() => getBaseProbabilities(lastChar), [lastChar]);
-            
+
             const handleSelect = (dir, char) => {
                 if (!char) return;
-                
+
                 // Spawn particle
                 const id = Date.now() + Math.random();
                 setParticles(prev => [...prev, { id, dir, char }]);
                 setTimeout(() => {
                     setParticles(prev => prev.filter(p => p.id !== id));
                 }, 250);
-                
+
                 setText(prev => prev + char);
                 setLayer(0);
                 setShowLegend(false);
@@ -238,7 +331,7 @@
                 const handleKeyDown = (e) => {
                     const offset = layer * 3;
                     const getChar = (idx) => letters[idx % letters.length];
-                    
+
                     if (e.key === 'ArrowUp') {
                         e.preventDefault();
                         handleSelect('up', getChar(offset));
@@ -253,11 +346,11 @@
                         if (isDownPressedRef.current) return;
                         isDownPressedRef.current = true;
                         downHandledRef.current = false;
-                        
+
                         downTimerRef.current = setTimeout(() => {
                             downHandledRef.current = true;
                             handleBackspace();
-                            
+
                             // Setup repeating backspace if holding down
                             downTimerRef.current = setInterval(() => {
                                 handleBackspace();
@@ -288,7 +381,7 @@
                         isDownPressedRef.current = false;
                         clearInterval(downTimerRef.current);
                         clearTimeout(downTimerRef.current);
-                        
+
                         if (!downHandledRef.current) {
                             // Short press -> Cycle letters
                             const maxLayers = Math.ceil((letters.length || 26) / 3);
@@ -318,7 +411,7 @@
                     <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/10 blur-[100px] rounded-full pointer-events-none"></div>
 
                     {/* Header area */}
-                    <div className="absolute top-0 w-full p-8 md:p-12 flex justify-center items-start z-30">
+                    <div className="w-full pt-8 md:pt-12 px-8 flex justify-center items-start z-30 shrink-0">
                         <div className="glass-panel px-8 py-6 min-w-[320px] max-w-4xl text-center shadow-2xl">
                             <h2 className="text-slate-400 text-xs font-bold tracking-[0.2em] uppercase mb-4">Text Entry</h2>
                             <div className="text-4xl sm:text-5xl md:text-6xl font-light text-white tracking-wide break-words min-h-[80px] flex items-center justify-center">
@@ -337,7 +430,7 @@
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
                             )}
-                            
+
                             {/* Central guiding dot when empty */}
                             {!success && <div className="w-2 h-2 rounded-full bg-slate-600 shadow-[0_0_10px_rgba(255,255,255,0.2)]"></div>}
                         </div>
@@ -348,13 +441,13 @@
                             <div className="letter-node slot-up">{getChar(offset)}</div>
                             <div className="letter-node slot-right">{getChar(offset + 1)}</div>
                             <div className="letter-node slot-left">{getChar(offset + 2)}</div>
-                            
+
                             {/* Ghost layer (upcoming letters) */}
                             <div className="letter-node ghost ghost-up">{getChar(offset + 3)}<div className="text-[10px] mt-8 text-blue-300/50">↓</div></div>
                             <div className="letter-node ghost ghost-right">{getChar(offset + 4)}<div className="text-[10px] mt-8 text-blue-300/50">↓</div></div>
                             <div className="letter-node ghost ghost-left">{getChar(offset + 5)}<div className="text-[10px] mt-8 text-blue-300/50">↓</div></div>
                         </div>
-                        
+
                         {/* Particle effects for pops - outside the cycleKey wrapper so they persist during layer swaps */}
                         <div className="charWrapper">
                             {particles.map(p => (
@@ -364,24 +457,24 @@
                             ))}
                         </div>
                     </div>
-                    
+
                     {/* UI Hint Legend */}
                     <div className={`absolute bottom-8 md:bottom-12 transition-all duration-1000 z-30 ${showLegend ? 'opacity-100 translate-y-0' : 'opacity-30 translate-y-4 hover:opacity-100 hover:translate-y-0'}`}>
                         <div className="flex flex-wrap gap-4 md:gap-8 justify-center text-[13px] md:text-sm text-slate-400 glass-panel px-6 py-4 shadow-xl">
                             <div className="flex items-center gap-3">
-                                <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs">↑ ← →</div> 
+                                <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs">↑ ← →</div>
                                 <span>Select Letter</span>
                             </div>
                             <div className="flex items-center gap-3">
-                                <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs">↓</div> 
+                                <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs">↓</div>
                                 <span>Cycle Letters</span>
                             </div>
                             <div className="flex items-center gap-3">
-                                <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs text-rose-300">Hold ↓</div> 
+                                <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs text-rose-300">Hold ↓</div>
                                 <span>Backspace</span>
                             </div>
                             <div className="flex items-center gap-3">
-                                <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs text-green-300">Enter</div> 
+                                <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs text-green-300">Enter</div>
                                 <span>Space / 2x Finish</span>
                             </div>
                         </div>
@@ -394,4 +487,5 @@
         root.render(<App />);
     </script>
 </body>
+
 </html>
