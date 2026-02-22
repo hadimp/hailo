@@ -500,12 +500,17 @@
 
                         downTimerRef.current = setTimeout(() => {
                             downHandledRef.current = true;
-                            handleBackspace();
+                            handleBackspace(); // First single deletion
 
-                            // Setup repeating backspace if holding down
-                            downTimerRef.current = setInterval(() => {
-                                handleBackspace();
-                            }, 100);
+                            // Wait an additional 400ms before starting rapid deletion,
+                            // giving the user a comfortable window to release the key
+                            // if they only wanted to delete one character.
+                            downTimerRef.current = setTimeout(() => {
+                                downTimerRef.current = setInterval(() => {
+                                    handleBackspace();
+                                }, 75);
+                            }, 400);
+
                         }, 350);
                     } else if (e.key === 'Enter') {
                         e.preventDefault();
