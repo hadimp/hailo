@@ -315,16 +315,15 @@
         function getBaseProbabilities(text) {
             if (!text) return defaultFreq;
 
-            const wordsMatch = text.toLowerCase().match(/[a-z]+$/);
-            const lastWordFragment = wordsMatch ? wordsMatch[0] : '';
+            // Use the entire typed phrase as the Trie prefix
+            const currentPhrase = text.toLowerCase();
+            const triePreds = getTriePredictions(currentPhrase);
 
-            if (lastWordFragment.length > 0) {
-                const triePreds = getTriePredictions(lastWordFragment);
-                if (triePreds.length > 0) {
-                    return Array.from(new Set([...triePreds, ...defaultFreq]));
-                }
+            if (triePreds.length > 0) {
+                return Array.from(new Set([...triePreds, ...defaultFreq]));
             }
 
+            // Fallback: If no exact phrase matches, guess based on the final character
             const lastChar = text.slice(-1).toLowerCase();
             if (lastChar && nextLetterFreq[lastChar]) {
                 const preferred = nextLetterFreq[lastChar].split('');
@@ -474,7 +473,10 @@
             }, []); // Empty dependency array so listeners persist across renders
 
             const offset = layer * 3;
-            const getChar = (idx) => letters[idx % letters.length].toUpperCase();
+            const getChar = (idx) => {
+                const c = letters[idx % letters.length];
+                return c === ' ' ? '␣' : c.toUpperCase();
+            };
 
             return (
                 <div className="flex flex-col items-center w-full h-full relative" onClick={() => window.focus()}>
