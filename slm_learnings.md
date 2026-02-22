@@ -42,7 +42,8 @@ CONCLUSION: SLM SAVED 4 Keystrokes (0.67% fewer physical clicks)
 ```
 
 ## Why We Reverted
-1.  **Negligible Efficiency Gain:** A net reduction of `<1%` in keystrokes does not justify the massive technical overhead.
+1.  **Tokenization Mismatch (The Structural Flaw):** Language models are trained to predict *tokens* (whole words or sub-word chunks), not individual keystrokes (characters). Because our UI requires instantaneous probabilities for the *very next strict character/letter* (A-Z) on a 3-slot hexpad, the SLM's token-based output vector (typically 50,000+ dimensions) had to be heavily post-processed to reverse-map word probabilities back to their starting characters. This proved to be fundamentally mismatched for a character-by-character prediction interface.
+2.  **Negligible Efficiency Gain:** A net reduction of `<1%` in keystrokes does not justify the massive technical overhead.
 2.  **Occasional Regressions:** In some scenarios (like "the latest episode"), the SLM confidently guided the predictions down slightly incorrect grammatical paths, causing the user to have to click "Cycle" (ArrowDown) *more* times to correct it than the baseline engine required.
 3.  **Hosting Complexity:** Modern browsers block Web Workers from importing external CDNs when running `file:///` URLs due to security policies. This forced the previously "double-click to test" prototype to require a local HTTP server (`localhost:3000`) to function, breaking the core requirement of a simple, zero-install, single-file HTML prototype artifact.
 4.  **Payload Weight:** 250MB is too heavy for an instant smart-tv text entry modal. The baseline Trie dictionary is `<100KB` and acts completely offline with 0 latency.
