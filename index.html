@@ -287,6 +287,7 @@
             const [success, setSuccess] = useState(false);
             const [particles, setParticles] = useState([]);
             const [showLegend, setShowLegend] = useState(true);
+            const [showGhostPhrases, setShowGhostPhrases] = useState(true);
             const [cycleKey, setCycleKey] = useState(0); // to trigger animation on cycle
 
             const downTimerRef = useRef(null);
@@ -356,21 +357,21 @@
                 setCycleKey(prev => prev + 1);
             };
 
-            const stateRef = useRef({ layer, letters, text, phrasePredictions });
+            const stateRef = useRef({ layer, letters, text, phrasePredictions, showGhostPhrases });
             useEffect(() => {
-                stateRef.current = { layer, letters, text, phrasePredictions };
-            }, [layer, letters, text, phrasePredictions]);
+                stateRef.current = { layer, letters, text, phrasePredictions, showGhostPhrases };
+            }, [layer, letters, text, phrasePredictions, showGhostPhrases]);
 
             useEffect(() => {
                 const handleKeyDown = (e) => {
-                    const { layer: currentLayer, letters: currentLetters, phrasePredictions: currentPhrases } = stateRef.current;
+                    const { layer: currentLayer, letters: currentLetters, phrasePredictions: currentPhrases, showGhostPhrases: currentShowGhost } = stateRef.current;
                     const offset = currentLayer * 3;
                     const getChar = (idx) => currentLetters[idx % currentLetters.length];
 
                     const now = Date.now();
                     const isDirKey = ['ArrowUp', 'ArrowRight', 'ArrowLeft'].includes(e.key);
 
-                    if (currentLayer === 0 && isDirKey) {
+                    if (currentShowGhost && currentLayer === 0 && isDirKey) {
                         if (tapRef.current.key === e.key && now - tapRef.current.time < 300) {
                             e.preventDefault();
                             let idx = 0;
@@ -481,6 +482,16 @@
                         <div className="glass-panel px-8 py-6 min-w-[320px] max-w-4xl text-center shadow-2xl">
                             <div className="flex justify-between items-center mb-4">
                                 <h2 className="text-slate-400 text-xs font-bold tracking-[0.2em] uppercase">Text Entry</h2>
+                                <button
+                                    onClick={() => setShowGhostPhrases(prev => !prev)}
+                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all duration-300 text-[10px] font-bold uppercase tracking-wider ${showGhostPhrases
+                                        ? 'bg-blue-500/10 border-blue-500/30 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)]'
+                                        : 'bg-slate-800/50 border-slate-700/50 text-slate-500'
+                                        }`}
+                                >
+                                    <span className={`w-2 h-2 rounded-full ${showGhostPhrases ? 'bg-blue-400 animate-pulse' : 'bg-slate-600'}`}></span>
+                                    Ghost Mode: {showGhostPhrases ? 'ON' : 'OFF'}
+                                </button>
                             </div>
                             <div className="text-4xl sm:text-5xl md:text-6xl font-light text-white tracking-wide break-words min-h-[80px] flex items-center justify-center">
                                 {text || <span className="opacity-20 italic">Type something...</span>}
@@ -508,7 +519,7 @@
                             {/* UP DIRECTION */}
                             <div className="letter-node slot-up">
                                 {getChar(offset)}
-                                {layer === 0 && phrasePredictions[0] && (
+                                {showGhostPhrases && layer === 0 && phrasePredictions[0] && (
                                     <div className="absolute -top-[160px] left-1/2 -translate-x-1/2 flex flex-col items-center">
                                         <div className="text-blue-400 opacity-70 whitespace-nowrap tracking-wider text-[1.1rem] lowercase font-medium bg-slate-900/40 px-3 py-1 rounded-full border border-blue-500/20 backdrop-blur-sm">
                                             {phrasePredictions[0]}
@@ -518,14 +529,14 @@
                                 )}
                             </div>
                             <div className="letter-node ghost ghost-up">
-                                {layer === 0 && phrasePredictions[0] ? (phrasePredictions[0][text.length + 1] || '␣').toUpperCase() : getChar(offset + 3)}
+                                {showGhostPhrases && layer === 0 && phrasePredictions[0] ? (phrasePredictions[0][text.length + 1] || '␣').toUpperCase() : getChar(offset + 3)}
                                 <div className="text-[10px] mt-8 text-blue-300/50">↓</div>
                             </div>
 
                             {/* RIGHT DIRECTION */}
                             <div className="letter-node slot-right">
                                 {getChar(offset + 1)}
-                                {layer === 0 && phrasePredictions[1] && (
+                                {showGhostPhrases && layer === 0 && phrasePredictions[1] && (
                                     <div className="absolute left-[210px] top-1/2 -translate-y-1/2 flex items-center">
                                         <div className="h-[1px] w-4 bg-blue-500/20 mr-1"></div>
                                         <div className="text-blue-400 opacity-70 whitespace-nowrap tracking-wider text-[1.1rem] lowercase font-medium bg-slate-900/40 px-3 py-1 rounded-full border border-blue-500/20 backdrop-blur-sm">
@@ -535,14 +546,14 @@
                                 )}
                             </div>
                             <div className="letter-node ghost ghost-right">
-                                {layer === 0 && phrasePredictions[1] ? (phrasePredictions[1][text.length + 1] || '␣').toUpperCase() : getChar(offset + 4)}
+                                {showGhostPhrases && layer === 0 && phrasePredictions[1] ? (phrasePredictions[1][text.length + 1] || '␣').toUpperCase() : getChar(offset + 4)}
                                 <div className="text-[10px] mt-8 text-blue-300/50">↓</div>
                             </div>
 
                             {/* LEFT DIRECTION */}
                             <div className="letter-node slot-left">
                                 {getChar(offset + 2)}
-                                {layer === 0 && phrasePredictions[2] && (
+                                {showGhostPhrases && layer === 0 && phrasePredictions[2] && (
                                     <div className="absolute right-[210px] top-1/2 -translate-y-1/2 flex items-center justify-end">
                                         <div className="text-blue-400 opacity-70 whitespace-nowrap tracking-wider text-[1.1rem] lowercase font-medium bg-slate-900/40 px-3 py-1 rounded-full border border-blue-500/20 backdrop-blur-sm">
                                             {phrasePredictions[2]}
@@ -552,7 +563,7 @@
                                 )}
                             </div>
                             <div className="letter-node ghost ghost-left">
-                                {layer === 0 && phrasePredictions[2] ? (phrasePredictions[2][text.length + 1] || '␣').toUpperCase() : getChar(offset + 5)}
+                                {showGhostPhrases && layer === 0 && phrasePredictions[2] ? (phrasePredictions[2][text.length + 1] || '␣').toUpperCase() : getChar(offset + 5)}
                                 <div className="text-[10px] mt-8 text-blue-300/50">↓</div>
                             </div>
                         </div>
