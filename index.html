@@ -505,24 +505,56 @@
 
                         {/* Slots container (re-renders to trigger cycle animation) */}
                         <div key={cycleKey} className="charWrapper cycle-flash">
-                            {/* Main selection slots */}
+                            {/* UP DIRECTION */}
                             <div className="letter-node slot-up">
                                 {getChar(offset)}
-                                {layer === 0 && phrasePredictions[0] && <div className="absolute -top-[30px] left-1/2 -translate-x-1/2 text-slate-400 opacity-50 whitespace-nowrap tracking-widest pointer-events-none text-[1rem] lowercase flex flex-col items-center"><span className="text-blue-300 text-xs mb-1">↑ double-tap</span>{getChar(offset)}{phrasePredictions[0]}</div>}
+                                {layer === 0 && phrasePredictions[0] && (
+                                    <div className="absolute -top-[140px] left-1/2 -translate-x-1/2 flex flex-col items-center">
+                                        <div className="text-slate-400 opacity-50 whitespace-nowrap tracking-widest text-[1rem] lowercase">
+                                            {phrasePredictions[0].substring(1)}
+                                        </div>
+                                        <div className="text-blue-300 text-xs mb-1 opacity-50 absolute -top-5">↑ double-tap</div>
+                                    </div>
+                                )}
                             </div>
-                            <div className="letter-node slot-right">
-                                {getChar(offset + 1)}
-                                {layer === 0 && phrasePredictions[1] && <div className="absolute left-[65px] top-1/2 -translate-y-1/2 text-slate-400 opacity-50 whitespace-nowrap tracking-widest pointer-events-none text-[1rem] lowercase flex flex-col items-start"><span className="text-blue-300 text-[10px] mb-[-4px]">→ double-tap</span><div><span className="opacity-0">{getChar(offset + 1)}</span>{phrasePredictions[1]}</div></div>}
-                            </div>
-                            <div className="letter-node slot-left">
-                                {getChar(offset + 2)}
-                                {layer === 0 && phrasePredictions[2] && <div className="absolute right-[65px] top-1/2 -translate-y-1/2 text-slate-400 opacity-50 whitespace-nowrap tracking-widest pointer-events-none text-[1rem] lowercase flex flex-col items-end"><span className="text-blue-300 text-[10px] mb-[-4px]">← double-tap</span><div>{phrasePredictions[2]}<span className="opacity-0">{getChar(offset + 2)}</span></div></div>}
+                            <div className="letter-node ghost ghost-up">
+                                {layer === 0 && phrasePredictions[0] ? phrasePredictions[0][0] : getChar(offset + 3)}
+                                <div className="text-[10px] mt-8 text-blue-300/50">↓</div>
                             </div>
 
-                            {/* Ghost layer (upcoming letters) */}
-                            <div className="letter-node ghost ghost-up">{getChar(offset + 3)}<div className="text-[10px] mt-8 text-blue-300/50">↓</div></div>
-                            <div className="letter-node ghost ghost-right">{getChar(offset + 4)}<div className="text-[10px] mt-8 text-blue-300/50">↓</div></div>
-                            <div className="letter-node ghost ghost-left">{getChar(offset + 5)}<div className="text-[10px] mt-8 text-blue-300/50">↓</div></div>
+                            {/* RIGHT DIRECTION */}
+                            <div className="letter-node slot-right">
+                                {getChar(offset + 1)}
+                                {layer === 0 && phrasePredictions[1] && (
+                                    <div className="absolute left-[140px] top-1/2 -translate-y-1/2 flex items-center">
+                                        <div className="text-slate-400 opacity-50 whitespace-nowrap tracking-widest text-[1rem] lowercase">
+                                            {phrasePredictions[1].substring(1)}
+                                        </div>
+                                        <div className="text-blue-300 text-[10px] ml-2 opacity-50 absolute -top-4 left-0 whitespace-nowrap">→ double-tap</div>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="letter-node ghost ghost-right">
+                                {layer === 0 && phrasePredictions[1] ? phrasePredictions[1][0] : getChar(offset + 4)}
+                                <div className="text-[10px] mt-8 text-blue-300/50">↓</div>
+                            </div>
+
+                            {/* LEFT DIRECTION */}
+                            <div className="letter-node slot-left">
+                                {getChar(offset + 2)}
+                                {layer === 0 && phrasePredictions[2] && (
+                                    <div className="absolute right-[140px] top-1/2 -translate-y-1/2 flex items-center justify-end">
+                                        <div className="text-slate-400 opacity-50 whitespace-nowrap tracking-widest text-[1rem] lowercase">
+                                            {phrasePredictions[2].substring(1)}
+                                        </div>
+                                        <div className="text-blue-300 text-[10px] mr-2 opacity-50 absolute -top-4 right-0 whitespace-nowrap">← double-tap</div>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="letter-node ghost ghost-left">
+                                {layer === 0 && phrasePredictions[2] ? phrasePredictions[2][0] : getChar(offset + 5)}
+                                <div className="text-[10px] mt-8 text-blue-300/50">↓</div>
+                            </div>
                         </div>
 
                         {/* Particle effects for pops - outside the cycleKey wrapper so they persist during layer swaps */}
