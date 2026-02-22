@@ -379,7 +379,7 @@
 
                             const phraseToAccept = tapRef.current.phrases[idx];
                             if (phraseToAccept) {
-                                setText(prev => prev + phraseToAccept + " ");
+                                setText(phraseToAccept + " ");
                                 setLayer(0);
                                 lastSelectionRef.current = null;
                                 setSuccess(true);
