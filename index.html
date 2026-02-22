@@ -350,6 +350,30 @@
                 .map(entry => entry[0]);
         }
 
+        const fallbackWords = "404: Not Found".split(",");
+
+        const fallbackTrieRoot = new TrieNode();
+        fallbackWords.forEach(word => {
+            let node = fallbackTrieRoot;
+            for (const char of word) {
+                if (!node.children[char]) node.children[char] = new TrieNode();
+                node = node.children[char];
+                node.subWords++;
+            }
+            node.isWord = true;
+        });
+
+        function getFallbackTriePredictions(prefix) {
+            let node = fallbackTrieRoot;
+            for (const char of prefix) {
+                if (!node.children[char]) return [];
+                node = node.children[char];
+            }
+            return Object.entries(node.children)
+                .sort((a, b) => b[1].subWords - a[1].subWords)
+                .map(entry => entry[0]);
+        }
+
         const defaultFreq = "etaoinsrhdlucmfywgpbvkxqjz".split('');
         const nextLetterFreq = {
             'a': 'ntrsldcpmvbgkyfwzxjq', 'b': 'eouyilar', 'c': 'oetahrkil', 'd': 'eoriays',
@@ -362,21 +386,28 @@
         function getBaseProbabilities(text) {
             if (!text) return defaultFreq;
 
-            // Use the entire typed phrase as the Trie prefix
+            // 1. Primary Engine: Streaming Phrase Trie
             const currentPhrase = text.toLowerCase();
-            const triePreds = getTriePredictions(currentPhrase);
+            const phrasePreds = getTriePredictions(currentPhrase);
 
-            if (triePreds.length > 0) {
-                return Array.from(new Set([...triePreds, ...defaultFreq]));
+            // 2. Secondary Engine: English Word Trie
+            // Get the last alphabetical fragment of the typed string
+            const wordsMatch = currentPhrase.match(/[a-z]+$/);
+            const lastWordFragment = wordsMatch ? wordsMatch[0] : '';
+            const fallbackPreds = lastWordFragment.length > 0 ? getFallbackTriePredictions(lastWordFragment) : [];
+
+            // Combine them, heavily prioritizing the exact phrase match, then the word fallback
+            let combined = [...phrasePreds, ...fallbackPreds];
+
+            // 3. Last Resort Engine: Letter Frequency Maps
+            if (combined.length < 3) {
+                const lastChar = currentPhrase.slice(-1);
+                if (lastChar && nextLetterFreq[lastChar]) {
+                    combined = [...combined, ...nextLetterFreq[lastChar].split('')];
+                }
             }
 
-            // Fallback: If no exact phrase matches, guess based on the final character
-            const lastChar = text.slice(-1).toLowerCase();
-            if (lastChar && nextLetterFreq[lastChar]) {
-                const preferred = nextLetterFreq[lastChar].split('');
-                return Array.from(new Set([...preferred, ...defaultFreq]));
-            }
-            return defaultFreq;
+            return Array.from(new Set([...combined, ...defaultFreq]));
         }
 
         const App = () => {
