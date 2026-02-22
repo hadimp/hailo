@@ -294,6 +294,7 @@
             const isDownPressedRef = useRef(false);
             const lastEnterRef = useRef(0);
             const lastSelectionRef = useRef(null); // { char: string, dir: 'up'|'right'|'left' }
+            const tapRef = useRef({ key: null, time: 0, phrases: [] });
 
             const letters = useMemo(() => {
                 const baseProbs = getBaseProbabilities(text);
@@ -318,7 +319,19 @@
                     }
                 }
                 return baseProbs;
-            }, [text, layer]); // Reverted slm dependencies
+            }, [text, layer]);
+
+            const phrasePredictions = useMemo(() => {
+                if (layer !== 0) return ["", "", ""];
+
+                const getPhraseForChar = (char) => {
+                    if (!char) return "";
+                    const preds = getTopPhrasePredictions(text + char);
+                    return preds.length > 0 ? preds[0] : "";
+                };
+
+                return [getPhraseForChar(letters[0]), getPhraseForChar(letters[1]), getPhraseForChar(letters[2])];
+            }, [text, layer, letters]);
 
             const handleSelect = (dir, char) => {
                 if (!char) return;
@@ -343,16 +356,41 @@
                 setCycleKey(prev => prev + 1);
             };
 
-            const stateRef = useRef({ layer, letters, text });
+            const stateRef = useRef({ layer, letters, text, phrasePredictions });
             useEffect(() => {
-                stateRef.current = { layer, letters, text };
-            }, [layer, letters, text]);
+                stateRef.current = { layer, letters, text, phrasePredictions };
+            }, [layer, letters, text, phrasePredictions]);
 
             useEffect(() => {
                 const handleKeyDown = (e) => {
-                    const { layer: currentLayer, letters: currentLetters } = stateRef.current;
+                    const { layer: currentLayer, letters: currentLetters, phrasePredictions: currentPhrases } = stateRef.current;
                     const offset = currentLayer * 3;
                     const getChar = (idx) => currentLetters[idx % currentLetters.length];
+
+                    const now = Date.now();
+                    const isDirKey = ['ArrowUp', 'ArrowRight', 'ArrowLeft'].includes(e.key);
+
+                    if (currentLayer === 0 && isDirKey) {
+                        if (tapRef.current.key === e.key && now - tapRef.current.time < 300) {
+                            e.preventDefault();
+                            let idx = 0;
+                            if (e.key === 'ArrowRight') idx = 1;
+                            if (e.key === 'ArrowLeft') idx = 2;
+
+                            const phraseToAccept = tapRef.current.phrases[idx];
+                            if (phraseToAccept) {
+                                setText(prev => prev + phraseToAccept + " ");
+                                setLayer(0);
+                                lastSelectionRef.current = null;
+                                setSuccess(true);
+                                setTimeout(() => setSuccess(false), 500);
+
+                                tapRef.current = { key: null, time: 0, phrases: [] };
+                                return; // Skip normal single tap processing
+                            }
+                        }
+                        tapRef.current = { key: e.key, time: now, phrases: currentPhrases };
+                    }
 
                     if (e.key === 'ArrowUp') {
                         e.preventDefault();
@@ -468,9 +506,18 @@
                         {/* Slots container (re-renders to trigger cycle animation) */}
                         <div key={cycleKey} className="charWrapper cycle-flash">
                             {/* Main selection slots */}
-                            <div className="letter-node slot-up">{getChar(offset)}</div>
-                            <div className="letter-node slot-right">{getChar(offset + 1)}</div>
-                            <div className="letter-node slot-left">{getChar(offset + 2)}</div>
+                            <div className="letter-node slot-up">
+                                {getChar(offset)}
+                                {layer === 0 && phrasePredictions[0] && <div className="absolute -top-[30px] left-1/2 -translate-x-1/2 text-slate-400 opacity-50 whitespace-nowrap tracking-widest pointer-events-none text-[1rem] lowercase flex flex-col items-center"><span className="text-blue-300 text-xs mb-1">↑ double-tap</span>{getChar(offset)}{phrasePredictions[0]}</div>}
+                            </div>
+                            <div className="letter-node slot-right">
+                                {getChar(offset + 1)}
+                                {layer === 0 && phrasePredictions[1] && <div className="absolute left-[65px] top-1/2 -translate-y-1/2 text-slate-400 opacity-50 whitespace-nowrap tracking-widest pointer-events-none text-[1rem] lowercase flex flex-col items-start"><span className="text-blue-300 text-[10px] mb-[-4px]">→ double-tap</span><div><span className="opacity-0">{getChar(offset + 1)}</span>{phrasePredictions[1]}</div></div>}
+                            </div>
+                            <div className="letter-node slot-left">
+                                {getChar(offset + 2)}
+                                {layer === 0 && phrasePredictions[2] && <div className="absolute right-[65px] top-1/2 -translate-y-1/2 text-slate-400 opacity-50 whitespace-nowrap tracking-widest pointer-events-none text-[1rem] lowercase flex flex-col items-end"><span className="text-blue-300 text-[10px] mb-[-4px]">← double-tap</span><div>{phrasePredictions[2]}<span className="opacity-0">{getChar(offset + 2)}</span></div></div>}
+                            </div>
 
                             {/* Ghost layer (upcoming letters) */}
                             <div className="letter-node ghost ghost-up">{getChar(offset + 3)}<div className="text-[10px] mt-8 text-blue-300/50">↓</div></div>

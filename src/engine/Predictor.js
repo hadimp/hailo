@@ -28,3 +28,24 @@ function getBaseProbabilities(text) {
 
     return Array.from(new Set([...combined, ...defaultFreq]));
 }
+
+function getTopPhrasePredictions(text) {
+    if (!text) return [];
+
+    const currentPhrase = text.toLowerCase();
+
+    // 1. Primary Engine: Streaming Phrase Trie
+    let phrasePreds = getFullPhrasePredictions(phraseTrieRoot, currentPhrase, 3);
+
+    // 2. Secondary Engine: English Word Trie
+    if (phrasePreds.length < 3) {
+        const wordsMatch = currentPhrase.match(/[a-z]+$/);
+        const lastWordFragment = wordsMatch ? wordsMatch[0] : '';
+        if (lastWordFragment) {
+            const fallbackPreds = getFullPhrasePredictions(fallbackTrieRoot, lastWordFragment, 3 - phrasePreds.length);
+            phrasePreds = [...phrasePreds, ...fallbackPreds];
+        }
+    }
+
+    return Array.from(new Set(phrasePreds)).slice(0, 3);
+}
