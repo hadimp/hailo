@@ -44,7 +44,7 @@ function getFullPhrasePredictions(root, prefix, limit = 3) {
     function dfs(currentNode, currentString) {
         // Only collect branches that legally terminate as a full word/phrase in our dataset
         if (currentNode.isWord) {
-            results.push({ phrase: currentString, weight: currentNode.subWords });
+            results.push({ phrase: prefix + currentString, weight: currentNode.subWords });
         }
 
         // Prioritize heavier branches to traverse the most likely paths first

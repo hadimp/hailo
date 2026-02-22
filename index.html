@@ -490,7 +490,7 @@
                     </div>
 
                     {/* Main Slingshot Arena */}
-                    <div className="flex-1 w-full flex justify-center items-center relative scale-[1.15] md:scale-125 z-20">
+                    <div className="flex-1 w-full flex justify-center items-center relative scale-[1.1] md:scale-120 z-20 mt-20">
                         {/* Reference Ring */}
                         <div className={`focus-ring ${success ? 'success' : ''}`}>
                             {success && (
@@ -509,15 +509,16 @@
                             <div className="letter-node slot-up">
                                 {getChar(offset)}
                                 {layer === 0 && phrasePredictions[0] && (
-                                    <div className="absolute -top-[125px] left-1/2 -translate-x-1/2 flex flex-col items-center">
-                                        <div className="text-slate-400 opacity-50 whitespace-nowrap tracking-widest text-[1rem] lowercase">
+                                    <div className="absolute -top-[160px] left-1/2 -translate-x-1/2 flex flex-col items-center">
+                                        <div className="text-blue-400 opacity-70 whitespace-nowrap tracking-wider text-[1.1rem] lowercase font-medium bg-slate-900/40 px-3 py-1 rounded-full border border-blue-500/20 backdrop-blur-sm">
                                             {phrasePredictions[0]}
                                         </div>
+                                        <div className="w-[1px] h-4 bg-blue-500/20 mt-1"></div>
                                     </div>
                                 )}
                             </div>
                             <div className="letter-node ghost ghost-up">
-                                {layer === 0 && phrasePredictions[0] ? phrasePredictions[0][0] : getChar(offset + 3)}
+                                {layer === 0 && phrasePredictions[0] ? (phrasePredictions[0][text.length + 1] || '␣').toUpperCase() : getChar(offset + 3)}
                                 <div className="text-[10px] mt-8 text-blue-300/50">↓</div>
                             </div>
 
@@ -525,15 +526,16 @@
                             <div className="letter-node slot-right">
                                 {getChar(offset + 1)}
                                 {layer === 0 && phrasePredictions[1] && (
-                                    <div className="absolute left-[80px] top-1/2 -translate-y-1/2 flex items-center">
-                                        <div className="text-slate-400 opacity-50 whitespace-nowrap tracking-widest text-[1rem] lowercase">
+                                    <div className="absolute left-[210px] top-1/2 -translate-y-1/2 flex items-center">
+                                        <div className="h-[1px] w-4 bg-blue-500/20 mr-1"></div>
+                                        <div className="text-blue-400 opacity-70 whitespace-nowrap tracking-wider text-[1.1rem] lowercase font-medium bg-slate-900/40 px-3 py-1 rounded-full border border-blue-500/20 backdrop-blur-sm">
                                             {phrasePredictions[1]}
                                         </div>
                                     </div>
                                 )}
                             </div>
                             <div className="letter-node ghost ghost-right">
-                                {layer === 0 && phrasePredictions[1] ? phrasePredictions[1][0] : getChar(offset + 4)}
+                                {layer === 0 && phrasePredictions[1] ? (phrasePredictions[1][text.length + 1] || '␣').toUpperCase() : getChar(offset + 4)}
                                 <div className="text-[10px] mt-8 text-blue-300/50">↓</div>
                             </div>
 
@@ -541,15 +543,16 @@
                             <div className="letter-node slot-left">
                                 {getChar(offset + 2)}
                                 {layer === 0 && phrasePredictions[2] && (
-                                    <div className="absolute right-[80px] top-1/2 -translate-y-1/2 flex items-center justify-end">
-                                        <div className="text-slate-400 opacity-50 whitespace-nowrap tracking-widest text-[1rem] lowercase">
+                                    <div className="absolute right-[210px] top-1/2 -translate-y-1/2 flex items-center justify-end">
+                                        <div className="text-blue-400 opacity-70 whitespace-nowrap tracking-wider text-[1.1rem] lowercase font-medium bg-slate-900/40 px-3 py-1 rounded-full border border-blue-500/20 backdrop-blur-sm">
                                             {phrasePredictions[2]}
                                         </div>
+                                        <div className="h-[1px] w-4 bg-blue-500/20 ml-1"></div>
                                     </div>
                                 )}
                             </div>
                             <div className="letter-node ghost ghost-left">
-                                {layer === 0 && phrasePredictions[2] ? phrasePredictions[2][0] : getChar(offset + 5)}
+                                {layer === 0 && phrasePredictions[2] ? (phrasePredictions[2][text.length + 1] || '␣').toUpperCase() : getChar(offset + 5)}
                                 <div className="text-[10px] mt-8 text-blue-300/50">↓</div>
                             </div>
                         </div>
