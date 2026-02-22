@@ -268,147 +268,18 @@
 
 <body>
     <div id="root" class="w-full h-full relative"></div>
+    <!-- Native Data Modules -->
+    <script src="src/data/movies.js"></script>
+    <script src="src/data/words.js"></script>
+    <script src="src/data/frequencies.js"></script>
+
+    <!-- Native Engine Modules -->
+    <script src="src/engine/Trie.js"></script>
+    <script src="src/engine/Predictor.js"></script>
+
+    <!-- React UI Application -->
     <script type="text/babel">
         const { useState, useEffect, useRef, useMemo } = React;
-
-        const dictionaryWords = [
-            "stranger things", "the office", "breaking bad", "game of thrones", "the mandalorian",
-            "the crown", "the witcher", "the boys", "succession", "the sopranos",
-            "the wire", "friends", "seinfeld", "the simpsons", "south park",
-            "rick and morty", "the walking dead", "peaky blinders", "black mirror", "dark",
-            "money heist", "squid game", "ozark", "better call saul", "narcos",
-            "mindhunter", "true detective", "fargo", "chernobyl", "band of brothers",
-            "the queens gambit", "the last of us", "house of the dragon", "the white lotus", "ted lasso",
-            "severance", "yellowstone", "the bear", "only murders in the building", "the morning show",
-            "euphoria", "the handmaids tale", "the marvelous mrs maisel", "the grand tour", "the grand budapest hotel",
-            "the dark knight", "inception", "interstellar", "the matrix", "the lord of the rings",
-            "the fellowship of the ring", "the two towers", "the return of the king", "star wars",
-            "a new hope", "the empire strikes back", "return of the jedi", "the phantom menace",
-            "attack of the clones", "revenge of the sith", "the force awakens", "the last jedi",
-            "the rise of skywalker", "jurassic park", "the avengers", "avengers endgame", "avengers infinity war",
-            "iron man", "captain america", "thor ragnarok", "black panther", "spider man",
-            "spider man no way home", "spider man into the spider verse", "batman begins", "the dark knight rises",
-            "joker", "the batman", "superman", "man of steel", "wonder woman",
-            "aquaman", "the flash", "justice league", "the suicide squad", "guardians of the galaxy",
-            "doctor strange", "ant man", "captain marvel", "black widow", "shang chi",
-            "eternals", "harry potter", "the sorcerers stone", "the chamber of secrets", "the prisoner of azkaban",
-            "the goblet of fire", "the order of the phoenix", "the half blood prince", "the deathly hallows",
-            "pirates of the caribbean", "the curse of the black pearl", "dead mans chest", "at worlds end",
-            "on stranger tides", "dead men tell no tales", "indiana jones", "raiders of the lost ark",
-            "the temple of doom", "the last crusade", "the kingdom of the crystal skull", "the dial of destiny",
-            "james bond", "casino royale", "quantum of solace", "skyfall", "spectre",
-            "no time to die", "mission impossible", "rogue nation", "fallout", "dead reckoning",
-            "fast and furious", "tokyo drift", "fast five", "furious", "the fate of the furious",
-            "transformers", "revenge of the fallen", "dark of the moon", "age of extinction", "the last knight",
-            "bumblebee", "rise of the beasts", "toy story", "finding nemo", "the incredibles",
-            "monsters inc", "up", "inside out", "coco", "soul",
-            "luca", "turning red", "frozen", "moana", "zootopia",
-            "tangled", "wreck it ralph", "big hero", "the lion king", "beauty and the beast",
-            "aladdin", "the little mermaid", "mulan", "tarzan", "pocahontas",
-            "hercules", "the hunchback of notre dame", "the jungle book", "shrek", "madagascar",
-            "kung fu panda", "how to train your dragon", "despicable me", "minions", "the secret life of pets",
-            "sing", "ice age", "the terminator", "terminator  judgment day", "alien",
-            "aliens", "predator", "die hard", "lethal weapon", "rambo",
-            "rocky", "the godfather", "goodfellas", "pulp fiction", "fight club",
-            "the shawshank redemption", "forrest gump", "the green mile", "schindlers list", "saving private ryan",
-            "gladiator", "braveheart", "titanic", "avatar", "the way of water",
-            "the matrix reloaded", "the matrix revolutions", "the matrix resurrections",
-            "john wick", "mad max fury road", "dune", "blade runner", "blade runner ",
-            "the fifth element", "star trek", "the wrath of khan", "the search for spock", "the voyage home",
-            "the final frontier", "the undiscovered country", "generations", "first contact", "insurrection",
-            "nemesis", "the next generation", "deep space nine", "voyager", "enterprise",
-            "discovery", "picard", "strange new worlds", "lower decks", "prodigy"
-        ];
-
-        class TrieNode {
-            constructor() {
-                this.children = {};
-                this.isWord = false;
-                this.subWords = 0;
-            }
-        }
-
-        const trieRoot = new TrieNode();
-        dictionaryWords.forEach(word => {
-            let node = trieRoot;
-            for (const char of word) {
-                if (!node.children[char]) node.children[char] = new TrieNode();
-                node = node.children[char];
-                node.subWords++;
-            }
-            node.isWord = true;
-        });
-
-        function getTriePredictions(prefix) {
-            let node = trieRoot;
-            for (const char of prefix) {
-                if (!node.children[char]) return [];
-                node = node.children[char];
-            }
-            return Object.entries(node.children)
-                .sort((a, b) => b[1].subWords - a[1].subWords)
-                .map(entry => entry[0]);
-        }
-
-        const fallbackWords = "404: Not Found".split(",");
-
-        const fallbackTrieRoot = new TrieNode();
-        fallbackWords.forEach(word => {
-            let node = fallbackTrieRoot;
-            for (const char of word) {
-                if (!node.children[char]) node.children[char] = new TrieNode();
-                node = node.children[char];
-                node.subWords++;
-            }
-            node.isWord = true;
-        });
-
-        function getFallbackTriePredictions(prefix) {
-            let node = fallbackTrieRoot;
-            for (const char of prefix) {
-                if (!node.children[char]) return [];
-                node = node.children[char];
-            }
-            return Object.entries(node.children)
-                .sort((a, b) => b[1].subWords - a[1].subWords)
-                .map(entry => entry[0]);
-        }
-
-        const defaultFreq = "etaoinsrhdlucmfywgpbvkxqjz".split('');
-        const nextLetterFreq = {
-            'a': 'ntrsldcpmvbgkyfwzxjq', 'b': 'eouyilar', 'c': 'oetahrkil', 'd': 'eoriays',
-            'e': 'rsndltmca', 'f': 'oeriutaf', 'g': 'ehoarilu', 'h': 'eaioyt', 'i': 'nstncrlmd',
-            'j': 'ouea', 'k': 'eiyano', 'l': 'eioyadsu', 'm': 'eaoipu', 'n': 'dtgescoai',
-            'o': 'nrumslwtd', 'p': 'roelapiu', 'q': 'ui', 'r': 'eiotasmd', 's': 'teoishu',
-            't': 'heioar', 'u': 'rnstlcpm', 'v': 'eia', 'w': 'ahoie', 'x': 'tpceia', 'y': 'osema', 'z': 'eaio'
-        };
-
-        function getBaseProbabilities(text) {
-            if (!text) return defaultFreq;
-
-            // 1. Primary Engine: Streaming Phrase Trie
-            const currentPhrase = text.toLowerCase();
-            const phrasePreds = getTriePredictions(currentPhrase);
-
-            // 2. Secondary Engine: English Word Trie
-            // Get the last alphabetical fragment of the typed string
-            const wordsMatch = currentPhrase.match(/[a-z]+$/);
-            const lastWordFragment = wordsMatch ? wordsMatch[0] : '';
-            const fallbackPreds = lastWordFragment.length > 0 ? getFallbackTriePredictions(lastWordFragment) : [];
-
-            // Combine them, heavily prioritizing the exact phrase match, then the word fallback
-            let combined = [...phrasePreds, ...fallbackPreds];
-
-            // 3. Last Resort Engine: Letter Frequency Maps
-            if (combined.length < 3) {
-                const lastChar = currentPhrase.slice(-1);
-                if (lastChar && nextLetterFreq[lastChar]) {
-                    combined = [...combined, ...nextLetterFreq[lastChar].split('')];
-                }
-            }
-
-            return Array.from(new Set([...combined, ...defaultFreq]));
-        }
 
         const App = () => {
             const [text, setText] = useState("");
