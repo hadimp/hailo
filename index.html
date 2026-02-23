@@ -313,7 +313,6 @@
             const [success, setSuccess] = useState(false);
             const [particles, setParticles] = useState([]);
             const [showLegend, setShowLegend] = useState(true);
-            const [showGhostPhrases, setShowGhostPhrases] = useState(false);
             const [cycleKey, setCycleKey] = useState(0);
 
             const downTimerRef = useRef(null);
@@ -321,7 +320,6 @@
             const isDownPressedRef = useRef(false);
             const lastEnterRef = useRef(0);
             const lastSelectionRef = useRef(null);
-            const tapRef = useRef({ key: null, time: 0, phrases: [] });
 
             const letters = useMemo(() => {
                 const baseProbs = getBaseProbabilities(text);
@@ -346,18 +344,6 @@
                 return baseProbs;
             }, [text, layer]);
 
-            const phrasePredictions = useMemo(() => {
-                if (layer !== 0) return ["", "", ""];
-
-                const getPhraseForChar = (char) => {
-                    if (!char) return "";
-                    const preds = getTopPhrasePredictions(text + char);
-                    return preds.length > 0 ? preds[0] : "";
-                };
-
-                return [getPhraseForChar(letters[0]), getPhraseForChar(letters[1]), getPhraseForChar(letters[2])];
-            }, [text, layer, letters]);
-
             const handleSelect = (dir, char) => {
                 if (!char) return;
 
@@ -378,45 +364,21 @@
                 setCycleKey(prev => prev + 1);
             };
 
-            const stateRef = useRef({ layer, letters, text, phrasePredictions, showGhostPhrases });
+            const stateRef = useRef({ layer, letters, text });
             useEffect(() => {
-                stateRef.current = { layer, letters, text, phrasePredictions, showGhostPhrases };
-            }, [layer, letters, text, phrasePredictions, showGhostPhrases]);
+                stateRef.current = { layer, letters, text };
+            }, [layer, letters, text]);
 
             useEffect(() => {
                 if (!isActive) return;
 
                 const handleKeyDown = (e) => {
-                    const { layer: currentLayer, letters: currentLetters, phrasePredictions: currentPhrases, showGhostPhrases: currentShowGhost } = stateRef.current;
+                    const { layer: currentLayer, letters: currentLetters } = stateRef.current;
                     const offset = currentLayer * 3;
                     const getChar = (idx) => currentLetters[idx % currentLetters.length];
 
-                    const now = Date.now();
-                    const isDirKey = ['ArrowUp', 'ArrowRight', 'ArrowLeft'].includes(e.key);
-
                     if (['ArrowUp', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'Enter', 'Backspace'].includes(e.key)) {
                         e.preventDefault();
-                    }
-
-                    if (currentShowGhost && currentLayer === 0 && isDirKey) {
-                        if (tapRef.current.key === e.key && now - tapRef.current.time < 300) {
-                            let idx = 0;
-                            if (e.key === 'ArrowRight') idx = 1;
-                            if (e.key === 'ArrowLeft') idx = 2;
-
-                            const phraseToAccept = tapRef.current.phrases[idx];
-                            if (phraseToAccept) {
-                                setText(phraseToAccept + " ");
-                                setLayer(0);
-                                lastSelectionRef.current = null;
-                                setSuccess(true);
-                                setTimeout(() => setSuccess(false), 500);
-
-                                tapRef.current = { key: null, time: 0, phrases: [] };
-                                return;
-                            }
-                        }
-                        tapRef.current = { key: e.key, time: now, phrases: currentPhrases };
                     }
 
                     if (e.key === 'ArrowUp') {
@@ -491,19 +453,7 @@
 
                     <div className="w-full pt-8 px-4 md:px-8 flex justify-center items-start z-30 shrink-0">
                         <div className="glass-panel px-6 py-4 w-full max-w-lg text-center shadow-2xl">
-                            <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-2">
-                                <h2 className={`text-xs font-bold tracking-[0.2em] uppercase transition-colors ${isActive ? 'text-blue-400' : 'text-slate-500'}`}>Slingshot Paradigm</h2>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); setShowGhostPhrases(prev => !prev); }}
-                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all duration-300 text-[10px] font-bold uppercase tracking-wider pointer-events-auto ${showGhostPhrases
-                                        ? 'bg-blue-500/10 border-blue-500/30 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)]'
-                                        : 'bg-slate-800/50 border-slate-700/50 text-slate-500'
-                                        }`}
-                                >
-                                    <span className={`w-2 h-2 rounded-full ${showGhostPhrases ? 'bg-blue-400 animate-pulse' : 'bg-slate-600'}`}></span>
-                                    Ghost Mode: {showGhostPhrases ? 'ON' : 'OFF'}
-                                </button>
-                            </div>
+                            <h2 className={`text-xs font-bold tracking-[0.2em] uppercase mb-4 transition-colors ${isActive ? 'text-blue-400' : 'text-slate-500'}`}>Slingshot Paradigm</h2>
                             <div className="text-3xl lg:text-5xl font-light text-white tracking-wide break-words min-h-[60px] flex items-center justify-center">
                                 {text || <span className="opacity-20 italic">Type...</span>}
                                 {isActive && <span className={`type-cursor ${success ? 'hidden' : ''}`}></span>}
@@ -524,49 +474,25 @@
                         <div key={cycleKey} className="charWrapper cycle-flash">
                             <div className="letter-node slot-up">
                                 {getChar(offset)}
-                                {showGhostPhrases && layer === 0 && phrasePredictions[0] && (
-                                    <div className="absolute -top-[160px] left-1/2 -translate-x-1/2 flex flex-col items-center">
-                                        <div className="text-blue-400 opacity-70 whitespace-nowrap tracking-wider text-[1.1rem] lowercase font-medium bg-slate-900/40 px-3 py-1 rounded-full border border-blue-500/20 backdrop-blur-sm">
-                                            {phrasePredictions[0]}
-                                        </div>
-                                        <div className="w-[1px] h-4 bg-blue-500/20 mt-1"></div>
-                                    </div>
-                                )}
                             </div>
                             <div className="letter-node ghost ghost-up">
-                                {showGhostPhrases && layer === 0 && phrasePredictions[0] ? (phrasePredictions[0][text.length + 1] || '␣').toUpperCase() : getChar(offset + 3)}
+                                {getChar(offset + 3)}
                                 <div className="text-[10px] mt-8 text-blue-300/50">↓</div>
                             </div>
 
                             <div className="letter-node slot-right">
                                 {getChar(offset + 1)}
-                                {showGhostPhrases && layer === 0 && phrasePredictions[1] && (
-                                    <div className="absolute left-[210px] top-1/2 -translate-y-1/2 flex items-center">
-                                        <div className="h-[1px] w-4 bg-blue-500/20 mr-1"></div>
-                                        <div className="text-blue-400 opacity-70 whitespace-nowrap tracking-wider text-[1.1rem] lowercase font-medium bg-slate-900/40 px-3 py-1 rounded-full border border-blue-500/20 backdrop-blur-sm">
-                                            {phrasePredictions[1]}
-                                        </div>
-                                    </div>
-                                )}
                             </div>
                             <div className="letter-node ghost ghost-right">
-                                {showGhostPhrases && layer === 0 && phrasePredictions[1] ? (phrasePredictions[1][text.length + 1] || '␣').toUpperCase() : getChar(offset + 4)}
+                                {getChar(offset + 4)}
                                 <div className="text-[10px] mt-8 text-blue-300/50">↓</div>
                             </div>
 
                             <div className="letter-node slot-left">
                                 {getChar(offset + 2)}
-                                {showGhostPhrases && layer === 0 && phrasePredictions[2] && (
-                                    <div className="absolute right-[210px] top-1/2 -translate-y-1/2 flex items-center justify-end">
-                                        <div className="text-blue-400 opacity-70 whitespace-nowrap tracking-wider text-[1.1rem] lowercase font-medium bg-slate-900/40 px-3 py-1 rounded-full border border-blue-500/20 backdrop-blur-sm">
-                                            {phrasePredictions[2]}
-                                        </div>
-                                        <div className="h-[1px] w-4 bg-blue-500/20 ml-1"></div>
-                                    </div>
-                                )}
                             </div>
                             <div className="letter-node ghost ghost-left">
-                                {showGhostPhrases && layer === 0 && phrasePredictions[2] ? (phrasePredictions[2][text.length + 1] || '␣').toUpperCase() : getChar(offset + 5)}
+                                {getChar(offset + 5)}
                                 <div className="text-[10px] mt-8 text-blue-300/50">↓</div>
                             </div>
                         </div>
