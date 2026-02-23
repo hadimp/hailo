@@ -882,13 +882,21 @@
         // ------------- SPLIT SCREEN ORCHESTRATOR -------------
         const MainApp = () => {
             const [activeMode, setActiveMode] = useState('slingshot'); // 'slingshot' or 'qwerty'
-            const [sentenceIndex, setSentenceIndex] = useState(0);
 
-            const handleNextSentence = () => {
-                setSentenceIndex(prev => (prev + 1) % TARGET_SENTENCES.length);
+            // Track sentences independently so they can be compared fairly side-by-side
+            const [slingshotIndex, setSlingshotIndex] = useState(0);
+            const [qwertyIndex, setQwertyIndex] = useState(0);
+
+            const handleSlingshotNext = () => {
+                setSlingshotIndex(prev => (prev + 1) % TARGET_SENTENCES.length);
             };
 
-            const targetSentence = TARGET_SENTENCES[sentenceIndex];
+            const handleQwertyNext = () => {
+                setQwertyIndex(prev => (prev + 1) % TARGET_SENTENCES.length);
+            };
+
+            const slingshotSentence = TARGET_SENTENCES[slingshotIndex];
+            const qwertySentence = TARGET_SENTENCES[qwertyIndex];
 
             return (
                 <div className="flex flex-col md:flex-row w-full h-full bg-slate-900 border-[8px] border-slate-900 overflow-hidden box-border gap-2 md:gap-4">
@@ -902,8 +910,8 @@
                     >
                         <SlingshotKeyboard
                             isActive={activeMode === 'slingshot'}
-                            targetSentence={targetSentence}
-                            onComplete={handleNextSentence}
+                            targetSentence={slingshotSentence}
+                            onComplete={handleSlingshotNext}
                         />
                     </div>
 
@@ -917,8 +925,8 @@
                     >
                         <QwertyKeyboard
                             isActive={activeMode === 'qwerty'}
-                            targetSentence={targetSentence}
-                            onComplete={handleNextSentence}
+                            targetSentence={qwertySentence}
+                            onComplete={handleQwertyNext}
                         />
                     </div>
                 </div>
