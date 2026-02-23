@@ -508,10 +508,19 @@
             }, [isActive]);
 
             const offset = layer * 3;
-            const getChar = (idx) => {
+            const getRawChar = (idx) => {
                 const c = letters[idx % letters.length];
-                return c === ' ' ? '␣' : c.toUpperCase();
+                return c ? c.toLowerCase() : '';
             };
+            const getDisplayChar = (c) => c === ' ' ? '␣' : (c || '').toUpperCase();
+
+            const rawUp = getRawChar(offset);
+            const rawRight = getRawChar(offset + 1);
+            const rawLeft = getRawChar(offset + 2);
+
+            const predUp = getBaseProbabilities(text + rawUp)[0] || '';
+            const predRight = getBaseProbabilities(text + rawRight)[0] || '';
+            const predLeft = getBaseProbabilities(text + rawLeft)[0] || '';
 
             return (
                 <div className={`flex flex-col items-center w-full h-full relative transition-all duration-500 ${isActive ? 'opacity-100 scale-100' : 'opacity-40 grayscale-[0.8] mix-blend-screen pointer-events-none scale-[0.97]'}`}>
@@ -532,33 +541,33 @@
 
                         <div key={cycleKey} className="charWrapper cycle-flash">
                             <div className={`letter-node slot-up ${isActive ? `${currentTheme.focusPanel.split(' ')[0]}` : ''}`}>
-                                {getChar(offset)}
+                                {getDisplayChar(rawUp)}
                                 <div className="ghost-node" style={{
-                                    transform: 'translate(-50%, -45px)',
+                                    transform: 'translate(-50%, calc(-50% - 40px))',
                                     opacity: isActive ? 0.7 : 0.3,
                                     color: currentTheme.hex
                                 }}>
-                                    {getBaseProbabilities(text + getChar(offset).toLowerCase())[0].toUpperCase()}
+                                    {getDisplayChar(predUp)}
                                 </div>
                             </div>
                             <div className={`letter-node slot-right ${isActive ? `${currentTheme.focusPanel.split(' ')[0]}` : ''}`}>
-                                {getChar(offset + 1)}
+                                {getDisplayChar(rawRight)}
                                 <div className="ghost-node" style={{
-                                    transform: 'translate(45px, -50%)',
+                                    transform: 'translate(calc(-50% + 40px), -50%)',
                                     opacity: isActive ? 0.7 : 0.3,
                                     color: currentTheme.hex
                                 }}>
-                                    {getBaseProbabilities(text + getChar(offset + 1).toLowerCase())[0].toUpperCase()}
+                                    {getDisplayChar(predRight)}
                                 </div>
                             </div>
                             <div className={`letter-node slot-left ${isActive ? `${currentTheme.focusPanel.split(' ')[0]}` : ''}`}>
-                                {getChar(offset + 2)}
+                                {getDisplayChar(rawLeft)}
                                 <div className="ghost-node" style={{
-                                    transform: 'translate(-45px, -50%)',
+                                    transform: 'translate(calc(-50% - 40px), -50%)',
                                     opacity: isActive ? 0.7 : 0.3,
                                     color: currentTheme.hex
                                 }}>
-                                    {getBaseProbabilities(text + getChar(offset + 2).toLowerCase())[0].toUpperCase()}
+                                    {getDisplayChar(predLeft)}
                                 </div>
                             </div>
                         </div>
