@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slingshot Cardinal Prototype</title>
+    <title>Slingshot Cardinal Prototype - Side-by-Side Demo</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
@@ -263,11 +263,36 @@
                 filter: brightness(1);
             }
         }
+
+        /* QWERTY Styles */
+        .qwerty-key {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            background-color: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(51, 65, 85, 0.8);
+            color: #e2e8f0;
+            font-size: 1.25rem;
+            transition: all 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-weight: 500;
+        }
+
+        .qwerty-key.focused {
+            background-color: rgba(56, 189, 248, 0.2);
+            border-color: #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+            transform: scale(1.05);
+            color: #fff;
+            z-index: 10;
+        }
     </style>
 </head>
 
 <body>
     <div id="root" class="w-full h-full relative"></div>
+
     <!-- Native Data Modules -->
     <script src="src/data/movies.js"></script>
     <script src="src/data/words.js"></script>
@@ -281,29 +306,31 @@
     <script type="text/babel">
         const { useState, useEffect, useRef, useMemo } = React;
 
-        const App = () => {
+        // ------------- SHOTSHOT COMPONENT -------------
+        const SlingshotKeyboard = ({ onExit }) => {
             const [text, setText] = useState("");
             const [layer, setLayer] = useState(0);
             const [success, setSuccess] = useState(false);
             const [particles, setParticles] = useState([]);
             const [showLegend, setShowLegend] = useState(true);
             const [showGhostPhrases, setShowGhostPhrases] = useState(false);
-            const [cycleKey, setCycleKey] = useState(0); // to trigger animation on cycle
+            const [cycleKey, setCycleKey] = useState(0);
 
             const downTimerRef = useRef(null);
             const downHandledRef = useRef(false);
             const isDownPressedRef = useRef(false);
             const lastEnterRef = useRef(0);
-            const lastSelectionRef = useRef(null); // { char: string, dir: 'up'|'right'|'left' }
+            const enterHoldTimerRef = useRef(null);
+            const isEnterPressedRef = useRef(false);
+            const lastSelectionRef = useRef(null);
             const tapRef = useRef({ key: null, time: 0, phrases: [] });
 
             const letters = useMemo(() => {
                 const baseProbs = getBaseProbabilities(text);
 
-                // If we have a past selection and it's in the top 3 (layer 0)
                 if (lastSelectionRef.current && layer === 0) {
                     const { char, dir } = lastSelectionRef.current;
-                    const charIndex = baseProbs.indexOf(char.toLowerCase()); // Ensure lowercase match
+                    const charIndex = baseProbs.indexOf(char.toLowerCase());
 
                     if (charIndex !== -1 && charIndex < 3) {
                         let targetIndex;
@@ -311,7 +338,6 @@
                         else if (dir === 'right') targetIndex = 1;
                         else if (dir === 'left') targetIndex = 2;
 
-                        // Swap with whoever is currently in the target slot
                         if (targetIndex !== undefined && charIndex !== targetIndex) {
                             const temp = baseProbs[targetIndex];
                             baseProbs[targetIndex] = baseProbs[charIndex];
@@ -337,21 +363,18 @@
             const handleSelect = (dir, char) => {
                 if (!char) return;
 
-                // Spawn particle
                 const id = Date.now() + Math.random();
                 setParticles(prev => [...prev, { id, dir, char }]);
-                setTimeout(() => {
-                    setParticles(prev => prev.filter(p => p.id !== id));
-                }, 250);
+                setTimeout(() => setParticles(prev => prev.filter(p => p.id !== id)), 250);
 
-                lastSelectionRef.current = { char, dir }; // Track the selection
+                lastSelectionRef.current = { char, dir };
                 setText(prev => prev + char);
                 setLayer(0);
                 setShowLegend(false);
             };
 
             const handleBackspace = () => {
-                lastSelectionRef.current = null; // Break continuity
+                lastSelectionRef.current = null;
                 setText(prev => prev.slice(0, -1));
                 setLayer(0);
                 setCycleKey(prev => prev + 1);
@@ -387,7 +410,7 @@
                                 setTimeout(() => setSuccess(false), 500);
 
                                 tapRef.current = { key: null, time: 0, phrases: [] };
-                                return; // Skip normal single tap processing
+                                return;
                             }
                         }
                         tapRef.current = { key: e.key, time: now, phrases: currentPhrases };
@@ -410,26 +433,27 @@
 
                         downTimerRef.current = setTimeout(() => {
                             downHandledRef.current = true;
-                            handleBackspace(); // First single deletion
-
-                            // Wait an additional 400ms before starting rapid deletion,
-                            // giving the user a comfortable window to release the key
-                            // if they only wanted to delete one character.
+                            handleBackspace();
                             downTimerRef.current = setTimeout(() => {
-                                downTimerRef.current = setInterval(() => {
-                                    handleBackspace();
-                                }, 75);
+                                downTimerRef.current = setInterval(() => handleBackspace(), 75);
                             }, 400);
-
                         }, 350);
                     } else if (e.key === 'Enter') {
                         e.preventDefault();
+                        if (isEnterPressedRef.current) return;
+                        isEnterPressedRef.current = true;
+
+                        // Start timer to check for long press (exit demo)
+                        enterHoldTimerRef.current = setTimeout(() => {
+                            onExit();
+                        }, 1000);
+
                         const now = Date.now();
                         if (now - lastEnterRef.current < 300) {
                             setSuccess(true);
                             setTimeout(() => setSuccess(false), 1000);
                         } else {
-                            lastSelectionRef.current = null; // Break continuity
+                            lastSelectionRef.current = null;
                             setText(prev => prev + " ");
                             setLayer(0);
                         }
@@ -452,6 +476,10 @@
                             setLayer(prev => (prev + 1) % maxLayers);
                             setCycleKey(prev => prev + 1);
                         }
+                    } else if (e.key === 'Enter') {
+                        e.preventDefault();
+                        isEnterPressedRef.current = false;
+                        clearTimeout(enterHoldTimerRef.current);
                     }
                 };
 
@@ -462,8 +490,9 @@
                     window.removeEventListener('keyup', handleKeyUp);
                     clearInterval(downTimerRef.current);
                     clearTimeout(downTimerRef.current);
+                    clearTimeout(enterHoldTimerRef.current);
                 };
-            }, []); // Empty dependency array so listeners persist across renders
+            }, [onExit]);
 
             const offset = layer * 3;
             const getChar = (idx) => {
@@ -473,15 +502,13 @@
 
             return (
                 <div className="flex flex-col items-center w-full h-full relative" onClick={() => window.focus()}>
-                    {/* Background decoration */}
                     <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none"></div>
                     <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/10 blur-[100px] rounded-full pointer-events-none"></div>
 
-                    {/* Header area */}
                     <div className="w-full pt-8 md:pt-12 px-8 flex justify-center items-start z-30 shrink-0">
                         <div className="glass-panel px-8 py-6 min-w-[320px] max-w-4xl text-center shadow-2xl">
                             <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-slate-400 text-xs font-bold tracking-[0.2em] uppercase">Text Entry</h2>
+                                <h2 className="text-slate-400 text-xs font-bold tracking-[0.2em] uppercase">Slingshot Paradigm</h2>
                                 <button
                                     onClick={() => setShowGhostPhrases(prev => !prev)}
                                     className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all duration-300 text-[10px] font-bold uppercase tracking-wider ${showGhostPhrases
@@ -500,23 +527,17 @@
                         </div>
                     </div>
 
-                    {/* Main Slingshot Arena */}
                     <div className="flex-1 w-full flex justify-center items-center relative scale-[1.1] md:scale-120 z-20 mt-20">
-                        {/* Reference Ring */}
                         <div className={`focus-ring ${success ? 'success' : ''}`}>
                             {success && (
                                 <svg className="w-8 h-8 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
                             )}
-
-                            {/* Central guiding dot when empty */}
                             {!success && <div className="w-2 h-2 rounded-full bg-slate-600 shadow-[0_0_10px_rgba(255,255,255,0.2)]"></div>}
                         </div>
 
-                        {/* Slots container (re-renders to trigger cycle animation) */}
                         <div key={cycleKey} className="charWrapper cycle-flash">
-                            {/* UP DIRECTION */}
                             <div className="letter-node slot-up">
                                 {getChar(offset)}
                                 {showGhostPhrases && layer === 0 && phrasePredictions[0] && (
@@ -533,7 +554,6 @@
                                 <div className="text-[10px] mt-8 text-blue-300/50">↓</div>
                             </div>
 
-                            {/* RIGHT DIRECTION */}
                             <div className="letter-node slot-right">
                                 {getChar(offset + 1)}
                                 {showGhostPhrases && layer === 0 && phrasePredictions[1] && (
@@ -550,7 +570,6 @@
                                 <div className="text-[10px] mt-8 text-blue-300/50">↓</div>
                             </div>
 
-                            {/* LEFT DIRECTION */}
                             <div className="letter-node slot-left">
                                 {getChar(offset + 2)}
                                 {showGhostPhrases && layer === 0 && phrasePredictions[2] && (
@@ -568,7 +587,6 @@
                             </div>
                         </div>
 
-                        {/* Particle effects for pops - outside the cycleKey wrapper so they persist during layer swaps */}
                         <div className="charWrapper">
                             {particles.map(p => (
                                 <div key={p.id} className={`letter-node particle anim-${p.dir}`}>
@@ -578,28 +596,229 @@
                         </div>
                     </div>
 
-                    {/* UI Hint Legend */}
                     <div className={`absolute bottom-8 md:bottom-12 transition-all duration-1000 z-30 ${showLegend ? 'opacity-100 translate-y-0' : 'opacity-30 translate-y-4 hover:opacity-100 hover:translate-y-0'}`}>
                         <div className="flex flex-wrap gap-4 md:gap-8 justify-center text-[13px] md:text-sm text-slate-400 glass-panel px-6 py-4 shadow-xl">
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2">
                                 <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs">↑ ← →</div>
-                                <span>Select Letter</span>
+                                <span>Select</span>
                             </div>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2">
                                 <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs text-blue-300">2x (↑←→)</div>
                                 <span>Auto-Complete</span>
                             </div>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2">
                                 <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs">↓</div>
-                                <span>Cycle Letters</span>
+                                <span>Cycle</span>
                             </div>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2">
                                 <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs text-rose-300">Hold ↓</div>
                                 <span>Backspace</span>
                             </div>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2">
                                 <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs text-green-300">Enter</div>
-                                <span>Space / 2x Finish</span>
+                                <span>Space</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs text-amber-300">Hold Enter (1s)</div>
+                                <span>Exit</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // ------------- QWERTY COMPONENT -------------
+        const QwertyKeyboard = ({ onExit }) => {
+            const [text, setText] = useState("");
+            // Grid representation of QWERTY
+            const keyboardLayout = useMemo(() => [
+                ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+                ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'DEL'],
+                ['Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '?'],
+                ['SPACE', 'SPACE', 'SPACE', 'SPACE', 'SPACE', 'SPACE', 'SPACE', 'SPACE', 'SPACE', 'SPACE']
+            ], []);
+
+            const [focusRow, setFocusRow] = useState(1);
+            const [focusCol, setFocusCol] = useState(4); // Start at 'G'
+
+            const enterHoldTimerRef = useRef(null);
+            const isEnterPressedRef = useRef(false);
+
+            useEffect(() => {
+                const handleKeyDown = (e) => {
+                    const ROWS = keyboardLayout.length;
+                    const COLS = keyboardLayout[0].length;
+
+                    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter'].includes(e.key)) {
+                        e.preventDefault();
+                    }
+
+                    if (e.key === 'ArrowUp') {
+                        setFocusRow(r => Math.max(0, r - 1));
+                    } else if (e.key === 'ArrowDown') {
+                        setFocusRow(r => Math.min(ROWS - 1, r + 1));
+                    } else if (e.key === 'ArrowLeft') {
+                        setFocusCol(c => Math.max(0, c - 1));
+                    } else if (e.key === 'ArrowRight') {
+                        setFocusCol(c => Math.min(COLS - 1, c + 1));
+                    } else if (e.key === 'Enter') {
+                        if (isEnterPressedRef.current) return;
+                        isEnterPressedRef.current = true;
+
+                        enterHoldTimerRef.current = setTimeout(() => {
+                            onExit();
+                        }, 1000);
+
+                        const char = keyboardLayout[focusRow][focusCol];
+                        if (char === 'DEL') {
+                            setText(prev => prev.slice(0, -1));
+                        } else if (char === 'SPACE') {
+                            setText(prev => prev + ' ');
+                        } else {
+                            setText(prev => prev + char.toLowerCase());
+                        }
+                    }
+                };
+
+                const handleKeyUp = (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        isEnterPressedRef.current = false;
+                        clearTimeout(enterHoldTimerRef.current);
+                    }
+                };
+
+                window.addEventListener('keydown', handleKeyDown);
+                window.addEventListener('keyup', handleKeyUp);
+                return () => {
+                    window.removeEventListener('keydown', handleKeyDown);
+                    window.removeEventListener('keyup', handleKeyUp);
+                    clearTimeout(enterHoldTimerRef.current);
+                };
+            }, [focusRow, focusCol, keyboardLayout, onExit]);
+
+            return (
+                <div className="flex flex-col items-center w-full h-full relative" onClick={() => window.focus()}>
+                    <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[50%] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+                    <div className="w-full pt-8 md:pt-12 px-8 flex justify-center items-start z-30 shrink-0">
+                        <div className="glass-panel px-8 py-6 min-w-[320px] max-w-4xl text-center shadow-2xl">
+                            <h2 className="text-slate-400 text-xs font-bold tracking-[0.2em] uppercase mb-4">Qwerty Paradigm (D-Pad)</h2>
+                            <div className="text-3xl sm:text-4xl md:text-5xl font-light text-white tracking-wide break-words min-h-[80px] flex items-center justify-center">
+                                {text || <span className="opacity-20 italic">Type something...</span>}
+                                <span className="type-cursor"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex-1 w-full flex flex-col justify-center items-center relative z-20">
+                        <div className="glass-panel p-6 flex flex-col gap-3">
+                            {/* Row 1 */}
+                            <div className="flex gap-2 justify-center">
+                                {keyboardLayout[0].map((k, idx) => (
+                                    <div key={'r0' + idx} className={`w-12 h-12 qwerty-key ${focusRow === 0 && focusCol === idx ? 'focused' : ''}`}>
+                                        {k}
+                                    </div>
+                                ))}
+                            </div>
+                            {/* Row 2 */}
+                            <div className="flex gap-2 justify-center ml-4">
+                                {keyboardLayout[1].map((k, idx) => (
+                                    <div key={'r1' + idx} className={`w-12 h-12 qwerty-key ${focusRow === 1 && focusCol === idx ? 'focused' : ''}`}>
+                                        {k === 'DEL' ? '⌫' : k}
+                                    </div>
+                                ))}
+                            </div>
+                            {/* Row 3 */}
+                            <div className="flex gap-2 justify-center ml-10">
+                                {keyboardLayout[2].map((k, idx) => (
+                                    <div key={'r2' + idx} className={`w-12 h-12 qwerty-key ${focusRow === 2 && focusCol === idx ? 'focused' : ''}`}>
+                                        {k}
+                                    </div>
+                                ))}
+                            </div>
+                            {/* Row 4 (Space) */}
+                            <div className="flex gap-2 justify-center mt-2">
+                                <div className={`w-96 h-12 qwerty-key ${focusRow === 3 ? 'focused' : ''}`}>
+                                    SPACE
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="absolute bottom-8 md:bottom-12 transition-all duration-1000 z-30">
+                        <div className="flex flex-wrap gap-4 md:gap-8 justify-center text-[13px] md:text-sm text-slate-400 glass-panel px-6 py-4 shadow-xl">
+                            <div className="flex items-center gap-2">
+                                <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs">↑ ↓ ← →</div>
+                                <span>Move Focus</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs text-green-300">Enter</div>
+                                <span>Press Key</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="px-2 py-1 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs text-amber-300">Hold Enter (1s)</div>
+                                <span>Exit</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // ------------- MAIN APP ORCHESTRATOR -------------
+        const MainApp = () => {
+            const [mode, setMode] = useState('menu'); // 'menu', 'slingshot', 'qwerty'
+            const [focusItem, setFocusItem] = useState(0); // 0 = Slingshot, 1 = Qwerty
+
+            useEffect(() => {
+                if (mode !== 'menu') return;
+
+                const handleKeyDown = (e) => {
+                    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter'].includes(e.key)) {
+                        e.preventDefault();
+                    }
+
+                    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                        setFocusItem(0);
+                    } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                        setFocusItem(1);
+                    } else if (e.key === 'Enter') {
+                        setMode(focusItem === 0 ? 'slingshot' : 'qwerty');
+                    }
+                };
+
+                window.addEventListener('keydown', handleKeyDown);
+                return () => window.removeEventListener('keydown', handleKeyDown);
+            }, [mode, focusItem]);
+
+            if (mode === 'slingshot') {
+                return <SlingshotKeyboard onExit={() => setMode('menu')} />;
+            }
+            if (mode === 'qwerty') {
+                return <QwertyKeyboard onExit={() => setMode('menu')} />;
+            }
+
+            return (
+                <div className="flex flex-col items-center justify-center w-full h-full relative" onClick={() => window.focus()}>
+                    <div className="absolute top-1/4 left-1/4 w-[50%] h-[50%] bg-indigo-500/10 blur-[150px] rounded-full pointer-events-none"></div>
+
+                    <div className="glass-panel p-12 text-center max-w-2xl w-full z-10 shadow-2xl flex flex-col gap-8">
+                        <div>
+                            <h1 className="text-4xl md:text-5xl font-light mb-4">Input Paradigm Demo</h1>
+                            <p className="text-slate-400">Use Arrow Keys to select, Enter to confirm.</p>
+                        </div>
+
+                        <div className="flex flex-col gap-4 mx-auto w-3/4">
+                            <div className={`p-6 rounded-xl border transition-all duration-300 ${focusItem === 0 ? 'bg-blue-500/20 border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.3)] scale-105' : 'bg-slate-800/50 border-slate-700/50 opacity-70'}`}>
+                                <h2 className="text-2xl font-medium mb-2 text-blue-300">Slingshot Keyboard</h2>
+                                <p className="text-sm text-slate-300">Predictive, 3-directional cycling interface. Optimized for minimal movement.</p>
+                            </div>
+
+                            <div className={`p-6 rounded-xl border transition-all duration-300 ${focusItem === 1 ? 'bg-emerald-500/20 border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)] scale-105' : 'bg-slate-800/50 border-slate-700/50 opacity-70'}`}>
+                                <h2 className="text-2xl font-medium mb-2 text-emerald-300">D-Pad QWERTY</h2>
+                                <p className="text-sm text-slate-300">Traditional grid layout controlled via directional step-by-step cursor.</p>
                             </div>
                         </div>
                     </div>
@@ -608,7 +827,7 @@
         };
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        root.render(<MainApp />);
     </script>
 </body>
 
