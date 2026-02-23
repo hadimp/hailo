@@ -308,6 +308,7 @@
         const THEMES = {
             blue: {
                 text: 'text-blue-400',
+                hex: '#60a5fa',
                 cursor: 'bg-blue-400 shadow-[0_0_8px_rgba(56,189,248,0.8)]',
                 active: 'bg-blue-500/20 text-blue-300 border-blue-400/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]',
                 focusPanel: 'border-blue-500/30 shadow-[0_0_20px_rgba(56,189,248,0.1)]',
@@ -318,6 +319,7 @@
             },
             emerald: {
                 text: 'text-emerald-400',
+                hex: '#34d399',
                 cursor: 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]',
                 active: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]',
                 focusPanel: 'border-emerald-500/30 shadow-[0_0_20px_rgba(52,211,153,0.1)]',
@@ -532,9 +534,9 @@
                             <div className={`letter-node slot-up ${isActive ? `${currentTheme.focusPanel.split(' ')[0]}` : ''}`}>
                                 {getChar(offset)}
                                 <div className="ghost-node" style={{
-                                    transform: 'translate(-50%, -42px)',
+                                    transform: 'translate(-50%, -45px)',
                                     opacity: isActive ? 0.7 : 0.3,
-                                    color: THEMES.emerald.text.replace('text-', '#')
+                                    color: currentTheme.hex
                                 }}>
                                     {getBaseProbabilities(text + getChar(offset).toLowerCase())[0].toUpperCase()}
                                 </div>
@@ -542,9 +544,9 @@
                             <div className={`letter-node slot-right ${isActive ? `${currentTheme.focusPanel.split(' ')[0]}` : ''}`}>
                                 {getChar(offset + 1)}
                                 <div className="ghost-node" style={{
-                                    transform: 'translate(14px, -50%)',
+                                    transform: 'translate(45px, -50%)',
                                     opacity: isActive ? 0.7 : 0.3,
-                                    color: THEMES.emerald.text.replace('text-', '#')
+                                    color: currentTheme.hex
                                 }}>
                                     {getBaseProbabilities(text + getChar(offset + 1).toLowerCase())[0].toUpperCase()}
                                 </div>
@@ -552,9 +554,9 @@
                             <div className={`letter-node slot-left ${isActive ? `${currentTheme.focusPanel.split(' ')[0]}` : ''}`}>
                                 {getChar(offset + 2)}
                                 <div className="ghost-node" style={{
-                                    transform: 'translate(-40px, -50%)',
+                                    transform: 'translate(-45px, -50%)',
                                     opacity: isActive ? 0.7 : 0.3,
-                                    color: THEMES.emerald.text.replace('text-', '#')
+                                    color: currentTheme.hex
                                 }}>
                                     {getBaseProbabilities(text + getChar(offset + 2).toLowerCase())[0].toUpperCase()}
                                 </div>
