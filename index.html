@@ -50,7 +50,10 @@
             height: 80px;
             border-radius: 50%;
             border: 2px solid rgba(16, 185, 129, 0.5);
-            position: relative;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -73,7 +76,7 @@
         .focus-ring.success {
             border-color: #4ade80;
             box-shadow: 0 0 40px rgba(74, 222, 128, 0.6);
-            transform: scale(1.1);
+            transform: translate(-50%, -50%) scale(1.1);
         }
 
         .focus-ring.success::after {
@@ -176,6 +179,19 @@
             }
         }
 
+        @keyframes pop-down {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translate(0, 100px) scale(0.5);
+                opacity: 0;
+                filter: blur(4px);
+            }
+        }
+
         .particle {
             pointer-events: none;
             z-index: 50;
@@ -191,6 +207,24 @@
 
         .anim-left {
             animation: pop-left 0.25s ease-in forwards;
+        }
+
+        .anim-down {
+            animation: pop-down 0.3s ease-out forwards;
+        }
+
+        .ghost-node {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.9rem;
+            color: #10b981;
+            /* Default to emerald */
+            font-weight: 600;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
         .type-cursor {
@@ -449,6 +483,12 @@
                         if (!downHandledRef.current) {
                             const { letters: currentLetters } = stateRef.current;
                             const maxLayers = Math.ceil((currentLetters.length || 26) / 3);
+
+                            // Visual feedback for cycle
+                            const id = Date.now() + Math.random();
+                            setParticles(prev => [...prev, { id, dir: 'down', char: '▼' }]);
+                            setTimeout(() => setParticles(prev => prev.filter(p => p.id !== id)), 300);
+
                             setLayer(prev => (prev + 1) % maxLayers);
                             setCycleKey(prev => prev + 1);
                         }
@@ -491,12 +531,33 @@
                         <div key={cycleKey} className="charWrapper cycle-flash">
                             <div className={`letter-node slot-up ${isActive ? `${currentTheme.focusPanel.split(' ')[0]}` : ''}`}>
                                 {getChar(offset)}
+                                <div className="ghost-node" style={{
+                                    transform: 'translate(-50%, -42px)',
+                                    opacity: isActive ? 0.7 : 0.3,
+                                    color: THEMES.emerald.text.replace('text-', '#')
+                                }}>
+                                    {getBaseProbabilities(text + getChar(offset).toLowerCase())[0].toUpperCase()}
+                                </div>
                             </div>
                             <div className={`letter-node slot-right ${isActive ? `${currentTheme.focusPanel.split(' ')[0]}` : ''}`}>
                                 {getChar(offset + 1)}
+                                <div className="ghost-node" style={{
+                                    transform: 'translate(14px, -50%)',
+                                    opacity: isActive ? 0.7 : 0.3,
+                                    color: THEMES.emerald.text.replace('text-', '#')
+                                }}>
+                                    {getBaseProbabilities(text + getChar(offset + 1).toLowerCase())[0].toUpperCase()}
+                                </div>
                             </div>
                             <div className={`letter-node slot-left ${isActive ? `${currentTheme.focusPanel.split(' ')[0]}` : ''}`}>
                                 {getChar(offset + 2)}
+                                <div className="ghost-node" style={{
+                                    transform: 'translate(-40px, -50%)',
+                                    opacity: isActive ? 0.7 : 0.3,
+                                    color: THEMES.emerald.text.replace('text-', '#')
+                                }}>
+                                    {getBaseProbabilities(text + getChar(offset + 2).toLowerCase())[0].toUpperCase()}
+                                </div>
                             </div>
                         </div>
 
