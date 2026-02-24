@@ -743,7 +743,6 @@
                                         intervals
                                     };
                                     recordSession(payload);
-                                    if (onComplete) onComplete(payload);
 
                                     setText("");
                                     setStartTime(null);
@@ -752,7 +751,8 @@
                                     setBackspaceCount(0);
                                     setIntervals([]);
                                     setIsCompleted(false);
-                                    if (onComplete) onComplete();
+
+                                    if (onComplete) onComplete(payload);
                                 }}
                                 className={`mt-4 px-6 py-3 rounded-full font-bold tracking-wider uppercase transition-all duration-300 ${currentTheme.active} hover:scale-105`}
                             >
@@ -927,8 +927,27 @@
 
                             <button
                                 onClick={() => {
+                                    const payload = {
+                                        paradigm: 'qwerty',
+                                        sentence: targetSentence,
+                                        keystrokes,
+                                        backspaceCount,
+                                        timeSeconds: timeInSeconds,
+                                        wpm: wpm,
+                                        efficiency: (keystrokes / text.length).toFixed(2),
+                                        intervals
+                                    };
+                                    recordSession(payload);
+
+                                    setText("");
+                                    setStartTime(null);
+                                    setEndTime(null);
+                                    setKeystrokes(0);
+                                    setBackspaceCount(0);
+                                    setIntervals([]);
                                     setIsCompleted(false);
-                                    if (onComplete) onComplete();
+
+                                    if (onComplete) onComplete(payload);
                                 }}
                                 className={`mt-4 px-6 py-3 rounded-full font-bold tracking-wider uppercase transition-all duration-300 ${currentTheme.active} hover:scale-105`}
                             >
