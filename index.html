@@ -492,6 +492,7 @@
             onComplete,
             title = "Slingshot",
             interceptKey = null,
+            interceptKeyUp = null,
             onTextChange = null,
             renderOverlay = null,
             removeSpecials = false,
@@ -572,10 +573,10 @@
                 setBackspaceCount(prev => prev + 1);
             };
 
-            const stateRef = useRef({ layer, letters, text, success });
+            const stateRef = useRef({ layer, letters, text, success, interceptKey, interceptKeyUp });
             useEffect(() => {
-                stateRef.current = { layer, letters, text, success };
-            }, [layer, letters, text, success]);
+                stateRef.current = { layer, letters, text, success, interceptKey, interceptKeyUp };
+            }, [layer, letters, text, success, interceptKey, interceptKeyUp]);
 
             // Check for custom text completion logic
             useEffect(() => {
@@ -593,15 +594,15 @@
                 if (!isActive || isCompleted) return;
 
                 const handleKeyDown = (e) => {
-                    const { layer: currentLayer, letters: currentLetters, text: currentText, success: currentSuccess } = stateRef.current;
+                    const { layer: currentLayer, letters: currentLetters, text: currentText, success: currentSuccess, interceptKey: currentInterceptKey } = stateRef.current;
                     const offset = currentLayer * 3;
                     const getChar = (idx) => currentLetters[idx % currentLetters.length];
 
                     const validKeys = ['ArrowUp', 'ArrowRight', 'ArrowLeft', 'ArrowDown', 'Enter', 'Backspace', ' '];
 
                     if (validKeys.includes(e.key)) {
-                        if (interceptKey) {
-                            const prevent = interceptKey(e, { text: currentText, layer: currentLayer, success: currentSuccess });
+                        if (currentInterceptKey) {
+                            const prevent = currentInterceptKey(e, { text: currentText, layer: currentLayer, success: currentSuccess });
                             if (prevent) {
                                 e.preventDefault();
                                 return;
@@ -655,6 +656,15 @@
                 };
 
                 const handleKeyUp = (e) => {
+                    const { layer: currentLayer, text: currentText, success: currentSuccess, interceptKeyUp: currentInterceptKeyUp } = stateRef.current;
+                    if (currentInterceptKeyUp) {
+                        const prevent = currentInterceptKeyUp(e, { text: currentText, layer: currentLayer, success: currentSuccess });
+                        if (prevent) {
+                            e.preventDefault();
+                            return;
+                        }
+                    }
+
                     if (e.key === 'ArrowDown') {
                         e.preventDefault();
                         isDownPressedRef.current = false;
@@ -1044,7 +1054,7 @@
 
             const handleInterceptKey = (e, { text, layer }) => {
                 if (stage === 1 && e.key === 'ArrowDown') {
-                    setStage(2);
+                    // Stage 1 waits for cycle down keyup
                     return false;
                 }
                 if (stage === 2 && ['ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
@@ -1056,6 +1066,14 @@
                 if (stage === 2 && !['ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return true;
                 if (stage === 4) return true;
 
+                return false;
+            };
+
+            const handleInterceptKeyUp = (e, { text, layer }) => {
+                if (stage === 1 && e.key === 'ArrowDown') {
+                    setStage(2);
+                    return false;
+                }
                 return false;
             };
 
@@ -1115,6 +1133,7 @@
                         targetSentence={stage >= 3 ? "sun" : ""}
                         title={`Tutorial: ${stage === 0 ? 'Intro' : stage === 1 ? 'Cycling' : stage === 2 ? 'Typing' : 'Practice'}`}
                         interceptKey={handleInterceptKey}
+                        interceptKeyUp={handleInterceptKeyUp}
                         onTextChange={handleTextChange}
                         renderOverlay={renderTutorialLegend}
                         removeSpecials={true}
