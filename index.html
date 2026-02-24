@@ -317,7 +317,7 @@
     <script src="src/engine/Trie.js"></script>
     <script src="src/engine/Predictor.js"></script>
 
-    <script type="module">
+    <script type="text/babel" data-type="module">
         import React, { useState, useEffect, useRef, useCallback, useMemo } from 'https://esm.sh/react@18.2.0';
         import ReactDOM from 'https://esm.sh/react-dom@18.2.0/client';
         import { recordSession } from './src/engine/Analytics.js';
@@ -733,7 +733,7 @@
 
                             <button
                                 onClick={() => {
-                                    recordSession({
+                                    const payload = {
                                         paradigm: 'slingshot',
                                         sentence: targetSentence,
                                         keystrokes,
@@ -742,7 +742,10 @@
                                         wpm: wpm,
                                         efficiency: (keystrokes / text.length).toFixed(2),
                                         intervals
-                                    });
+                                    };
+                                    recordSession(payload);
+                                    if (onComplete) onComplete(payload);
+
                                     setText("");
                                     setStartTime(null);
                                     setEndTime(null);
@@ -757,7 +760,7 @@
                                 Next Sentence
                             </button>
                         </div>
-                    </div>
+                    </div >
                 );
             }
 
@@ -925,24 +928,8 @@
 
                             <button
                                 onClick={() => {
-                                    recordSession({
-                                        paradigm: 'qwerty',
-                                        sentence: targetSentence,
-                                        keystrokes,
-                                        backspaceCount,
-                                        timeSeconds: timeInSeconds,
-                                        wpm: wpm,
-                                        efficiency: (keystrokes / text.length).toFixed(2),
-                                        intervals
-                                    });
-                                    setText("");
-                                    setStartTime(null);
-                                    setEndTime(null);
-                                    setKeystrokes(0);
-                                    setBackspaceCount(0);
-                                    setIntervals([]);
                                     setIsCompleted(false);
-                                    onComplete();
+                                    if (onComplete) onComplete();
                                 }}
                                 className={`mt-4 px-6 py-3 rounded-full font-bold tracking-wider uppercase transition-all duration-300 ${currentTheme.active} hover:scale-105`}
                             >
