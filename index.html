@@ -314,9 +314,9 @@
     <script src="src/data/frequencies.js"></script>
 
     <!-- Native Engine Modules -->
-    <script src="src/engine/Trie.js"></script>
-    <script src="src/engine/Predictor.js"></script>
-    <script src="src/engine/Analytics.js"></script>
+    <script src="src/engine/Trie.js?v=2"></script>
+    <script src="src/engine/Predictor.js?v=2"></script>
+    <script src="src/engine/Analytics.js?v=3"></script>
 
     <script type="text/babel">
         const { useState, useEffect, useRef, useCallback, useMemo } = React;
@@ -742,7 +742,16 @@
                                         efficiency: (keystrokes / text.length).toFixed(2),
                                         intervals
                                     };
-                                    recordSession(payload);
+
+                                    try {
+                                        if (typeof window.recordSession === 'function') {
+                                            window.recordSession(payload);
+                                        } else {
+                                            console.warn("Analytics module not loaded. Skipping recordSession.");
+                                        }
+                                    } catch (e) {
+                                        console.error("Error calling recordSession:", e);
+                                    }
 
                                     setText("");
                                     setStartTime(null);
@@ -937,7 +946,16 @@
                                         efficiency: (keystrokes / text.length).toFixed(2),
                                         intervals
                                     };
-                                    recordSession(payload);
+
+                                    try {
+                                        if (typeof window.recordSession === 'function') {
+                                            window.recordSession(payload);
+                                        } else {
+                                            console.warn("Analytics module not loaded. Skipping recordSession.");
+                                        }
+                                    } catch (e) {
+                                        console.error("Error calling recordSession:", e);
+                                    }
 
                                     setText("");
                                     setStartTime(null);
