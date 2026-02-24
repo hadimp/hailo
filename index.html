@@ -364,8 +364,8 @@
             const currentTheme = THEMES[theme];
             return (
                 <div className="w-full pt-16 px-4 md:px-8 flex justify-center items-start z-30 shrink-0">
-                    <div className={`glass-panel px-6 py-6 w-full max-w-lg text-center transition-all duration-300 ${isActive ? `${currentTheme.focusPanel} border-opacity-50` : 'shadow-lg border-slate-700/30'}`}>
-                        <h2 className={`text-xs font-bold tracking-[0.2em] uppercase mb-4 transition-colors ${isActive ? currentTheme.text : 'text-slate-500'}`}>
+                    <div className={`glass-panel px-4 py-4 w-full max-w-md text-center transition-all duration-300 ${isActive ? `${currentTheme.focusPanel} border-opacity-50` : 'shadow-lg border-slate-700/30'}`}>
+                        <h2 className={`text-[10px] font-bold tracking-[0.2em] uppercase mb-2 transition-colors ${isActive ? currentTheme.text : 'text-slate-500'}`}>
                             {title}
                         </h2>
                         {targetSentence && (
@@ -384,7 +384,7 @@
                                 })}
                             </div>
                         )}
-                        <div className="text-3xl lg:text-5xl font-light text-white tracking-wide break-words min-h-[60px] flex items-center justify-center">
+                        <div className="text-2xl lg:text-4xl font-light text-white tracking-wide break-words min-h-[40px] flex items-center justify-center">
                             {text || <span className="opacity-20 italic">Type...</span>}
                             {isActive && <span className={`type-cursor ${currentTheme.cursor} ${success ? 'hidden' : ''}`}></span>}
                         </div>
@@ -780,8 +780,8 @@
                     {renderOverlay ? (
                         renderOverlay()
                     ) : (
-                        <div className={`absolute bottom-8 transition-all duration-1000 z-30 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                            <div className="flex flex-wrap gap-4 justify-center text-[11px] lg:text-[13px] text-slate-400 glass-panel px-4 py-3 shadow-xl max-w-sm">
+                        <div className={`absolute bottom-8 transition-all duration-1000 z-30 w-full flex justify-center px-4 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                            <div className="flex flex-row flex-nowrap gap-3 md:gap-6 justify-center text-[10px] lg:text-[12px] text-slate-400 glass-panel px-6 py-2 shadow-xl whitespace-nowrap">
                                 <div className="flex items-center gap-2">
                                     <div className={`px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs ${currentTheme.accent}`}>↑←→</div>
                                     <span>Select</span>
@@ -1129,7 +1129,7 @@
             };
 
             const renderTutorialLegend = () => (
-                <div className="absolute top-12 transition-all duration-1000 z-50 flex flex-col items-center w-full px-4 text-center max-w-xl">
+                <div className="absolute top-8 left-1/2 -translate-x-1/2 transition-all duration-1000 z-50 flex flex-col items-center w-full px-4 text-center max-w-xl pointer-events-auto">
                     {stage === 0 && (
                         <div className="animate-fade-in glass-panel p-6 border-emerald-500/30 shadow-2xl">
                             <h2 className="text-xl text-emerald-400 mb-2 font-bold uppercase tracking-widest">Tutorial</h2>
@@ -1179,15 +1179,16 @@
                         <div className="animate-fade-in glass-panel p-6 border-emerald-500/30 shadow-2xl">
                             <h2 className="text-xl text-emerald-400 mb-2 font-bold uppercase tracking-widest">You're ready! 🎉</h2>
                             <p className="text-slate-300 text-sm mb-4">You successfully mastered the Slingshot paradigm.</p>
-                            <button onClick={onComplete} className="px-6 py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 rounded-full font-bold hover:bg-emerald-500/30 transition-colors uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.2)]">Enter Playground</button>
+                            <button onClick={onComplete} className="px-6 py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 rounded-full font-bold hover:bg-emerald-500/30 transition-colors uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.2)] pointer-events-auto">Enter Playground</button>
                         </div>
                     )}
                 </div>
             );
 
             return (
-                <div className="w-full h-full bg-[#0b1120] border-[8px] border-slate-900 overflow-hidden relative">
-                    <div className="w-full h-full pt-16">
+                <div className="w-full h-full bg-[#0b1120] border-[8px] border-slate-900 overflow-hidden relative pointer-events-none">
+                    {renderTutorialLegend()}
+                    <div className="w-full h-full pt-64 pb-8 pointer-events-auto">
                         <SlingshotCore
                             key={`core-${resetKey}`}
                             isActive={true}
@@ -1196,7 +1197,6 @@
                             interceptKey={handleInterceptKey}
                             interceptKeyUp={handleInterceptKeyUp}
                             onTextChange={handleTextChange}
-                            renderOverlay={renderTutorialLegend}
                             removeSpecials={true}
                             showMetricsScreen={false}
                             onComplete={onComplete}
