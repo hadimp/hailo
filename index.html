@@ -317,9 +317,10 @@
     <script src="src/engine/Trie.js"></script>
     <script src="src/engine/Predictor.js"></script>
 
-    <!-- React UI Application -->
-    <script type="text/babel">
-        const { useState, useEffect, useRef, useMemo } = React;
+    <script type="module">
+        import React, { useState, useEffect, useRef, useCallback, useMemo } from 'https://esm.sh/react@18.2.0';
+        import ReactDOM from 'https://esm.sh/react-dom@18.2.0/client';
+        import { recordSession } from './src/engine/Analytics.js';
 
         const THEMES = {
             blue: {
@@ -732,7 +733,7 @@
 
                             <button
                                 onClick={() => {
-                                    console.log("Slingshot Telemetry:", {
+                                    recordSession({
                                         paradigm: 'slingshot',
                                         sentence: targetSentence,
                                         keystrokes,
@@ -924,7 +925,7 @@
 
                             <button
                                 onClick={() => {
-                                    console.log("Qwerty Telemetry:", {
+                                    recordSession({
                                         paradigm: 'qwerty',
                                         sentence: targetSentence,
                                         keystrokes,
@@ -1206,26 +1207,64 @@
             );
         };
 
-        const StatsDashboard = () => (
-            <div className="flex flex-col items-center justify-center w-full h-full bg-[#0b1120] border-[8px] border-slate-900 text-white animate-fade-in p-8">
-                <div className="p-4 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6 text-4xl shadow-[0_0_30px_rgba(59,130,246,0.15)]">📊</div>
-                <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent tracking-tight">Study Complete!</h1>
-                <p className="text-xl text-slate-400 mb-12 text-center max-w-lg font-light">Thank you for participating. Your typing statistics have been securely recorded.</p>
+        const StatsDashboard = ({ slingshotMetrics, qwertyMetrics }) => {
+            const calculateAverage = (arr) => arr.length ? (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : 0;
 
-                <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-8 max-w-2xl w-full text-center">
-                    <p className="text-slate-300 text-lg mb-4">Fetching Community Aggregates...</p>
-                    {/* Placeholder for real charts if needed later */}
-                    <div className="flex justify-center items-end gap-12 h-40 mt-8 opacity-50">
-                        <div className="w-16 bg-blue-500/40 border border-blue-400/50 rounded-t-lg h-[60%] relative flex flex-col justify-end pb-2">
-                            <span className="text-xs text-blue-200 uppercase font-bold tracking-wider mb-[-2rem]">Qwerty</span>
+            const avgSlingshotWPM = calculateAverage(slingshotMetrics.wpm);
+            const avgQwertyWPM = calculateAverage(qwertyMetrics.wpm);
+
+            const avgSlingshotErrors = calculateAverage(slingshotMetrics.errors);
+            const avgQwertyErrors = calculateAverage(qwertyMetrics.errors);
+
+            // Determine max WPM for proportional bar charts (minimum 60 to look good)
+            const maxWPM = Math.max(60, avgSlingshotWPM, avgQwertyWPM);
+            const slingshotHeight = `${(avgSlingshotWPM / maxWPM) * 100}%`;
+            const qwertyHeight = `${(avgQwertyWPM / maxWPM) * 100}%`;
+
+            return (
+                <div className="flex flex-col items-center justify-center w-full h-full bg-[#0b1120] border-[8px] border-slate-900 text-white animate-fade-in p-4 md:p-8">
+                    <div className="absolute top-[20%] left-[50%] -translate-x-[50%] w-[600px] h-[600px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none"></div>
+
+                    <div className="p-4 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6 text-4xl shadow-[0_0_30px_rgba(59,130,246,0.15)] z-10">📊</div>
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent tracking-tight z-10 text-center">Study Complete!</h1>
+                    <p className="text-lg md:text-xl text-slate-400 mb-10 text-center max-w-lg font-light z-10">Thank you for participating. Your typing statistics have been securely recorded.</p>
+
+                    <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 md:p-8 max-w-3xl w-full z-10 flex flex-col md:flex-row gap-8 md:gap-12">
+                        {/* WPM Chart Area */}
+                        <div className="flex-1 flex flex-col items-center border-b md:border-b-0 md:border-r border-slate-700/50 pb-8 md:pb-0 md:pr-8">
+                            <h2 className="text-xl font-medium text-slate-300 mb-6">Average Speed (WPM)</h2>
+                            <div className="flex justify-center items-end gap-8 h-48 w-full">
+                                <div className="w-20 md:w-24 bg-blue-500/20 border border-blue-400/50 shadow-[0_0_20px_rgba(59,130,246,0.1)] rounded-t-lg relative flex flex-col justify-end items-center pb-2 transition-all duration-1000" style={{ height: qwertyHeight }}>
+                                    <span className="absolute -top-8 text-xl font-bold text-blue-300">{avgQwertyWPM}</span>
+                                    <span className="text-xs text-blue-200 uppercase font-bold tracking-wider mb-[-2.5rem]">Qwerty</span>
+                                </div>
+                                <div className="w-20 md:w-24 bg-emerald-500/20 border border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.1)] rounded-t-lg relative flex flex-col justify-end items-center pb-2 transition-all duration-1000 delay-300" style={{ height: slingshotHeight }}>
+                                    <span className="absolute -top-8 text-xl font-bold text-emerald-300">{avgSlingshotWPM}</span>
+                                    <span className="text-xs text-emerald-200 uppercase font-bold tracking-wider mb-[-2.5rem]">Slingshot</span>
+                                </div>
+                            </div>
                         </div>
-                        <div className="w-16 bg-emerald-500/40 border border-emerald-400/50 rounded-t-lg h-[90%] relative flex flex-col justify-end pb-2">
-                            <span className="text-xs text-emerald-200 uppercase font-bold tracking-wider mb-[-2rem]">Slingshot</span>
+
+                        {/* Additional Stats Area */}
+                        <div className="flex-1 flex flex-col justify-center gap-6">
+                            <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-800">
+                                <h3 className="text-sm uppercase tracking-wider text-slate-500 mb-2">Avg Errors Per Sentence</h3>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-blue-300"><span className="text-slate-500 mr-2">Q:</span>{avgQwertyErrors}</span>
+                                    <span className="text-emerald-300"><span className="text-slate-500 mr-2">S:</span>{avgSlingshotErrors}</span>
+                                </div>
+                            </div>
+
+                            <div className="flex justify-center mt-2">
+                                <button className="px-6 py-3 rounded-full font-bold tracking-wider uppercase transition-all duration-300 bg-slate-700 hover:bg-slate-600 text-white shadow-lg text-sm" onClick={() => window.location.reload()}>
+                                    Start Over
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        );
+            );
+        };
 
         // ------------- SPLIT SCREEN ORCHESTRATOR -------------
         const MainApp = () => {
@@ -1236,6 +1275,10 @@
             const [slingshotIndex, setSlingshotIndex] = useState(0);
             const [qwertyIndex, setQwertyIndex] = useState(0);
 
+            // Session analytics accumulator
+            const [slingshotMetrics, setSlingshotMetrics] = useState({ wpm: [], errors: [] });
+            const [qwertyMetrics, setQwertyMetrics] = useState({ wpm: [], errors: [] });
+
             // If user finishes both tests, go to Stats
             useEffect(() => {
                 if (slingshotIndex >= TARGET_SENTENCES.length && qwertyIndex >= TARGET_SENTENCES.length) {
@@ -1243,11 +1286,23 @@
                 }
             }, [slingshotIndex, qwertyIndex]);
 
-            const handleSlingshotNext = () => {
+            const handleSlingshotNext = (metrics) => {
+                if (metrics) {
+                    setSlingshotMetrics(prev => ({
+                        wpm: [...prev.wpm, metrics.wpm],
+                        errors: [...prev.errors, metrics.backspaceCount]
+                    }));
+                }
                 setSlingshotIndex(prev => prev + 1);
             };
 
-            const handleQwertyNext = () => {
+            const handleQwertyNext = (metrics) => {
+                if (metrics) {
+                    setQwertyMetrics(prev => ({
+                        wpm: [...prev.wpm, metrics.wpm],
+                        errors: [...prev.errors, metrics.backspaceCount]
+                    }));
+                }
                 setQwertyIndex(prev => prev + 1);
             };
 
@@ -1269,7 +1324,7 @@
             }
 
             if (appState === 'stats') {
-                return <StatsDashboard />
+                return <StatsDashboard slingshotMetrics={slingshotMetrics} qwertyMetrics={qwertyMetrics} />
             }
 
             const slingshotSentence = TARGET_SENTENCES[slingshotIndex % TARGET_SENTENCES.length];
