@@ -64,5 +64,81 @@ function doPost(e) {
 // Handle preflight OPTIONS request
 function doOptions() {
     return ContentService.createTextOutput("")
-        .setMimeType(ContentService.MimeType.TEXT);
+        .setMimeType(ContentService.MimeType.TEXT)
+        .setHeader("Access-Control-Allow-Origin", "*")
+        .setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+        .setHeader("Access-Control-Allow-Headers", "Content-Type");
+}
+
+/**
+ * Handle GET requests to return Aggregated Leaderboard Data
+ */
+function doGet(e) {
+    try {
+        const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+        const dataRange = sheet.getDataRange();
+        const values = dataRange.getValues();
+
+        if (values.length <= 1) {
+            // No data yet
+            return ContentService.createTextOutput(JSON.stringify({
+                slingshot: { top: [], avgWpm: 0, avgErrors: 0 },
+                qwerty: { top: [], avgWpm: 0, avgErrors: 0 }
+            }))
+                .setMimeType(ContentService.MimeType.JSON)
+                .setHeader("Access-Control-Allow-Origin", "*");
+        }
+
+        const headers = values[0];
+        const rows = values.slice(1);
+
+        const paradigmIdx = headers.indexOf("Paradigm");
+        const wpmIdx = headers.indexOf("WPM");
+        const bckspcIdx = headers.indexOf("Backspace Count");
+
+        let slingshotScores = [];
+        let qwertyScores = [];
+
+        rows.forEach(row => {
+            const paradigm = String(row[paradigmIdx]).toLowerCase();
+            const wpm = parseFloat(row[wpmIdx]) || 0;
+            const errors = parseInt(row[bckspcIdx]) || 0;
+
+            if (paradigm === 'slingshot') {
+                slingshotScores.push({ wpm, errors });
+            } else if (paradigm === 'qwerty') {
+                qwertyScores.push({ wpm, errors });
+            }
+        });
+
+        // Helper to calculate top 5 and averages
+        const processStats = (scores) => {
+            if (scores.length === 0) return { top: [], avgWpm: 0, avgErrors: 0 };
+
+            // Sort descending by WPM and get Top 5
+            const sorted = [...scores].sort((a, b) => b.wpm - a.wpm);
+            const top5 = sorted.slice(0, 5).map(s => s.wpm);
+
+            const avgWpm = (scores.reduce((sum, s) => sum + s.wpm, 0) / scores.length).toFixed(1);
+            const avgErrors = (scores.reduce((sum, s) => sum + s.errors, 0) / scores.length).toFixed(1);
+
+            return { top: top5, avgWpm: parseFloat(avgWpm), avgErrors: parseFloat(avgErrors) };
+        };
+
+        const result = {
+            slingshot: processStats(slingshotScores),
+            qwerty: processStats(qwertyScores)
+        };
+
+        const output = ContentService.createTextOutput(JSON.stringify(result));
+        output.setMimeType(ContentService.MimeType.JSON);
+        output.setHeader("Access-Control-Allow-Origin", "*");
+
+        return output;
+
+    } catch (error) {
+        return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": error.toString() }))
+            .setMimeType(ContentService.MimeType.JSON)
+            .setHeader("Access-Control-Allow-Origin", "*");
+    }
 }

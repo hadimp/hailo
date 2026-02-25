@@ -19,7 +19,7 @@ window.getOrCreateUserId = function () {
 };
 
 // Replace this URL with your actual Google Apps Script Webhook URL once deployed
-window.GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbx88q2zEr7TREh9HqVcixFCZJjPvXAEtXnopC0EdmMi6llutaR6ij2HFYwi5swpJ7TI6A/exec";
+window.GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwk6yRdHp-S_dGUJG_Dx4Uyy85EQZCSnB-L5hCq-8fzFAT6nnFWHHj1L5iiO2ly71wLIQ/exec";
 
 /**
  * Format and send telemetry data for a completed typing trial
@@ -50,5 +50,26 @@ window.recordSession = async function (metrics) {
         console.log(`[Analytics] Successfully recorded ${metrics.paradigm} trial.`);
     } catch (error) {
         console.error("[Analytics] Failed to record session data:", error);
+    }
+};
+
+/**
+ * Fetch the global leaderboard statistics from the webhook
+ * Returns an object containing top scores and averages for both paradigms
+ */
+window.fetchLeaderboard = async function () {
+    if (!window.GOOGLE_SHEETS_WEBHOOK_URL) {
+        console.warn("Analytics: GOOGLE_SHEETS_WEBHOOK_URL is empty. Cannot fetch leaderboard.");
+        return null;
+    }
+
+    try {
+        const response = await fetch(window.GOOGLE_SHEETS_WEBHOOK_URL);
+        const data = await response.json();
+        console.log("[Analytics] Successfully fetched global leaderboard.", data);
+        return data;
+    } catch (error) {
+        console.error("[Analytics] Failed to fetch leaderboard data:", error);
+        return null;
     }
 };
