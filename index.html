@@ -372,12 +372,11 @@
             return (
                 <div className="w-full pt-16 px-4 md:px-8 flex justify-center items-start z-30 shrink-0">
                     <div className={`glass-panel px-4 py-4 w-full max-w-md text-center transition-all duration-300 ${isActive ? `${currentTheme.focusPanel} border-opacity-50` : 'shadow-lg border-slate-700/30'}`}>
-                        <h2 className={`text-[10px] font-bold tracking-[0.2em] uppercase mb-2 transition-colors ${isActive ? currentTheme.text : 'text-slate-500'}`}>
-                            {title}
+                        <h2 className={`text-[10px] font-bold tracking-[0.2em] uppercase mb-4 transition-colors ${isActive ? currentTheme.text : 'text-slate-500'}`}>
+                            TYPE THIS TEXT:
                         </h2>
                         {targetSentence && (
                             <div className="mb-2">
-                                <span className="block text-[10px] text-slate-500 uppercase tracking-widest mb-1">Type this text:</span>
                                 <div className="text-sm md:text-base font-medium text-slate-400 opacity-60 tracking-wider">
                                     {targetSentence.split('').map((char, i) => {
                                         const typedChar = text[i];
@@ -396,7 +395,6 @@
                         )}
                         <div className="text-2xl lg:text-4xl font-light text-white tracking-wide break-words min-h-[40px] flex items-center justify-center">
                             {text || <span className="opacity-20 italic">Type...</span>}
-                            {isActive && <span className={`type-cursor ${currentTheme.cursor} ${success ? 'hidden' : ''}`}></span>}
                         </div>
                     </div>
                 </div>
@@ -404,15 +402,26 @@
         };
 
         // Shared Active Indicator
-        const SharedActiveIndicator = ({ isActive, theme }) => {
+        const SharedActiveIndicator = ({ isActive, theme, title }) => {
             const currentTheme = THEMES[theme];
+
+            // Extract the base paradigm name from titles like "Tutorial: Intro" or "Slingshot Playground"
+            const getDisplayTitle = () => {
+                if (!title) return '';
+                if (title.toLowerCase().includes('slingshot')) return 'SLINGSHOT';
+                if (title.toLowerCase().includes('qwerty')) return 'QWERTY';
+                return title;
+            };
+
             return (
                 <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50">
-                    <div className={`px-5 py-1.5 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-500 shadow-xl border
+                    <div className={`px-5 py-1.5 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-500 shadow-xl border flex items-center gap-2
                         ${isActive
                             ? currentTheme.active
                             : 'bg-transparent text-slate-600 border-transparent'}`}>
-                        {isActive ? '● Active' : 'Select'}
+                        <span>{getDisplayTitle()}</span>
+                        {isActive && <span className="opacity-50">|</span>}
+                        <span>{isActive ? '● ACTIVE' : 'SELECT'}</span>
                     </div>
                 </div>
             );
@@ -786,7 +795,7 @@
                 <div className={`flex flex-col items-center w-full h-full relative transition-all duration-500 ${isActive ? 'opacity-100 scale-100' : 'opacity-40 grayscale-[0.8] mix-blend-screen pointer-events-none scale-[0.97]'}`}>
                     <div className={`absolute top-[-20%] left-[-10%] w-[50%] h-[50%] ${currentTheme.glow} blur-[120px] rounded-full pointer-events-none`}></div>
 
-                    <SharedActiveIndicator isActive={isActive} theme={theme} />
+                    <SharedActiveIndicator isActive={isActive} theme={theme} title={title} />
                     <SharedTypeArea title={title} text={text} targetSentence={targetSentence} isActive={isActive} success={success} theme={theme} />
 
                     <SharedSlingshotRing
@@ -856,6 +865,7 @@
 
             const theme = 'blue';
             const currentTheme = THEMES[theme];
+            const title = "Qwerty Paradigm";
 
             // Check for completion
             useEffect(() => {
@@ -990,7 +1000,7 @@
                 <div className={`flex flex-col items-center w-full h-full relative transition-all duration-500 ${isActive ? 'opacity-100 scale-100' : 'opacity-40 grayscale-[0.8] mix-blend-screen pointer-events-none scale-[0.97]'}`}>
                     <div className={`absolute top-[-20%] right-[-10%] w-[50%] h-[50%] ${currentTheme.glow} blur-[120px] rounded-full pointer-events-none`}></div>
 
-                    <SharedActiveIndicator isActive={isActive} theme={theme} />
+                    <SharedActiveIndicator isActive={isActive} theme={theme} title={title} />
                     <SharedTypeArea title="Qwerty Paradigm" text={text} targetSentence={targetSentence} isActive={isActive} success={false} theme={theme} />
 
                     <div className="flex-1 w-full flex flex-col justify-center items-center pt-[10vh] relative z-20 scale-[0.85] lg:scale-100">
