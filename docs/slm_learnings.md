@@ -1,6 +1,6 @@
 # Small Language Model (SLM) Integration Learnings
 
-During the development of the Slingshot-Cardinal prototype, we attempted to upgrade the instantaneous text prediction engine (a JavaScript Trie Dictionary) with a Small Language Model (SLM) via Hugging Face's `Transformers.js`. 
+During the development of the Arc-Cardinal prototype, we attempted to upgrade the instantaneous text prediction engine (a JavaScript Trie Dictionary) with a Small Language Model (SLM) via Hugging Face's `Transformers.js`. 
 
 The goal was to provide deep, sentence-level context for predictions rather than just word-level autocomplete.
 

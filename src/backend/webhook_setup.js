@@ -1,5 +1,5 @@
 /**
- * Google Apps Script Webhook for Slingshot Telemetry
+ * Google Apps Script Webhook for Arc Telemetry
  * 
  * INSTRUCTIONS:
  * 1. Go to script.google.com and create a new project.
@@ -79,7 +79,7 @@ function doGet(e) {
         if (values.length <= 1) {
             // No data yet
             return ContentService.createTextOutput(JSON.stringify({
-                slingshot: { top: [], avgWpm: 0, avgErrors: 0 },
+                arc: { top: [], avgWpm: 0, avgErrors: 0 },
                 qwerty: { top: [], avgWpm: 0, avgErrors: 0 }
             }))
                 .setMimeType(ContentService.MimeType.JSON);
@@ -92,7 +92,7 @@ function doGet(e) {
         const wpmIdx = headers.indexOf("WPM");
         const bckspcIdx = headers.indexOf("Backspace Count");
 
-        let slingshotScores = [];
+        let arcScores = [];
         let qwertyScores = [];
 
         rows.forEach(row => {
@@ -100,8 +100,8 @@ function doGet(e) {
             const wpm = parseFloat(row[wpmIdx]) || 0;
             const errors = parseInt(row[bckspcIdx]) || 0;
 
-            if (paradigm === 'slingshot') {
-                slingshotScores.push({ wpm, errors });
+            if (paradigm === 'arc') {
+                arcScores.push({ wpm, errors });
             } else if (paradigm === 'qwerty') {
                 qwertyScores.push({ wpm, errors });
             }
@@ -122,7 +122,7 @@ function doGet(e) {
         };
 
         const result = {
-            slingshot: processStats(slingshotScores),
+            arc: processStats(arcScores),
             qwerty: processStats(qwertyScores)
         };
 

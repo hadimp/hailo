@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slingshot vs QWERTY Demo</title>
+    <title>Arc vs QWERTY Demo</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
@@ -405,10 +405,10 @@
         const SharedActiveIndicator = ({ isActive, theme, title }) => {
             const currentTheme = THEMES[theme];
 
-            // Extract the base paradigm name from titles like "Tutorial: Intro" or "Slingshot Playground"
+            // Extract the base paradigm name from titles like "Tutorial: Intro" or "Arc Playground"
             const getDisplayTitle = () => {
                 if (!title) return '';
-                if (title.toLowerCase().includes('slingshot')) return 'SLINGSHOT';
+                if (title.toLowerCase().includes('arc')) return 'SLINGSHOT';
                 if (title.toLowerCase().includes('qwerty')) return 'QWERTY';
                 return title;
             };
@@ -427,8 +427,8 @@
             );
         }
 
-        // Shared Slingshot Visual Ring
-        const SharedSlingshotRing = ({ isActive, success, theme, letters, layer, particles, cycleKey }) => {
+        // Shared Arc Visual Ring
+        const SharedArcRing = ({ isActive, success, theme, letters, layer, particles, cycleKey }) => {
             const currentTheme = THEMES[theme];
 
             const maxLayers = Math.ceil((letters.length || 26) / 3);
@@ -505,11 +505,11 @@
         };
 
         // ------------- SLINGSHOT CORE COMPONENT -------------
-        const SlingshotCore = ({
+        const ArcCore = ({
             isActive,
             targetSentence,
             onComplete,
-            title = "Slingshot",
+            title = "Arc",
             interceptKey = null,
             interceptKeyUp = null,
             onTextChange = null,
@@ -724,7 +724,7 @@
                         <div className={`absolute top-[-20%] left-[-10%] w-[50%] h-[50%] ${currentTheme.glow} blur-[120px] rounded-full pointer-events-none`}></div>
 
                         <div className={`glass-panel p-8 flex flex-col items-center gap-6 ${currentTheme.focusPanel} border-opacity-50 max-w-sm w-full z-20`}>
-                            <h2 className={`text-xl font-bold tracking-widest uppercase ${currentTheme.text}`}>Slingshot Completed</h2>
+                            <h2 className={`text-xl font-bold tracking-widest uppercase ${currentTheme.text}`}>Arc Completed</h2>
 
                             <div className="flex flex-col gap-4 w-full text-slate-300">
                                 <div className="flex justify-between items-center border-b border-slate-700/50 pb-2">
@@ -752,7 +752,7 @@
                             <button
                                 onClick={() => {
                                     const payload = {
-                                        paradigm: 'slingshot',
+                                        paradigm: 'arc',
                                         sentence: targetSentence,
                                         keystrokes,
                                         backspaceCount,
@@ -798,7 +798,7 @@
                     <SharedActiveIndicator isActive={isActive} theme={theme} title={title} />
                     <SharedTypeArea title={title} text={text} targetSentence={targetSentence} isActive={isActive} success={success} theme={theme} />
 
-                    <SharedSlingshotRing
+                    <SharedArcRing
                         isActive={isActive}
                         success={success}
                         theme={theme}
@@ -837,8 +837,8 @@
         };
 
         // ------------- SLINGSHOT PLAYGROUND WRAPPER -------------
-        const SlingshotKeyboard = (props) => {
-            return <SlingshotCore {...props} title="Slingshot Paradigm" showMetricsScreen={true} />;
+        const ArcKeyboard = (props) => {
+            return <ArcCore {...props} title="Arc Paradigm" showMetricsScreen={true} />;
         };
 
         // ------------- QWERTY COMPONENT -------------
@@ -1068,10 +1068,10 @@
                             <span className="text-4xl">🏹</span>
                         </div>
                         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-br from-emerald-300 to-emerald-600 bg-clip-text text-transparent mb-6 tracking-tight">
-                            Slingshot Paradigm Study
+                            Arc Paradigm Study
                         </h1>
                         <p className="text-lg text-slate-300/80 mb-10 leading-relaxed font-light">
-                            Welcome! You are about to evaluate a novel typing interface designed to maximize speed without looking at the screen. You will compare this new <strong className="text-emerald-400 font-medium">Slingshot</strong> paradigm directly against a traditional <strong className="text-blue-400 font-medium">Qwerty</strong> keyboard layout.
+                            Welcome! You are about to evaluate a novel typing interface designed to maximize speed without looking at the screen. You will compare this new <strong className="text-emerald-400 font-medium">Arc</strong> paradigm directly against a traditional <strong className="text-blue-400 font-medium">Qwerty</strong> keyboard layout.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
@@ -1177,7 +1177,7 @@
                     {stage === 0 && (
                         <div className="animate-fade-in glass-panel p-6 border-emerald-500/30 shadow-2xl">
                             <h2 className="text-xl text-emerald-400 mb-2 font-bold uppercase tracking-widest">Tutorial</h2>
-                            <p className="text-slate-300 text-sm mb-4">Instead of hunting for letters, Slingshot predicts what you want to type. You only need the four arrow keys.</p>
+                            <p className="text-slate-300 text-sm mb-4">Instead of hunting for letters, Arc predicts what you want to type. You only need the four arrow keys.</p>
                             <button onClick={() => setStage(1)} className="px-6 py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 rounded-full font-bold hover:bg-emerald-500/30 transition-colors uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.2)]">Got It (Enter)</button>
                         </div>
                     )}
@@ -1222,7 +1222,7 @@
                     {stage === 6 && (
                         <div className="animate-fade-in glass-panel p-6 border-emerald-500/30 shadow-2xl">
                             <h2 className="text-xl text-emerald-400 mb-2 font-bold uppercase tracking-widest">You're ready! 🎉</h2>
-                            <p className="text-slate-300 text-sm mb-4">You successfully mastered the Slingshot paradigm.</p>
+                            <p className="text-slate-300 text-sm mb-4">You successfully mastered the Arc paradigm.</p>
                             <button onClick={onComplete} className="px-6 py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 rounded-full font-bold hover:bg-emerald-500/30 transition-colors uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.2)] pointer-events-auto">Enter Playground</button>
                         </div>
                     )}
@@ -1233,7 +1233,7 @@
                 <div className="w-full h-full bg-[#0b1120] border-[8px] border-slate-900 overflow-hidden relative pointer-events-none">
                     {renderTutorialLegend()}
                     <div className="w-full h-full pt-64 pb-8 pointer-events-auto">
-                        <SlingshotCore
+                        <ArcCore
                             key={`core-${resetKey}`}
                             isActive={true}
                             targetSentence={stage >= 5 ? "sun" : ""}
@@ -1250,18 +1250,18 @@
             );
         };
 
-        const StatsDashboard = ({ slingshotMetrics, qwertyMetrics }) => {
+        const StatsDashboard = ({ arcMetrics, qwertyMetrics }) => {
             const calculateAverage = (arr) => arr.length ? (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : 0;
 
-            const avgSlingshotWPM = calculateAverage(slingshotMetrics.wpm);
+            const avgArcWPM = calculateAverage(arcMetrics.wpm);
             const avgQwertyWPM = calculateAverage(qwertyMetrics.wpm);
 
-            const avgSlingshotErrors = calculateAverage(slingshotMetrics.errors);
+            const avgArcErrors = calculateAverage(arcMetrics.errors);
             const avgQwertyErrors = calculateAverage(qwertyMetrics.errors);
 
             // Determine max WPM for proportional bar charts (minimum 60 to look good)
-            const maxWPM = Math.max(60, avgSlingshotWPM, avgQwertyWPM);
-            const slingshotHeight = `${(avgSlingshotWPM / maxWPM) * 100}%`;
+            const maxWPM = Math.max(60, avgArcWPM, avgQwertyWPM);
+            const arcHeight = `${(avgArcWPM / maxWPM) * 100}%`;
             const qwertyHeight = `${(avgQwertyWPM / maxWPM) * 100}%`;
 
             return (
@@ -1282,9 +1282,9 @@
                                     <span className="absolute -top-8 text-xl font-bold text-blue-300">{avgQwertyWPM}</span>
                                     <span className="text-xs text-blue-200 uppercase font-bold tracking-wider mb-[-2.5rem]">Qwerty</span>
                                 </div>
-                                <div className="w-20 md:w-24 bg-emerald-500/20 border border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.1)] rounded-t-lg relative flex flex-col justify-end items-center pb-2 transition-all duration-1000 delay-300" style={{ height: slingshotHeight }}>
-                                    <span className="absolute -top-8 text-xl font-bold text-emerald-300">{avgSlingshotWPM}</span>
-                                    <span className="text-xs text-emerald-200 uppercase font-bold tracking-wider mb-[-2.5rem]">Slingshot</span>
+                                <div className="w-20 md:w-24 bg-emerald-500/20 border border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.1)] rounded-t-lg relative flex flex-col justify-end items-center pb-2 transition-all duration-1000 delay-300" style={{ height: arcHeight }}>
+                                    <span className="absolute -top-8 text-xl font-bold text-emerald-300">{avgArcWPM}</span>
+                                    <span className="text-xs text-emerald-200 uppercase font-bold tracking-wider mb-[-2.5rem]">Arc</span>
                                 </div>
                             </div>
                         </div>
@@ -1295,7 +1295,7 @@
                                 <h3 className="text-sm uppercase tracking-wider text-slate-500 mb-2">Avg Errors Per Sentence</h3>
                                 <div className="flex justify-between items-center">
                                     <span className="text-blue-300"><span className="text-slate-500 mr-2">Q:</span>{avgQwertyErrors}</span>
-                                    <span className="text-emerald-300"><span className="text-slate-500 mr-2">S:</span>{avgSlingshotErrors}</span>
+                                    <span className="text-emerald-300"><span className="text-slate-500 mr-2">S:</span>{avgArcErrors}</span>
                                 </div>
                             </div>
 
@@ -1349,30 +1349,30 @@
                             </div>
                         ) : (
                             <div className="flex-1 overflow-y-auto flex flex-col md:flex-row gap-8 min-h-[300px]">
-                                {/* Slingshot Column */}
+                                {/* Arc Column */}
                                 <div className="flex-1 bg-emerald-900/10 border border-emerald-500/20 rounded-xl p-6 relative overflow-hidden">
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-bl-full pointer-events-none"></div>
-                                    <h3 className="text-xl font-bold text-emerald-400 mb-6 uppercase tracking-wider relative z-10">Slingshot Top 5</h3>
+                                    <h3 className="text-xl font-bold text-emerald-400 mb-6 uppercase tracking-wider relative z-10">Arc Top 5</h3>
                                     <div className="space-y-3 relative z-10">
-                                        {data.slingshot.top.map((wpm, i) => (
+                                        {data.arc.top.map((wpm, i) => (
                                             <div key={i} className="flex justify-between items-center bg-slate-900/50 px-4 py-3 rounded-lg border border-emerald-500/10">
                                                 <span className="text-slate-500 font-mono">#{i + 1}</span>
                                                 <span className="text-emerald-300 font-bold text-xl">{wpm.toFixed(1)} <span className="text-xs text-emerald-500 font-normal uppercase">WPM</span></span>
                                             </div>
                                         ))}
-                                        {data.slingshot.top.length === 0 && <p className="text-slate-500 italic">No runs recorded.</p>}
+                                        {data.arc.top.length === 0 && <p className="text-slate-500 italic">No runs recorded.</p>}
                                     </div>
                                     <div className="mt-8 pt-6 border-t border-emerald-500/20 relative z-10">
                                         <div className="flex justify-between items-center mb-1">
                                             <span className="text-sm uppercase tracking-wider text-slate-400">Community Avg Speed</span>
-                                            <span className="text-slate-200 font-mono text-lg">{data.slingshot.avgWpm} wpm</span>
+                                            <span className="text-slate-200 font-mono text-lg">{data.arc.avgWpm} wpm</span>
                                         </div>
                                         <div className="flex justify-end mb-4">
                                             <span className="text-[10px] text-slate-500 uppercase tracking-widest">Words Per Minute</span>
                                         </div>
                                         <div className="flex justify-between items-center">
                                             <span className="text-sm uppercase tracking-wider text-slate-400">Community Avg Errors</span>
-                                            <span className="text-slate-200 font-mono text-lg">{data.slingshot.avgErrors}</span>
+                                            <span className="text-slate-200 font-mono text-lg">{data.arc.avgErrors}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1414,32 +1414,32 @@
         // ------------- SPLIT SCREEN ORCHESTRATOR -------------
         const MainApp = () => {
             const [appState, setAppState] = useState('landing'); // 'landing', 'tutorial', 'playground', 'stats'
-            const [activeMode, setActiveMode] = useState('slingshot'); // 'slingshot' or 'qwerty'
+            const [activeMode, setActiveMode] = useState('arc'); // 'arc' or 'qwerty'
             const [showLeaderboard, setShowLeaderboard] = useState(false);
 
             // Track sentences independently so they can be compared fairly side-by-side
-            const [slingshotIndex, setSlingshotIndex] = useState(0);
+            const [arcIndex, setArcIndex] = useState(0);
             const [qwertyIndex, setQwertyIndex] = useState(0);
 
             // Session analytics accumulator
-            const [slingshotMetrics, setSlingshotMetrics] = useState({ wpm: [], errors: [] });
+            const [arcMetrics, setArcMetrics] = useState({ wpm: [], errors: [] });
             const [qwertyMetrics, setQwertyMetrics] = useState({ wpm: [], errors: [] });
 
             // If user finishes both tests, go to Stats
             useEffect(() => {
-                if (slingshotIndex >= TARGET_SENTENCES.length && qwertyIndex >= TARGET_SENTENCES.length) {
+                if (arcIndex >= TARGET_SENTENCES.length && qwertyIndex >= TARGET_SENTENCES.length) {
                     setAppState('stats');
                 }
-            }, [slingshotIndex, qwertyIndex]);
+            }, [arcIndex, qwertyIndex]);
 
-            const handleSlingshotNext = (metrics) => {
+            const handleArcNext = (metrics) => {
                 if (metrics) {
-                    setSlingshotMetrics(prev => ({
+                    setArcMetrics(prev => ({
                         wpm: [...prev.wpm, metrics.wpm],
                         errors: [...prev.errors, metrics.backspaceCount]
                     }));
                 }
-                setSlingshotIndex(prev => prev + 1);
+                setArcIndex(prev => prev + 1);
             };
 
             const handleQwertyNext = (metrics) => {
@@ -1470,10 +1470,10 @@
             }
 
             if (appState === 'stats') {
-                return <StatsDashboard slingshotMetrics={slingshotMetrics} qwertyMetrics={qwertyMetrics} />
+                return <StatsDashboard arcMetrics={arcMetrics} qwertyMetrics={qwertyMetrics} />
             }
 
-            const slingshotSentence = TARGET_SENTENCES[slingshotIndex % TARGET_SENTENCES.length];
+            const arcSentence = TARGET_SENTENCES[arcIndex % TARGET_SENTENCES.length];
             const qwertySentence = TARGET_SENTENCES[qwertyIndex % TARGET_SENTENCES.length];
 
             return (
@@ -1493,24 +1493,24 @@
                             </button>
                         </div>
                         <div className="flex gap-4">
-                            <span className="text-emerald-400 font-mono bg-emerald-500/10 px-2 py-1 rounded">Slingshot: {Math.min(slingshotIndex, TARGET_SENTENCES.length)}/{TARGET_SENTENCES.length}</span>
+                            <span className="text-emerald-400 font-mono bg-emerald-500/10 px-2 py-1 rounded">Arc: {Math.min(arcIndex, TARGET_SENTENCES.length)}/{TARGET_SENTENCES.length}</span>
                             <span className="text-blue-400 font-mono bg-blue-500/10 px-2 py-1 rounded">Qwerty: {Math.min(qwertyIndex, TARGET_SENTENCES.length)}/{TARGET_SENTENCES.length}</span>
                         </div>
                     </div>
 
                     <div className="flex flex-col md:flex-row flex-1 gap-2 md:gap-4 p-2 md:p-0 pt-2 md:pt-4">
-                        {/* Left Panel: Slingshot */}
+                        {/* Left Panel: Arc */}
                         <div
-                            className={`flex-1 relative transition-all duration-500 cursor-pointer overflow-hidden rounded-xl border transition-all duration-300 ${activeMode === 'slingshot' ? `bg-[#0b1120] border-emerald-500/20 shadow-[0_0_40px_rgba(16,185,129,0.1)]` : 'bg-slate-900 border-slate-800/50'}`}
+                            className={`flex-1 relative transition-all duration-500 cursor-pointer overflow-hidden rounded-xl border transition-all duration-300 ${activeMode === 'arc' ? `bg-[#0b1120] border-emerald-500/20 shadow-[0_0_40px_rgba(16,185,129,0.1)]` : 'bg-slate-900 border-slate-800/50'}`}
                             onClick={() => {
-                                setActiveMode('slingshot');
+                                setActiveMode('arc');
                                 window.focus();
                             }}
                         >
-                            <SlingshotKeyboard
-                                isActive={activeMode === 'slingshot'}
-                                targetSentence={slingshotSentence}
-                                onComplete={handleSlingshotNext}
+                            <ArcKeyboard
+                                isActive={activeMode === 'arc'}
+                                targetSentence={arcSentence}
+                                onComplete={handleArcNext}
                             />
                         </div>
 

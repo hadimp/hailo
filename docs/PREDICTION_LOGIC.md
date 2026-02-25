@@ -1,6 +1,6 @@
-# Slingshot Prediction Engine
+# Arc Prediction Engine
 
-The improved Slingshot Prediction Engine utilizes a highly optimized, cascaded approach to predict the next characters a user is likely to type. Rather than running a heavyweight neural network script, it relies on three rapid, memory-efficient tiers:
+The improved Arc Prediction Engine utilizes a highly optimized, cascaded approach to predict the next characters a user is likely to type. Rather than running a heavyweight neural network script, it relies on three rapid, memory-efficient tiers:
 
 ## 1. Context Engine (Bigrams)
 **Trigger:** Activated immediately after the user types a space, and remains active for the first **1 to 2 characters** of the new word.
