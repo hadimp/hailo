@@ -1065,13 +1065,13 @@
 
                     <div className="z-10 flex flex-col items-center text-center max-w-2xl">
                         <div className="mb-6 p-4 rounded-3xl bg-emerald-500/10 border border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.15)] flex justify-center items-center">
-                            <span className="text-4xl">🏹</span>
+                            <span className="text-4xl">💫</span>
                         </div>
                         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-br from-emerald-300 to-emerald-600 bg-clip-text text-transparent mb-6 tracking-tight">
-                            Arc Paradigm Study
+                            Learn the Arc Paradigm
                         </h1>
                         <p className="text-lg text-slate-300/80 mb-10 leading-relaxed font-light">
-                            Welcome! You are about to evaluate a novel typing interface designed to maximize speed without looking at the screen. You will compare this new <strong className="text-emerald-400 font-medium">Arc</strong> paradigm directly against a traditional <strong className="text-blue-400 font-medium">Qwerty</strong> keyboard layout.
+                            Welcome! This platform is designed to introduce you to a new typing interface utilizing directional input. Learn the fundamentals of the <strong className="text-emerald-400 font-medium">Arc</strong> paradigm, and test your skills against a classic <strong className="text-blue-400 font-medium">Qwerty</strong> baseline.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
@@ -1085,7 +1085,7 @@
                                 onClick={onSkip}
                                 className="px-8 py-4 rounded-full font-bold tracking-wider uppercase transition-all duration-300 bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white"
                             >
-                                Skip to Playground
+                                Skip to Practice Area
                             </button>
                         </div>
                     </div>
@@ -1223,7 +1223,7 @@
                         <div className="animate-fade-in glass-panel p-6 border-emerald-500/30 shadow-2xl">
                             <h2 className="text-xl text-emerald-400 mb-2 font-bold uppercase tracking-widest">You're ready! 🎉</h2>
                             <p className="text-slate-300 text-sm mb-4">You successfully mastered the Arc paradigm.</p>
-                            <button onClick={onComplete} className="px-6 py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 rounded-full font-bold hover:bg-emerald-500/30 transition-colors uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.2)] pointer-events-auto">Enter Playground</button>
+                            <button onClick={onComplete} className="px-6 py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 rounded-full font-bold hover:bg-emerald-500/30 transition-colors uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.2)] pointer-events-auto">Enter Practice Area</button>
                         </div>
                     )}
                 </div>
@@ -1481,9 +1481,12 @@
                     {/* Header informing users of dual paradigm test */}
                     <div className="w-full bg-slate-900 p-2 md:p-3 flex justify-between items-center text-xs md:text-sm font-medium tracking-wide border-b border-slate-800">
                         <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <span className="text-slate-300">Playground <span className="text-slate-500 hidden sm:inline">&mdash; Complete all sentences to finish</span></span>
+                            <h1 className="text-lg md:text-xl font-bold tracking-wider uppercase text-white">
+                                <span className="text-emerald-400">Arc</span> <span className="text-slate-600">|</span> <span className="text-blue-400 opacity-60">Qwerty</span>
+                            </h1>
+                            <div className="h-4 w-px bg-slate-700"></div>
+                            <div className="text-xs md:text-sm font-medium tracking-wide">
+                                <span className="text-slate-300">Practice Area <span className="text-slate-500 hidden sm:inline">&mdash; Complete all sentences to finish</span></span>
                             </div>
                             <button
                                 onClick={() => setShowLeaderboard(true)}
