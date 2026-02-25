@@ -64,10 +64,7 @@ function doPost(e) {
 // Handle preflight OPTIONS request
 function doOptions() {
     return ContentService.createTextOutput("")
-        .setMimeType(ContentService.MimeType.TEXT)
-        .setHeader("Access-Control-Allow-Origin", "*")
-        .setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
-        .setHeader("Access-Control-Allow-Headers", "Content-Type");
+        .setMimeType(ContentService.MimeType.TEXT);
 }
 
 /**
@@ -85,8 +82,7 @@ function doGet(e) {
                 slingshot: { top: [], avgWpm: 0, avgErrors: 0 },
                 qwerty: { top: [], avgWpm: 0, avgErrors: 0 }
             }))
-                .setMimeType(ContentService.MimeType.JSON)
-                .setHeader("Access-Control-Allow-Origin", "*");
+                .setMimeType(ContentService.MimeType.JSON);
         }
 
         const headers = values[0];
@@ -132,13 +128,11 @@ function doGet(e) {
 
         const output = ContentService.createTextOutput(JSON.stringify(result));
         output.setMimeType(ContentService.MimeType.JSON);
-        output.setHeader("Access-Control-Allow-Origin", "*");
 
         return output;
 
     } catch (error) {
         return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": error.toString() }))
-            .setMimeType(ContentService.MimeType.JSON)
-            .setHeader("Access-Control-Allow-Origin", "*");
+            .setMimeType(ContentService.MimeType.JSON);
     }
 }
