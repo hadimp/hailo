@@ -1262,7 +1262,8 @@
                     <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 md:p-8 max-w-3xl w-full z-10 flex flex-col md:flex-row gap-8 md:gap-12">
                         {/* WPM Chart Area */}
                         <div className="flex-1 flex flex-col items-center border-b md:border-b-0 md:border-r border-slate-700/50 pb-8 md:pb-0 md:pr-8">
-                            <h2 className="text-xl font-medium text-slate-300 mb-6">Average Speed (WPM)</h2>
+                            <h2 className="text-xl font-medium text-slate-300 mb-2">Average Speed (WPM)</h2>
+                            <p className="text-xs text-slate-500 uppercase tracking-widest mb-6">Words Per Minute</p>
                             <div className="flex justify-center items-end gap-8 h-48 w-full">
                                 <div className="w-20 md:w-24 bg-blue-500/20 border border-blue-400/50 shadow-[0_0_20px_rgba(59,130,246,0.1)] rounded-t-lg relative flex flex-col justify-end items-center pb-2 transition-all duration-1000" style={{ height: qwertyHeight }}>
                                     <span className="absolute -top-8 text-xl font-bold text-blue-300">{avgQwertyWPM}</span>
@@ -1349,9 +1350,12 @@
                                         {data.slingshot.top.length === 0 && <p className="text-slate-500 italic">No runs recorded.</p>}
                                     </div>
                                     <div className="mt-8 pt-6 border-t border-emerald-500/20 relative z-10">
-                                        <div className="flex justify-between items-center mb-2">
+                                        <div className="flex justify-between items-center mb-1">
                                             <span className="text-sm uppercase tracking-wider text-slate-400">Community Avg Speed</span>
                                             <span className="text-slate-200 font-mono text-lg">{data.slingshot.avgWpm} wpm</span>
+                                        </div>
+                                        <div className="flex justify-end mb-4">
+                                            <span className="text-[10px] text-slate-500 uppercase tracking-widest">Words Per Minute</span>
                                         </div>
                                         <div className="flex justify-between items-center">
                                             <span className="text-sm uppercase tracking-wider text-slate-400">Community Avg Errors</span>
@@ -1374,9 +1378,12 @@
                                         {data.qwerty.top.length === 0 && <p className="text-slate-500 italic">No runs recorded.</p>}
                                     </div>
                                     <div className="mt-8 pt-6 border-t border-blue-500/20 relative z-10">
-                                        <div className="flex justify-between items-center mb-2">
+                                        <div className="flex justify-between items-center mb-1">
                                             <span className="text-sm uppercase tracking-wider text-slate-400">Community Avg Speed</span>
                                             <span className="text-slate-200 font-mono text-lg">{data.qwerty.avgWpm} wpm</span>
+                                        </div>
+                                        <div className="flex justify-end mb-4">
+                                            <span className="text-[10px] text-slate-500 uppercase tracking-widest">Words Per Minute</span>
                                         </div>
                                         <div className="flex justify-between items-center">
                                             <span className="text-sm uppercase tracking-wider text-slate-400">Community Avg Errors</span>
