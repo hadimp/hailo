@@ -1554,15 +1554,17 @@
 
             useEffect(() => {
                 if (isMobile && appState === 'playground') {
-                    if (activeMode === 'arc' && arcRef.current) {
-                        try {
-                            arcRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        } catch (e) { }
-                    } else if (activeMode === 'qwerty' && qwertyRef.current) {
-                        try {
-                            qwertyRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        } catch (e) { }
-                    }
+                    setTimeout(() => {
+                        if (activeMode === 'arc' && arcRef.current) {
+                            try {
+                                arcRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            } catch (e) { }
+                        } else if (activeMode === 'qwerty' && qwertyRef.current) {
+                            try {
+                                qwertyRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            } catch (e) { }
+                        }
+                    }, 150);
                 }
             }, [activeMode, isMobile, appState]);
 
@@ -1683,6 +1685,26 @@
                                 attemptNumber={arcIndex + 1}
                             />
                         </div>
+
+                        {/* Mobile Scroll Indicator (Arc -> Qwerty) */}
+                        {isMobile && activeMode === 'arc' && (
+                            <div className="flex justify-center py-2 animate-bounce cursor-pointer text-slate-400 hover:text-white" onClick={() => setActiveMode('qwerty')}>
+                                <div className="text-xs uppercase tracking-widest font-bold flex flex-col items-center gap-2 bg-slate-800/80 px-6 py-3 rounded-full border border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                                    <span className="text-blue-300">Scroll down for Qwerty</span>
+                                    <span className="text-blue-400 text-lg">▼</span>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Mobile Scroll Indicator (Qwerty -> Arc) */}
+                        {isMobile && activeMode === 'qwerty' && (
+                            <div className="flex justify-center py-2 animate-bounce cursor-pointer text-slate-400 hover:text-white" onClick={() => setActiveMode('arc')}>
+                                <div className="text-xs uppercase tracking-widest font-bold flex file-col items-center gap-2 bg-slate-800/80 px-6 py-3 rounded-full border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                                    <span className="text-emerald-400 text-lg">▲</span>
+                                    <span className="text-emerald-300">Scroll up for Arc</span>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Right Panel: Qwerty */}
                         <div
