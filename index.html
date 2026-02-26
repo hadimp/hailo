@@ -414,7 +414,7 @@
             };
 
             return (
-                <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50">
+                <div className="relative sm:absolute sm:top-4 left-1/2 -translate-x-1/2 z-50 mt-4 sm:mt-0">
                     <div className={`px-5 py-1.5 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-500 shadow-xl border flex items-center gap-2
                         ${isActive
                             ? currentTheme.active
@@ -792,7 +792,7 @@
             }
 
             return (
-                <div className={`flex flex-col items-center gap-12 sm:gap-0 mt-[20vh] sm:mt-0 w-full h-full relative transition-all duration-500 ${isActive ? 'opacity-100 scale-100' : 'opacity-40 grayscale-[0.8] mix-blend-screen pointer-events-none scale-[0.97]'}`}>
+                <div className={`flex flex-col items-center gap-4 sm:gap-0 mt-[20vh] sm:mt-0 w-full h-full relative transition-all duration-500 ${isActive ? 'opacity-100 scale-100' : 'opacity-40 grayscale-[0.8] mix-blend-screen pointer-events-none scale-[0.97]'}`}>
                     <div className={`absolute top-[-20%] left-[-10%] w-[50%] h-[50%] ${currentTheme.glow} blur-[120px] rounded-full pointer-events-none`}></div>
 
                     <SharedActiveIndicator isActive={isActive} theme={theme} title={title} />
