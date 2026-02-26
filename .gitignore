@@ -2,3 +2,13 @@ video/
 
 # Local Netlify folder
 .netlify
+
+# Cloudflare Wrangler
+.wrangler
+
+# Dependencies
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
