@@ -370,7 +370,7 @@
         const SharedTypeArea = ({ title, text, targetSentence, isActive, success, theme }) => {
             const currentTheme = THEMES[theme];
             return (
-                <div className="w-full pt-16 sm:pt-12 md:pt-16 px-2 sm:px-4 md:px-8 flex justify-center items-start z-30 shrink-0">
+                <div className="w-full pt-12 sm:pt-12 md:pt-16 px-2 sm:px-4 md:px-8 flex justify-center items-start z-30 shrink-0">
                     <div className={`glass-panel px-3 sm:px-4 py-3 sm:py-4 w-full max-w-md text-center transition-all duration-300 ${isActive ? `${currentTheme.focusPanel} border-opacity-50` : 'shadow-lg border-slate-700/30'}`}>
                         <h2 className={`text-[9px] sm:text-[10px] font-bold tracking-[0.2em] uppercase mb-2 sm:mb-4 transition-colors ${isActive ? currentTheme.text : 'text-slate-500'}`}>
                             TYPE THIS TEXT:
@@ -408,7 +408,7 @@
             // Extract the base paradigm name from titles like "Tutorial: Intro" or "Arc Playground"
             const getDisplayTitle = () => {
                 if (!title) return '';
-                if (title.toLowerCase().includes('arc')) return 'SLINGSHOT';
+                if (title.toLowerCase().includes('arc')) return 'ARC';
                 if (title.toLowerCase().includes('qwerty')) return 'QWERTY';
                 return title;
             };
@@ -450,7 +450,7 @@
             const predLeft = getRawChar(nextOffset + 2);
 
             return (
-                <div className="w-full flex justify-center items-start pt-16 sm:pt-28 md:pt-[15vh] pb-2 sm:pb-16 relative transform-gpu scale-[0.55] sm:scale-[0.8] lg:scale-100 z-20 origin-top sm:flex-1">
+                <div className="w-full flex justify-center items-center pt-8 sm:pt-28 md:pt-[15vh] pb-2 sm:pb-16 relative transform-gpu scale-[0.7] sm:scale-[0.8] lg:scale-100 z-20 origin-center sm:flex-1">
                     <div className={`focus-ring ${isActive ? currentTheme.focusRing : ''} ${success ? 'success' : ''}`}>
                         {success && (
                             <svg className="w-8 h-8 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -504,7 +504,7 @@
             );
         };
 
-        // ------------- SLINGSHOT CORE COMPONENT -------------
+        // ------------- ARC CORE COMPONENT -------------
         const ArcCore = ({
             isActive,
             targetSentence,
@@ -847,7 +847,7 @@
             );
         };
 
-        // ------------- SLINGSHOT PLAYGROUND WRAPPER -------------
+        // ------------- ARC PLAYGROUND WRAPPER -------------
         const ArcKeyboard = (props) => {
             return <ArcCore {...props} title="Arc Paradigm" showMetricsScreen={true} />;
         };
@@ -1411,13 +1411,13 @@
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-bl-full pointer-events-none"></div>
                                     <h3 className="text-xl font-bold text-emerald-400 mb-6 uppercase tracking-wider relative z-10">Arc Top 5</h3>
                                     <div className="space-y-3 relative z-10">
-                                        {data.arc.top.map((wpm, i) => (
+                                        {data.arc?.top?.map((wpm, i) => (
                                             <div key={i} className="flex justify-between items-center bg-slate-900/50 px-4 py-3 rounded-lg border border-emerald-500/10">
                                                 <span className="text-slate-500 font-mono">#{i + 1}</span>
                                                 <span className="text-emerald-300 font-bold text-xl">{wpm.toFixed(1)} <span className="text-xs text-emerald-500 font-normal uppercase">WPM</span></span>
                                             </div>
                                         ))}
-                                        {data.arc.top.length === 0 && <p className="text-slate-500 italic">No runs recorded.</p>}
+                                        {(!data.arc?.top || data.arc.top.length === 0) && <p className="text-slate-500 italic">No runs recorded.</p>}
                                     </div>
                                     <div className="mt-8 pt-6 border-t border-emerald-500/20 relative z-10">
                                         <div className="flex justify-between items-center mb-1">
@@ -1439,13 +1439,13 @@
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-bl-full pointer-events-none"></div>
                                     <h3 className="text-xl font-bold text-blue-400 mb-6 uppercase tracking-wider relative z-10">Qwerty Top 5</h3>
                                     <div className="space-y-3 relative z-10">
-                                        {data.qwerty.top.map((wpm, i) => (
+                                        {data.qwerty?.top?.map((wpm, i) => (
                                             <div key={i} className="flex justify-between items-center bg-slate-900/50 px-4 py-3 rounded-lg border border-blue-500/10">
                                                 <span className="text-slate-500 font-mono">#{i + 1}</span>
                                                 <span className="text-blue-300 font-bold text-xl">{wpm.toFixed(1)} <span className="text-xs text-blue-500 font-normal uppercase">WPM</span></span>
                                             </div>
                                         ))}
-                                        {data.qwerty.top.length === 0 && <p className="text-slate-500 italic">No runs recorded.</p>}
+                                        {(!data.qwerty?.top || data.qwerty.top.length === 0) && <p className="text-slate-500 italic">No runs recorded.</p>}
                                     </div>
                                     <div className="mt-8 pt-6 border-t border-blue-500/20 relative z-10">
                                         <div className="flex justify-between items-center mb-1">
