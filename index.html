@@ -1021,14 +1021,14 @@
 
                     <SharedActiveIndicator isActive={isActive} theme={theme} title={title} />
 
-                    <div className="mt-16 sm:mt-20 mb-[-3rem] z-40 bg-blue-500/10 border border-blue-500/30 text-blue-300 rounded px-4 py-1.5 text-xs sm:text-sm font-medium tracking-wide shadow-lg">
+                    <div className="mt-8 sm:mt-20 mb-[-2rem] sm:mb-[-3rem] z-40 bg-blue-500/10 border border-blue-500/30 text-blue-300 rounded px-3 py-1 sm:px-4 sm:py-1.5 text-[10px] sm:text-sm font-medium tracking-wide shadow-lg text-center mx-4">
                         ⚠️ Please use <strong className="text-blue-400">Arrow Keys</strong> to navigate and <strong className="text-blue-400">Enter</strong> to select.
                     </div>
 
                     <SharedTypeArea title="Qwerty Paradigm" text={text} targetSentence={targetSentence} isActive={isActive} success={false} theme={theme} />
 
-                    <div className="flex-1 w-full flex flex-col justify-center items-center pt-[10vh] relative z-20 scale-[0.85] lg:scale-100">
-                        <div className={`glass-panel p-4 md:p-6 flex flex-col gap-2 md:gap-3 ${isActive ? `${currentTheme.focusPanel.split(' ')[0]}` : ''}`}>
+                    <div className="flex-1 w-full flex flex-col justify-center items-center pt-2 sm:pt-4 md:pt-[5vh] pb-24 sm:pb-16 md:pb-0 relative z-20 scale-[0.75] sm:scale-[0.85] lg:scale-100 mt-2 sm:mt-0">
+                        <div className={`glass-panel p-3 sm:p-4 md:p-6 flex flex-col gap-1.5 sm:gap-2 md:gap-3 ${isActive ? `${currentTheme.focusPanel.split(' ')[0]}` : ''}`}>
                             {/* Row 1 */}
                             <div className="flex gap-1.5 md:gap-2 justify-center">
                                 {keyboardLayout[0].map((k, idx) => (
@@ -1065,14 +1065,14 @@
                         </div>
                     </div>
 
-                    <div className={`absolute bottom-8 transition-all duration-1000 z-30 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                        <div className="flex flex-wrap gap-4 justify-center text-[11px] lg:text-[13px] text-slate-400 glass-panel px-4 py-3 shadow-xl">
-                            <div className="flex items-center gap-2">
-                                <div className={`px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs ${currentTheme.accent}`}>↑↓←→</div>
+                    <div className={`absolute bottom-2 sm:bottom-8 transition-all duration-1000 z-30 w-full flex justify-center px-2 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                        <div className="flex flex-wrap gap-3 sm:gap-4 justify-center text-[9px] sm:text-[11px] lg:text-[13px] text-slate-400 glass-panel px-3 sm:px-4 py-2 sm:py-3 shadow-xl">
+                            <div className="flex items-center gap-1.5 sm:gap-2">
+                                <div className={`px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[9px] sm:text-xs ${currentTheme.accent}`}>↑↓←→</div>
                                 <span>Move Focus</span>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <div className="px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[10px] text-green-300">Enter</div>
+                            <div className="flex items-center gap-1.5 sm:gap-2">
+                                <div className="px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[9px] sm:text-[10px] text-green-300">Enter</div>
                                 <span>Press Key</span>
                             </div>
                         </div>
