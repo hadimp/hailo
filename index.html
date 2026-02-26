@@ -1109,6 +1109,7 @@
         const TutorialOverlay = ({ onComplete }) => {
             const [stage, setStage] = useState(0);
             const [resetKey, setResetKey] = useState(0);
+            const isMobile = useIsMobile();
 
             useEffect(() => {
                 if (stage === 5) {
@@ -1257,7 +1258,7 @@
             return (
                 <div className="w-full h-full bg-[#0b1120] border-[8px] border-slate-900 overflow-hidden relative pointer-events-none">
                     {renderTutorialLegend()}
-                    <div className="w-full h-full pt-64 pb-8 pointer-events-auto">
+                    <div className={`w-full h-full pt-64 ${isMobile ? 'pb-48' : 'pb-8'} pointer-events-auto`}>
                         <ArcCore
                             key={`core-${resetKey}`}
                             isActive={true}
@@ -1271,7 +1272,7 @@
                             onComplete={onComplete}
                         />
                     </div>
-                    <MobileRemote />
+                    <MobileRemote isMobile={isMobile} />
                 </div>
             );
         };
@@ -1443,7 +1444,7 @@
         };
 
         // ------------- MOBILE REMOTE OVERLAY -------------
-        const MobileRemote = () => {
+        const useIsMobile = () => {
             const [isMobile, setIsMobile] = useState(false);
 
             useEffect(() => {
@@ -1454,11 +1455,15 @@
                 }
             }, []);
 
+            return isMobile;
+        };
+
+        const MobileRemote = ({ isMobile }) => {
             if (!isMobile) return null;
 
-            const Button = ({ label, keyName, className = "" }) => (
+            const Button = ({ icon, label, keyName, className = "" }) => (
                 <button
-                    className={`w-12 h-12 md:w-16 md:h-16 bg-slate-800/80 border border-slate-600/50 rounded-full flex items-center justify-center text-slate-300 font-bold shadow-lg active:bg-emerald-500/30 active:border-emerald-500/50 active:text-emerald-300 transition-colors select-none touch-manipulation ${className}`}
+                    className={`w-14 h-14 md:w-16 md:h-16 bg-slate-800/80 border border-slate-600/50 rounded-full flex items-center justify-center text-slate-300 font-bold shadow-lg active:bg-emerald-500/30 active:border-emerald-500/50 active:text-emerald-300 transition-colors select-none touch-manipulation ${className}`}
                     onPointerDown={(e) => {
                         e.preventDefault();
                         e.currentTarget.setPointerCapture(e.pointerId);
@@ -1476,20 +1481,25 @@
                     }}
                     onContextMenu={(e) => e.preventDefault()}
                 >
-                    {label}
+                    {icon || label}
                 </button>
             );
 
+            const UpIcon = <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m18 15-6-6-6 6" /></svg>;
+            const DownIcon = <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>;
+            const LeftIcon = <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>;
+            const RightIcon = <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>;
+
             return (
-                <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 flex flex-col items-center gap-2 p-3 md:p-4 bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-slate-700/50 shadow-2xl scale-75 sm:scale-100 origin-bottom-right">
-                    <Button label="▲" keyName="ArrowUp" />
+                <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 flex flex-col items-center gap-2 p-3 md:p-4 bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-700/80 shadow-[0_10px_40px_rgba(0,0,0,0.5)] scale-[0.85] sm:scale-100 origin-bottom-right">
+                    <Button icon={UpIcon} keyName="ArrowUp" />
                     <div className="flex gap-2">
-                        <Button label="◀" keyName="ArrowLeft" />
-                        <Button label="OK" keyName="Enter" className="text-emerald-400 bg-emerald-900/30 border-emerald-500/40 text-sm md:text-base" />
-                        <Button label="▶" keyName="ArrowRight" />
+                        <Button icon={LeftIcon} keyName="ArrowLeft" />
+                        <Button label="OK" keyName="Enter" className="text-emerald-400 bg-emerald-900/40 border-emerald-500/50 text-sm md:text-base tracking-widest" />
+                        <Button icon={RightIcon} keyName="ArrowRight" />
                     </div>
-                    <Button label="▼" keyName="ArrowDown" />
-                    <div className="text-[9px] text-slate-400 uppercase tracking-widest mt-1 opacity-60">TV Remote</div>
+                    <Button icon={DownIcon} keyName="ArrowDown" />
+                    <div className="text-[10px] text-slate-400 font-medium uppercase tracking-widest mt-1 opacity-70">TV Remote</div>
                 </div>
             );
         };
@@ -1499,6 +1509,7 @@
             const [appState, setAppState] = useState('landing'); // 'landing', 'tutorial', 'playground', 'stats'
             const [activeMode, setActiveMode] = useState('arc'); // 'arc' or 'qwerty'
             const [showLeaderboard, setShowLeaderboard] = useState(false);
+            const isMobile = useIsMobile();
 
             // Track sentences independently so they can be compared fairly side-by-side
             const [arcIndex, setArcIndex] = useState(0);
@@ -1608,7 +1619,7 @@
                         </div>
                     </div>
 
-                    <div className="flex flex-col md:flex-row flex-1 gap-2 md:gap-4 p-2 md:p-0 pt-2 md:pt-4">
+                    <div className={`flex flex-col md:flex-row flex-1 gap-2 md:gap-4 p-2 md:p-0 pt-2 md:pt-4 ${isMobile ? 'pb-48' : ''}`}>
                         {/* Left Panel: Arc */}
                         <div
                             className={`flex-1 relative transition-all duration-500 cursor-pointer overflow-hidden rounded-xl border transition-all duration-300 ${activeMode === 'arc' ? `bg-[#0b1120] border-emerald-500/20 shadow-[0_0_40px_rgba(16,185,129,0.1)]` : 'bg-slate-900 border-slate-800/50'}`}
@@ -1642,7 +1653,7 @@
                         </div>
                     </div>
                     {showLeaderboard && <LeaderboardOverlay onClose={() => setShowLeaderboard(false)} />}
-                    <MobileRemote />
+                    <MobileRemote isMobile={isMobile} />
                 </div>
             );
         };
