@@ -515,7 +515,8 @@
             onTextChange = null,
             renderOverlay = null,
             removeSpecials = false,
-            showMetricsScreen = true
+            showMetricsScreen = true,
+            attemptNumber = 1
         }) => {
             const [text, setText] = useState("");
             const [layer, setLayer] = useState(0);
@@ -749,6 +750,7 @@
                                 onClick={() => {
                                     const payload = {
                                         paradigm: 'arc',
+                                        attemptNumber,
                                         sentence: targetSentence,
                                         keystrokes,
                                         backspaceCount,
@@ -838,7 +840,7 @@
         };
 
         // ------------- QWERTY COMPONENT -------------
-        const QwertyKeyboard = ({ isActive, targetSentence, onComplete }) => {
+        const QwertyKeyboard = ({ isActive, targetSentence, onComplete, attemptNumber = 1 }) => {
             const [text, setText] = useState("");
             const [isCompleted, setIsCompleted] = useState(false);
 
@@ -961,6 +963,7 @@
                                 onClick={() => {
                                     const payload = {
                                         paradigm: 'qwerty',
+                                        attemptNumber,
                                         sentence: targetSentence,
                                         keystrokes,
                                         backspaceCount,
@@ -1075,9 +1078,14 @@
                         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-br from-emerald-300 to-emerald-600 bg-clip-text text-transparent mb-6 tracking-tight">
                             Learn the Arc Paradigm
                         </h1>
-                        <p className="text-lg text-slate-300/80 mb-10 leading-relaxed font-light">
+                        <p className="text-lg text-slate-300/80 mb-6 leading-relaxed font-light">
                             Welcome! Typing on Smart TVs, game consoles, and VR devices with older paradigms is slow and frustrating. This platform is designed to introduce you to a faster way to type using only directional inputs. Learn the fundamentals of the <strong className="text-emerald-400 font-medium">Arc</strong> paradigm, and test your skills against a classic <strong className="text-blue-400 font-medium">Qwerty</strong> baseline.
                         </p>
+
+                        <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg px-4 py-3 mb-10 w-full max-w-lg text-sm text-slate-400">
+                            <span className="text-blue-400 mr-2">ℹ️</span>
+                            For research purposes, we record anonymous typing metrics (speed, keystrokes, accuracy) during the practice area. No personal information is collected.
+                        </div>
 
                         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                             <button
@@ -1288,7 +1296,12 @@
 
                     <div className="p-4 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6 text-4xl shadow-[0_0_30px_rgba(59,130,246,0.15)] z-10">📊</div>
                     <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent tracking-tight z-10 text-center">Study Complete!</h1>
-                    <p className="text-lg md:text-xl text-slate-400 mb-10 text-center max-w-lg font-light z-10">Thank you for participating. Your typing statistics have been securely recorded.</p>
+                    <p className="text-lg md:text-xl text-slate-400 mb-6 text-center max-w-lg font-light z-10">Thank you for participating. Your typing statistics have been securely recorded.</p>
+
+                    <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg px-4 py-3 mb-10 text-sm text-slate-400 z-10">
+                        <span className="text-blue-400 mr-2">ℹ️</span>
+                        Metrics shown below have been recorded anonymously for our research.
+                    </div>
 
                     <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 md:p-8 max-w-3xl w-full z-10 flex flex-col md:flex-row gap-8 md:gap-12">
                         {/* WPM Chart Area */}
@@ -1608,6 +1621,7 @@
                                 isActive={activeMode === 'arc'}
                                 targetSentence={arcSentence}
                                 onComplete={handleArcNext}
+                                attemptNumber={arcIndex + 1}
                             />
                         </div>
 
@@ -1623,6 +1637,7 @@
                                 isActive={activeMode === 'qwerty'}
                                 targetSentence={qwertySentence}
                                 onComplete={handleQwertyNext}
+                                attemptNumber={qwertyIndex + 1}
                             />
                         </div>
                     </div>
