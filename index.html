@@ -1263,6 +1263,7 @@
                             onComplete={onComplete}
                         />
                     </div>
+                    <MobileRemote />
                 </div>
             );
         };
@@ -1428,6 +1429,58 @@
             );
         };
 
+        // ------------- MOBILE REMOTE OVERLAY -------------
+        const MobileRemote = () => {
+            const [isMobile, setIsMobile] = useState(false);
+
+            useEffect(() => {
+                const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+                // Basic mobile detection regex
+                if (/windows phone/i.test(userAgent) || /android/i.test(userAgent) || /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                    setIsMobile(true);
+                }
+            }, []);
+
+            if (!isMobile) return null;
+
+            const Button = ({ label, keyName, className = "" }) => (
+                <button
+                    className={`w-12 h-12 md:w-16 md:h-16 bg-slate-800/80 border border-slate-600/50 rounded-full flex items-center justify-center text-slate-300 font-bold shadow-lg active:bg-emerald-500/30 active:border-emerald-500/50 active:text-emerald-300 transition-colors select-none touch-manipulation ${className}`}
+                    onPointerDown={(e) => {
+                        e.preventDefault();
+                        e.currentTarget.setPointerCapture(e.pointerId);
+                        window.dispatchEvent(new KeyboardEvent('keydown', { key: keyName, bubbles: true }));
+                        if (navigator.vibrate) navigator.vibrate(15);
+                    }}
+                    onPointerUp={(e) => {
+                        e.preventDefault();
+                        e.currentTarget.releasePointerCapture(e.pointerId);
+                        window.dispatchEvent(new KeyboardEvent('keyup', { key: keyName, bubbles: true }));
+                    }}
+                    onPointerCancel={(e) => {
+                        e.preventDefault();
+                        window.dispatchEvent(new KeyboardEvent('keyup', { key: keyName, bubbles: true }));
+                    }}
+                    onContextMenu={(e) => e.preventDefault()}
+                >
+                    {label}
+                </button>
+            );
+
+            return (
+                <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 flex flex-col items-center gap-2 p-3 md:p-4 bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-slate-700/50 shadow-2xl scale-75 sm:scale-100 origin-bottom-right">
+                    <Button label="▲" keyName="ArrowUp" />
+                    <div className="flex gap-2">
+                        <Button label="◀" keyName="ArrowLeft" />
+                        <Button label="OK" keyName="Enter" className="text-emerald-400 bg-emerald-900/30 border-emerald-500/40 text-sm md:text-base" />
+                        <Button label="▶" keyName="ArrowRight" />
+                    </div>
+                    <Button label="▼" keyName="ArrowDown" />
+                    <div className="text-[9px] text-slate-400 uppercase tracking-widest mt-1 opacity-60">TV Remote</div>
+                </div>
+            );
+        };
+
         // ------------- SPLIT SCREEN ORCHESTRATOR -------------
         const MainApp = () => {
             const [appState, setAppState] = useState('landing'); // 'landing', 'tutorial', 'playground', 'stats'
@@ -1574,6 +1627,7 @@
                         </div>
                     </div>
                     {showLeaderboard && <LeaderboardOverlay onClose={() => setShowLeaderboard(false)} />}
+                    <MobileRemote />
                 </div>
             );
         };
