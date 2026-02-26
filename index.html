@@ -755,9 +755,10 @@
                                         keystrokes,
                                         backspaceCount,
                                         timeSeconds: timeInSeconds,
-                                        wpm: wpm,
+                                        wpm: wpm, deviceType: getDeviceType(),
                                         efficiency: (keystrokes / text.length).toFixed(2),
-                                        intervals
+                                        intervals,
+                                        deviceType: getDeviceType()
                                     };
 
                                     try {
@@ -827,6 +828,17 @@
                                     <div className="px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[10px] text-green-300">Enter</div>
                                     <span>Space</span>
                                 </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {!isActive && (
+                        <div className="absolute inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center transition-opacity duration-300">
+                            <div className="flex flex-col items-center gap-3 transform hover:scale-105 transition-transform duration-300">
+                                <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/50 flex items-center justify-center shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-400"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"></path><path d="m7.5 4.21 4.5 2.6a2 2 0 0 0 2 0l4.5-2.6"></path></svg>
+                                </div>
+                                <span className="text-emerald-300 font-bold uppercase tracking-widest text-sm bg-slate-900/80 px-4 py-2 rounded-full border border-emerald-500/30">Tap to Switch</span>
                             </div>
                         </div>
                     )}
@@ -968,9 +980,10 @@
                                         keystrokes,
                                         backspaceCount,
                                         timeSeconds: timeInSeconds,
-                                        wpm: wpm,
+                                        wpm: wpm, deviceType: getDeviceType(),
                                         efficiency: (keystrokes / text.length).toFixed(2),
-                                        intervals
+                                        intervals,
+                                        deviceType: getDeviceType()
                                     };
 
                                     try {
@@ -1064,6 +1077,17 @@
                             </div>
                         </div>
                     </div>
+
+                    {!isActive && (
+                        <div className="absolute inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center transition-opacity duration-300">
+                            <div className="flex flex-col items-center gap-3 transform hover:scale-105 transition-transform duration-300">
+                                <div className="w-16 h-16 rounded-full bg-blue-500/20 border border-blue-500/50 flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.2)]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-400"><rect width="20" height="16" x="2" y="4" rx="2" ry="2"></rect><path d="M6 8h.001"></path><path d="M10 8h.001"></path><path d="M14 8h.001"></path><path d="M18 8h.001"></path><path d="M8 12h.001"></path><path d="M12 12h.001"></path><path d="M16 12h.001"></path><path d="M7 16h10"></path></svg>
+                                </div>
+                                <span className="text-blue-300 font-bold uppercase tracking-widest text-sm bg-slate-900/80 px-4 py-2 rounded-full border border-blue-500/30">Tap to Switch</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
             );
         };
@@ -1443,14 +1467,20 @@
             );
         };
 
-        // ------------- MOBILE REMOTE OVERLAY -------------
+        // ------------- GLOBAL HELPERS -------------
+        const getDeviceType = () => {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            if (/tablet|ipad|playbook|silk/i.test(userAgent)) return "tablet";
+            if (/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(userAgent)) return "mobile";
+            return "computer";
+        };
+
         const useIsMobile = () => {
             const [isMobile, setIsMobile] = useState(false);
 
             useEffect(() => {
-                const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-                // Basic mobile detection regex
-                if (/windows phone/i.test(userAgent) || /android/i.test(userAgent) || /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                const device = getDeviceType();
+                if (device === "mobile" || device === "tablet") {
                     setIsMobile(true);
                 }
             }, []);
@@ -1515,9 +1545,26 @@
             const [arcIndex, setArcIndex] = useState(0);
             const [qwertyIndex, setQwertyIndex] = useState(0);
 
-            // Session analytics accumulator
             const [arcMetrics, setArcMetrics] = useState({ wpm: [], errors: [] });
             const [qwertyMetrics, setQwertyMetrics] = useState({ wpm: [], errors: [] });
+
+            // Auto-scroll effect for mobile when active mode changes
+            const arcRef = React.useRef(null);
+            const qwertyRef = React.useRef(null);
+
+            useEffect(() => {
+                if (isMobile && appState === 'playground') {
+                    if (activeMode === 'arc' && arcRef.current) {
+                        try {
+                            arcRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        } catch (e) { }
+                    } else if (activeMode === 'qwerty' && qwertyRef.current) {
+                        try {
+                            qwertyRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        } catch (e) { }
+                    }
+                }
+            }, [activeMode, isMobile, appState]);
 
             // If user finishes both tests, go to Stats
             useEffect(() => {
@@ -1622,6 +1669,7 @@
                     <div className={`flex flex-col md:flex-row flex-1 gap-2 md:gap-4 p-2 md:p-0 pt-2 md:pt-4 ${isMobile ? 'pb-48' : ''}`}>
                         {/* Left Panel: Arc */}
                         <div
+                            ref={arcRef}
                             className={`flex-1 relative transition-all duration-500 cursor-pointer overflow-hidden rounded-xl border transition-all duration-300 ${activeMode === 'arc' ? `bg-[#0b1120] border-emerald-500/20 shadow-[0_0_40px_rgba(16,185,129,0.1)]` : 'bg-slate-900 border-slate-800/50'}`}
                             onClick={() => {
                                 setActiveMode('arc');
@@ -1638,6 +1686,7 @@
 
                         {/* Right Panel: Qwerty */}
                         <div
+                            ref={qwertyRef}
                             className={`flex-1 relative transition-all duration-500 cursor-pointer overflow-hidden rounded-xl border transition-all duration-300 ${activeMode === 'qwerty' ? `bg-[#0b1120] border-blue-500/20 shadow-[0_0_40px_rgba(59,130,246,0.1)]` : 'bg-slate-900 border-slate-800/50'}`}
                             onClick={() => {
                                 setActiveMode('qwerty');
