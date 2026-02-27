@@ -388,7 +388,7 @@
         const SharedTypeArea = ({ title, text, targetSentence, isActive, success, theme }) => {
             const currentTheme = THEMES[theme];
             return (
-                <div className="w-full pt-10 sm:pt-12 md:pt-16 px-2 sm:px-4 md:px-8 flex justify-center items-start z-30 shrink-0">
+                <div className="w-full pt-10 sm:pt-4 md:pt-4 px-2 sm:px-4 md:px-8 flex justify-center items-start z-30 shrink-0">
                     <div className={`glass-panel px-3 sm:px-4 py-3 sm:py-4 w-full max-w-md text-center transition-all duration-300 ${isActive ? `${currentTheme.focusPanel} border-opacity-50` : 'shadow-lg border-slate-700/30'}`}>
                         <h2 className={`text-[9px] sm:text-[10px] font-bold tracking-[0.2em] uppercase mb-2 sm:mb-4 transition-colors ${isActive ? currentTheme.text : 'text-slate-500'}`}>
                             TYPE THIS TEXT:
@@ -1063,8 +1063,8 @@
                             <div className="flex gap-1 sm:gap-1.5 md:gap-2 justify-center ml-2 md:ml-4">
                                 {keyboardLayout[1].map((k, idx) => (
                                     <div key={'r1' + idx}
-                                        className={`${k === 'DEL' ? 'w-10 sm:w-12 md:w-16 bg-rose-900/40 border-rose-500/50 text-rose-100' : 'w-7 h-9 sm:w-8 sm:h-10 md:w-10 md:h-12'} text-[10px] sm:text-xs md:text-sm qwerty-key ${focusRow === 1 && focusCol === idx ? `${currentTheme.active.split(' ')[0]} border-${theme}-400 shadow-[0_0_15px_rgba(59,130,246,0.4)] text-white scale-105 z-10` : ''}`}>
-                                        {k === 'DEL' ? '⌫ DEL' : k}
+                                        className={`w-7 h-9 sm:w-8 sm:h-10 md:w-10 md:h-12 text-[10px] sm:text-xs md:text-sm qwerty-key ${focusRow === 1 && focusCol === idx ? `${currentTheme.active.split(' ')[0]} border-${theme}-400 shadow-[0_0_15px_rgba(59,130,246,0.4)] text-white scale-105 z-10` : ''}`}>
+                                        {k === 'DEL' ? <span className="text-lg md:text-xl">⌫</span> : k}
                                     </div>
                                 ))}
                             </div>
@@ -1666,7 +1666,7 @@
             return (
                 <div className="flex flex-col w-full h-full bg-slate-900 border-[8px] border-slate-900 overflow-hidden box-border">
                     {/* Header informing users of dual paradigm test */}
-                    <div className="w-full bg-slate-900 p-2 md:p-3 flex justify-between items-center text-xs md:text-sm font-medium tracking-wide border-b border-slate-800 overflow-x-auto whitespace-nowrap">
+                    <div className="w-full bg-slate-900 p-2 md:p-3 flex justify-between items-center text-xs md:text-sm font-medium tracking-wide border-b border-slate-800 overflow-x-auto">
                         <div className="flex items-center gap-2 sm:gap-4 shrink-0">
                             <h1 className="text-sm sm:text-lg md:text-xl font-bold tracking-wider uppercase text-emerald-400">
                                 Arc
