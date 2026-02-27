@@ -1511,6 +1511,36 @@
             return isMobile;
         };
 
+        // ------------- MOBILE WARNING MODAL -------------
+        const MobilePlaygroundWarning = ({ onProceed }) => {
+            return (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
+                    <div className="glass-panel max-w-sm w-full p-6 space-y-6 text-center shadow-2xl border border-amber-500/30">
+                        <div className="flex justify-center">
+                            <div className="w-16 h-16 bg-amber-500/20 rounded-full flex items-center justify-center border border-amber-500/50">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <h2 className="text-xl font-bold tracking-tight text-amber-400 uppercase">Mobile Testing Guard</h2>
+                            <p className="text-slate-300 text-sm leading-relaxed">
+                                To compare these paradigms objectively, we recommend testing <span className="text-emerald-400 font-bold">BOTH</span> Arc and Qwerty.
+                            </p>
+                            <p className="text-slate-400 text-xs italic">
+                                Note: This website isn't optimized for mobile testing. For the best evaluation of speed and accuracy, we highly recommend a desktop browser with a physical keyboard.
+                            </p>
+                        </div>
+                        <button
+                            onClick={onProceed}
+                            className="w-full py-3 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-300 font-bold tracking-widest uppercase rounded-xl transition-all duration-300 active:scale-95 shadow-lg"
+                        >
+                            Proceed to Training
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
         const MobileRemote = ({ isMobile, activeMode, setActiveMode }) => {
             if (!isMobile) return null;
 
@@ -1571,6 +1601,7 @@
             const [appState, setAppState] = useState('landing'); // 'landing', 'tutorial', 'playground', 'stats'
             const [activeMode, setActiveMode] = useState('arc'); // 'arc' or 'qwerty'
             const [showLeaderboard, setShowLeaderboard] = useState(false);
+            const [showMobileWarning, setShowMobileWarning] = useState(false);
             const isMobile = useIsMobile();
 
             // Track sentences independently so they can be compared fairly side-by-side
@@ -1645,6 +1676,7 @@
                     onSkip={() => {
                         localStorage.setItem('hasCompletedTutorial', 'true');
                         setAppState('playground');
+                        if (isMobile) setShowMobileWarning(true);
                     }}
                 />
             }
@@ -1653,6 +1685,7 @@
                 return <TutorialOverlay onComplete={() => {
                     localStorage.setItem('hasCompletedTutorial', 'true');
                     setAppState('playground');
+                    if (isMobile) setShowMobileWarning(true);
                 }} />
             }
 
@@ -1741,6 +1774,7 @@
                         </div>
                     </div>
                     {showLeaderboard && <LeaderboardOverlay onClose={() => setShowLeaderboard(false)} />}
+                    {showMobileWarning && <MobilePlaygroundWarning onProceed={() => setShowMobileWarning(false)} />}
                     <MobileRemote isMobile={isMobile} activeMode={activeMode} setActiveMode={setActiveMode} />
                 </div>
             );
