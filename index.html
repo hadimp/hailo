@@ -798,15 +798,17 @@
                     <SharedActiveIndicator isActive={isActive} theme={theme} title={title} />
                     <SharedTypeArea title={title} text={text} targetSentence={targetSentence} isActive={isActive} success={success} theme={theme} />
 
-                    <SharedArcRing
-                        isActive={isActive}
-                        success={success}
-                        theme={theme}
-                        letters={letters}
-                        layer={layer}
-                        particles={particles}
-                        cycleKey={cycleKey}
-                    />
+                    <div className="mt-10 sm:mt-0">
+                        <SharedArcRing
+                            isActive={isActive}
+                            success={success}
+                            theme={theme}
+                            letters={letters}
+                            layer={layer}
+                            particles={particles}
+                            cycleKey={cycleKey}
+                        />
+                    </div>
 
                     {renderOverlay ? (
                         renderOverlay()
