@@ -1936,7 +1936,7 @@
             const handleArcNext = (metrics) => {
                 if (metrics) {
                     setArcMetrics(prev => ({
-                        wpm: [...prev.wpm, metrics.wpm],
+                        wpm: [...prev.wpm, parseFloat(metrics.wpm)],
                         errors: [...prev.errors, metrics.backspaceCount]
                     }));
                 }
@@ -1946,7 +1946,7 @@
             const handleQwertyNext = (metrics) => {
                 if (metrics) {
                     setQwertyMetrics(prev => ({
-                        wpm: [...prev.wpm, metrics.wpm],
+                        wpm: [...prev.wpm, parseFloat(metrics.wpm)],
                         errors: [...prev.errors, metrics.backspaceCount]
                     }));
                 }
