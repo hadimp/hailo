@@ -1541,12 +1541,12 @@
             );
         };
 
-        const MobileRemote = ({ isMobile, activeMode, setActiveMode }) => {
+        const MobileRemote = ({ isMobile, activeMode, setActiveMode, embedded = false }) => {
             if (!isMobile) return null;
 
             const Button = ({ icon, label, keyName, className = "" }) => (
                 <button
-                    className={`w-14 h-14 md:w-16 md:h-16 bg-slate-800/80 border border-slate-600/50 rounded-full flex items-center justify-center text-slate-300 font-bold shadow-lg active:bg-emerald-500/30 active:border-emerald-500/50 active:text-emerald-300 transition-colors select-none touch-manipulation ${className}`}
+                    className={`w-14 h-14 md:w-16 md:h-16 bg-slate-800/80 border border-slate-600/50 rounded-full flex items-center justify-center text-slate-300 font-bold shadow-[0_4px_20px_rgba(0,0,0,0.3)] active:bg-emerald-500/30 active:border-emerald-500/50 active:text-emerald-300 transition-colors select-none touch-manipulation ${className}`}
                     onPointerDown={(e) => {
                         e.preventDefault();
                         e.currentTarget.setPointerCapture(e.pointerId);
@@ -1573,25 +1573,208 @@
             const LeftIcon = <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>;
             const RightIcon = <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>;
 
+            const containerClasses = embedded 
+                ? "flex flex-col items-center gap-4 scale-[1] sm:scale-105"
+                : "fixed bottom-4 left-1/2 -translate-x-1/2 md:bottom-8 z-50 flex flex-col items-center gap-2 p-3 md:p-4 bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-700/80 shadow-[0_10px_40px_rgba(0,0,0,0.5)] scale-[0.85] sm:scale-100 origin-bottom";
+
             return (
-                <div className="fixed bottom-4 left-1/2 -translate-x-1/2 md:bottom-8 z-50 flex flex-col items-center gap-2 p-3 md:p-4 bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-700/80 shadow-[0_10px_40px_rgba(0,0,0,0.5)] scale-[0.85] sm:scale-100 origin-bottom">
+                <div className={containerClasses}>
                     <Button icon={UpIcon} keyName="ArrowUp" />
-                    <div className="flex gap-2">
+                    <div className="flex gap-4">
                         <Button icon={LeftIcon} keyName="ArrowLeft" />
-                        <Button label="OK" keyName="Enter" className="text-emerald-400 bg-emerald-900/40 border-emerald-500/50 text-sm md:text-base tracking-widest" />
+                        <Button label="OK" keyName="Enter" className="text-emerald-400 bg-emerald-900/40 border-emerald-500/50 text-[18px] tracking-widest w-[72px] h-[72px]" />
                         <Button icon={RightIcon} keyName="ArrowRight" />
                     </div>
                     <Button icon={DownIcon} keyName="ArrowDown" />
+                    {!embedded && (
+                        <>
+                            <button
+                                onClick={() => setActiveMode(activeMode === 'arc' ? 'qwerty' : 'arc')}
+                                className={`mt-1 px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-[0.15em] border transition-all duration-300 select-none touch-manipulation shadow-lg animate-pulse-subtle
+                                    ${activeMode === 'arc'
+                                        ? 'bg-blue-600/20 border-blue-500/50 text-blue-300 hover:bg-blue-600/30'
+                                        : 'bg-emerald-600/20 border-emerald-500/50 text-emerald-300 hover:bg-emerald-600/30'}`}
+                            >
+                                {activeMode === 'arc' ? 'Switch to Qwerty' : 'Switch to Arc'}
+                            </button>
+                            <div className="text-[9px] text-slate-500 font-bold uppercase tracking-[0.2em] mt-1 opacity-60">Control Panel</div>
+                        </>
+                    )}
+                </div>
+            );
+        };
+
+        // ------------- MOBILE SPECIFIC VIEWS -------------
+        const MobileLandingPage = ({ onStart }) => (
+            <div className="flex flex-col items-center justify-center w-full h-full p-6 relative animate-fade-in overflow-hidden">
+                <div className="absolute top-[20%] left-[50%] -translate-x-[50%] w-[400px] h-[400px] bg-emerald-500/10 blur-[90px] rounded-full pointer-events-none"></div>
+                
+                <div className="z-10 flex flex-col items-center text-center max-w-sm mt-[-10vh]">
+                    <h1 className="text-5xl font-bold bg-gradient-to-br from-emerald-300 to-emerald-600 bg-clip-text text-transparent mb-6 tracking-tight drop-shadow-lg">
+                        Arc
+                    </h1>
+                    <div className="w-16 h-1 bg-emerald-500/50 mb-6 rounded-full"></div>
+                    <p className="text-base text-slate-300 mb-10 font-light px-2 leading-relaxed">
+                        A minimal, directional-only typing paradigm designed for ultimate speed on constrained devices.
+                    </p>
+                    
                     <button
-                        onClick={() => setActiveMode(activeMode === 'arc' ? 'qwerty' : 'arc')}
-                        className={`mt-1 px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-[0.15em] border transition-all duration-300 select-none touch-manipulation shadow-lg animate-pulse-subtle
-                            ${activeMode === 'arc'
-                                ? 'bg-blue-600/20 border-blue-500/50 text-blue-300 hover:bg-blue-600/30'
-                                : 'bg-emerald-600/20 border-emerald-500/50 text-emerald-300 hover:bg-emerald-600/30'}`}
+                        onClick={onStart}
+                        className="w-full py-4 rounded-3xl font-bold text-lg tracking-wider uppercase transition-all duration-300 bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 shadow-[0_0_30px_rgba(16,185,129,0.2)] active:scale-95 active:bg-emerald-500/30"
                     >
-                        {activeMode === 'arc' ? 'Switch to Qwerty' : 'Switch to Arc'}
+                        Start Practicing
                     </button>
-                    <div className="text-[9px] text-slate-500 font-bold uppercase tracking-[0.2em] mt-1 opacity-60">Control Panel</div>
+                </div>
+            </div>
+        );
+
+        const MobileStatsDashboard = ({ arcMetrics, qwertyMetrics, onRestart }) => {
+            const calculateAverage = (arr) => arr.length ? (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : 0;
+            const avgArcWPM = calculateAverage(arcMetrics.wpm);
+            const avgQwertyWPM = calculateAverage(qwertyMetrics.wpm);
+            const avgArcErrors = calculateAverage(arcMetrics.errors);
+            const avgQwertyErrors = calculateAverage(qwertyMetrics.errors);
+
+            return (
+                <div className="flex flex-col items-center justify-center w-full h-full p-6 animate-fade-in text-white relative">
+                    <div className="p-4 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6 text-4xl shadow-[0_0_30px_rgba(59,130,246,0.15)] z-10">📊</div>
+                    <h2 className="text-4xl font-bold mb-3 bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent z-10 tracking-tight">Results</h2>
+                    <p className="text-slate-400 text-sm font-light mb-8 z-10">Testing complete.</p>
+                    
+                    <div className="w-full max-w-[320px] flex flex-col gap-5 z-10">
+                        <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-3xl p-6 flex justify-between items-center text-emerald-300 shadow-xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-[100px] pointer-events-none"></div>
+                            <div className="flex flex-col relative z-10">
+                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-emerald-500 mb-1">Arc WPM</span>
+                                <span className="text-4xl font-light">{avgArcWPM}</span>
+                            </div>
+                            <div className="flex flex-col items-end relative z-10">
+                                <span className="text-[10px] uppercase tracking-[0.2em] text-emerald-500 mb-1">Errors</span>
+                                <span className="text-2xl font-light opacity-80">{avgArcErrors}</span>
+                            </div>
+                        </div>
+
+                        <div className="bg-blue-900/20 border border-blue-500/30 rounded-3xl p-6 flex justify-between items-center text-blue-300 shadow-xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-[100px] pointer-events-none"></div>
+                            <div className="flex flex-col relative z-10">
+                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-blue-500 mb-1">Qwerty WPM</span>
+                                <span className="text-4xl font-light">{avgQwertyWPM}</span>
+                            </div>
+                            <div className="flex flex-col items-end relative z-10">
+                                <span className="text-[10px] uppercase tracking-[0.2em] text-blue-500 mb-1">Errors</span>
+                                <span className="text-2xl font-light opacity-80">{avgQwertyErrors}</span>
+                            </div>
+                        </div>
+
+                        <button 
+                            onClick={onRestart}
+                            className="mt-6 w-full py-4 rounded-full font-bold tracking-wider uppercase bg-slate-800 hover:bg-slate-700 text-white shadow-xl active:scale-95 transition-all text-sm border border-slate-700/50"
+                        >
+                            Start Over
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        const MobileApp = () => {
+            const [appState, setAppState] = useState('landing');
+            const [activeMode, setActiveMode] = useState('arc');
+            
+            const [arcIndex, setArcIndex] = useState(0);
+            const [qwertyIndex, setQwertyIndex] = useState(0);
+
+            const [arcMetrics, setArcMetrics] = useState({ wpm: [], errors: [] });
+            const [qwertyMetrics, setQwertyMetrics] = useState({ wpm: [], errors: [] });
+
+            useEffect(() => {
+                if (arcIndex > 0 && qwertyIndex > 0 && arcIndex >= TARGET_SENTENCES.length && qwertyIndex >= TARGET_SENTENCES.length) {
+                    setAppState('stats');
+                }
+            }, [arcIndex, qwertyIndex]);
+
+            const handleArcNext = (metrics) => {
+                if (metrics) {
+                    setArcMetrics(prev => ({ wpm: [...prev.wpm, parseFloat(metrics.wpm)], errors: [...prev.errors, metrics.backspaceCount] }));
+                }
+                setArcIndex(prev => prev + 1);
+            };
+
+            const handleQwertyNext = (metrics) => {
+                if (metrics) {
+                    setQwertyMetrics(prev => ({ wpm: [...prev.wpm, parseFloat(metrics.wpm)], errors: [...prev.errors, metrics.backspaceCount] }));
+                }
+                setQwertyIndex(prev => prev + 1);
+            };
+
+            if (appState === 'landing') {
+                return <MobileLandingPage onStart={() => setAppState('playground')} />;
+            }
+
+            if (appState === 'stats') {
+                return <MobileStatsDashboard 
+                    arcMetrics={arcMetrics} 
+                    qwertyMetrics={qwertyMetrics} 
+                    onRestart={() => window.location.reload()} 
+                />;
+            }
+
+            const arcSentence = TARGET_SENTENCES[arcIndex % TARGET_SENTENCES.length];
+            const qwertySentence = TARGET_SENTENCES[qwertyIndex % TARGET_SENTENCES.length];
+
+            return (
+                <div className="flex flex-col w-full h-full bg-[#0b1120] overflow-hidden fixed inset-0">
+                    <div className="w-full bg-[#0b1120] flex justify-between items-center px-4 py-3 border-b border-slate-800/50 text-xs font-medium tracking-wide z-10 shrink-0">
+                        <div className="flex flex-col">
+                            <h1 className="text-xl font-bold tracking-wider uppercase text-emerald-400 leading-none mb-1">
+                                Arc
+                            </h1>
+                            <span className="text-[10px] text-slate-500 uppercase tracking-widest">{activeMode} Testing</span>
+                        </div>
+                        <div className="text-slate-400 bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-700/50 shadow-inner">
+                            {activeMode === 'arc' ? arcIndex + 1 : qwertyIndex + 1} / {TARGET_SENTENCES.length}
+                        </div>
+                    </div>
+
+                    <div className="flex-1 overflow-hidden relative flex flex-col items-center justify-start mt-4 sm:mt-10 overflow-y-auto w-full">
+                        {activeMode === 'arc' ? (
+                            <div className="w-full flex flex-col items-center animate-[fadeIn_0.5s_ease-out]">
+                                <ArcKeyboard
+                                    isActive={true}
+                                    targetSentence={arcSentence}
+                                    onComplete={handleArcNext}
+                                    attemptNumber={arcIndex + 1}
+                                />
+                            </div>
+                        ) : (
+                            <div className="w-full flex flex-col items-center animate-[fadeIn_0.5s_ease-out]">
+                                <QwertyKeyboard
+                                    isActive={true}
+                                    targetSentence={qwertySentence}
+                                    onComplete={handleQwertyNext}
+                                    attemptNumber={qwertyIndex + 1}
+                                />
+                            </div>
+                        )}
+                    </div>
+                    
+                    <div className="shrink-0 w-full bg-slate-900/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-slate-700/80 shadow-[0_-15px_40px_rgba(0,0,0,0.6)] z-50 pt-5 pb-8 flex flex-col">
+                        <div className="flex justify-center mb-5 shrink-0">
+                            <button
+                                onClick={() => setActiveMode(activeMode === 'arc' ? 'qwerty' : 'arc')}
+                                className={`px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-300 shadow-md active:scale-95
+                                    ${activeMode === 'arc'
+                                        ? 'bg-blue-600/20 border border-blue-500/50 text-blue-300'
+                                        : 'bg-emerald-600/20 border border-emerald-500/50 text-emerald-300'}`}
+                            >
+                                {activeMode === 'arc' ? 'Switch to Qwerty' : 'Switch to Arc'}
+                            </button>
+                        </div>
+                        
+                        <div className="flex justify-center w-full shrink-0 relative overflow-visible">
+                            <MobileRemote isMobile={true} activeMode={activeMode} setActiveMode={setActiveMode} embedded={true} />
+                        </div>
+                    </div>
                 </div>
             );
         };
@@ -1603,6 +1786,10 @@
             const [showLeaderboard, setShowLeaderboard] = useState(false);
             const [showMobileWarning, setShowMobileWarning] = useState(false);
             const isMobile = useIsMobile();
+
+            if (isMobile) {
+                return <MobileApp />;
+            }
 
             // Track sentences independently so they can be compared fairly side-by-side
             const [arcIndex, setArcIndex] = useState(0);
