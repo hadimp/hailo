@@ -1244,62 +1244,62 @@
             };
 
             const renderTutorialLegend = () => (
-                <div className={`absolute ${mobileLayout ? 'top-4' : 'top-8'} left-1/2 -translate-x-1/2 transition-all duration-1000 z-50 flex flex-col items-center w-full px-4 text-center max-w-xl pointer-events-auto`}>
+                <div className={`absolute ${mobileLayout ? 'top-2' : 'top-8'} left-1/2 -translate-x-1/2 transition-all duration-1000 z-50 flex flex-col items-center w-[95%] sm:w-full px-1 sm:px-4 text-center max-w-xl pointer-events-auto`}>
                     {stage > 0 && stage < 6 && (
-                        <div className="absolute -top-6 left-0 text-slate-500 text-xs flex items-center gap-1 cursor-pointer hover:text-slate-300 transition-colors" onClick={() => setStage(prev => prev - 1)}>
+                        <div className={`absolute ${mobileLayout ? '-top-4' : '-top-6'} left-0 text-slate-500 text-[10px] sm:text-xs flex items-center gap-1 cursor-pointer hover:text-slate-300 transition-colors`} onClick={() => setStage(prev => prev - 1)}>
                             <span>←</span> Back (Esc)
                         </div>
                     )}
                     {stage === 0 && (
-                        <div className="animate-fade-in glass-panel p-6 border-emerald-500/30 shadow-2xl">
-                            <h2 className="text-xl text-emerald-400 mb-2 font-bold uppercase tracking-widest">Tutorial</h2>
-                            <p className="text-slate-300 text-sm mb-4">Instead of hunting for letters, Arc predicts what you want to type. You only need the four arrow keys.</p>
-                            <button onClick={() => setStage(1)} className="px-6 py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 rounded-full font-bold hover:bg-emerald-500/30 transition-colors uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.2)]">Got It (Enter)</button>
+                        <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-3' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
+                            {!mobileLayout && <h2 className="text-xl text-emerald-400 mb-2 font-bold uppercase tracking-widest">Tutorial</h2>}
+                            <p className="text-slate-300 text-xs sm:text-sm mb-3 sm:mb-4">Instead of hunting for letters, Arc predicts what you want to type. You only need the four arrow keys.</p>
+                            <button onClick={() => setStage(1)} className="px-5 sm:px-6 py-1.5 sm:py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 rounded-full font-bold hover:bg-emerald-500/30 transition-colors uppercase tracking-wider text-[10px] sm:text-base shadow-[0_0_15px_rgba(16,185,129,0.2)]">Got It (Enter)</button>
                         </div>
                     )}
                     {stage === 1 && (
-                        <div className="animate-fade-in glass-panel p-6 border-emerald-500/30 shadow-2xl">
-                            <h2 className="text-lg text-emerald-400 mb-2 font-bold uppercase tracking-widest">1. Cycling (Down)</h2>
-                            <p className="text-slate-300 text-sm mb-3">Press the <strong className="text-emerald-300">DOWN Arrow</strong> to flip through layers of predictions.</p>
-                            <div className="text-emerald-400/80 font-bold uppercase tracking-widest text-xs animate-pulse border border-emerald-500/30 px-4 py-1.5 rounded-full inline-block">Press Down Arrow</div>
-                            <div className="text-slate-500 text-[10px] uppercase tracking-widest mt-3">Or press Enter to skip</div>
+                        <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-3' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
+                            <h2 className="text-sm sm:text-lg text-emerald-400 mb-1 sm:mb-2 font-bold uppercase tracking-widest">1. Cycling (Down)</h2>
+                            <p className="text-slate-300 text-xs sm:text-sm mb-2 sm:mb-3">Press the <strong className="text-emerald-300">DOWN Arrow</strong> to flip through layers of predictions.</p>
+                            <div className="text-emerald-400/80 font-bold uppercase tracking-widest text-[10px] sm:text-xs animate-pulse border border-emerald-500/30 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full inline-block">Press Down Arrow</div>
+                            {!mobileLayout && <div className="text-slate-500 text-[10px] uppercase tracking-widest mt-3">Or press Enter to skip</div>}
                         </div>
                     )}
                     {stage === 2 && (
-                        <div className="animate-fade-in glass-panel p-6 border-emerald-500/30 shadow-2xl">
-                            <h2 className="text-lg text-emerald-400 mb-2 font-bold uppercase tracking-widest">2. Typing (Direction)</h2>
-                            <p className="text-slate-300 text-sm mb-3">Press <strong className="text-emerald-300">UP, RIGHT, or LEFT</strong> to instantly type the letter in that slot.</p>
-                            <div className="text-emerald-400/80 font-bold uppercase tracking-widest text-xs animate-pulse border border-emerald-500/30 px-4 py-1.5 rounded-full inline-block">Press Up, Left, Right</div>
-                            <div className="text-slate-500 text-[10px] uppercase tracking-widest mt-3">Or press Enter to skip</div>
+                        <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-3' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
+                            <h2 className="text-sm sm:text-lg text-emerald-400 mb-1 sm:mb-2 font-bold uppercase tracking-widest">2. Typing (Direction)</h2>
+                            <p className="text-slate-300 text-xs sm:text-sm mb-2 sm:mb-3">Press <strong className="text-emerald-300">UP, RIGHT, or LEFT</strong> to instantly type the letter in that slot.</p>
+                            <div className="text-emerald-400/80 font-bold uppercase tracking-widest text-[10px] sm:text-xs animate-pulse border border-emerald-500/30 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full inline-block">Press Up, Left, Right</div>
+                            {!mobileLayout && <div className="text-slate-500 text-[10px] uppercase tracking-widest mt-3">Or press Enter to skip</div>}
                         </div>
                     )}
                     {stage === 3 && (
-                        <div className="animate-fade-in glass-panel p-6 border-emerald-500/30 shadow-2xl">
-                            <h2 className="text-lg text-emerald-400 mb-2 font-bold uppercase tracking-widest">3. Space (Enter)</h2>
-                            <p className="text-slate-300 text-sm mb-3">Press <strong className="text-emerald-300">ENTER</strong> to type a space.</p>
-                            <div className="text-emerald-400/80 font-bold uppercase tracking-widest text-xs animate-pulse border border-emerald-500/30 px-4 py-1.5 rounded-full inline-block">Press Enter</div>
+                        <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-3' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
+                            <h2 className="text-sm sm:text-lg text-emerald-400 mb-1 sm:mb-2 font-bold uppercase tracking-widest">3. Space (Enter)</h2>
+                            <p className="text-slate-300 text-xs sm:text-sm mb-2 sm:mb-3">Press <strong className="text-emerald-300">ENTER</strong> to type a space.</p>
+                            <div className="text-emerald-400/80 font-bold uppercase tracking-widest text-[10px] sm:text-xs animate-pulse border border-emerald-500/30 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full inline-block">Press Enter</div>
                         </div>
                     )}
                     {stage === 4 && (
-                        <div className="animate-fade-in glass-panel p-6 border-emerald-500/30 shadow-2xl">
-                            <h2 className="text-lg text-emerald-400 mb-2 font-bold uppercase tracking-widest">4. Delete (Hold Down)</h2>
-                            <p className="text-slate-300 text-sm mb-3">Press and <strong className="text-rose-300">Hold DOWN Arrow</strong> to delete characters.</p>
-                            <div className="text-rose-400/80 font-bold uppercase tracking-widest text-xs animate-pulse border border-rose-500/30 px-4 py-1.5 rounded-full inline-block">Hold Down Arrow</div>
-                            <div className="text-slate-500 text-[10px] uppercase tracking-widest mt-3">Clear the text to continue, or press Enter</div>
+                        <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-3' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
+                            <h2 className="text-sm sm:text-lg text-emerald-400 mb-1 sm:mb-2 font-bold uppercase tracking-widest">4. Delete (Hold Down)</h2>
+                            <p className="text-slate-300 text-xs sm:text-sm mb-2 sm:mb-3">Press and <strong className="text-rose-300">Hold DOWN Arrow</strong> to delete characters.</p>
+                            <div className="text-rose-400/80 font-bold uppercase tracking-widest text-[10px] sm:text-xs animate-pulse border border-rose-500/30 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full inline-block">Hold Down Arrow</div>
+                            {!mobileLayout && <div className="text-slate-500 text-[10px] uppercase tracking-widest mt-3">Clear the text to continue, or press Enter</div>}
                         </div>
                     )}
                     {stage === 5 && (
-                        <div className="animate-fade-in glass-panel p-6 border-emerald-500/30 shadow-2xl">
-                            <h2 className="text-lg text-emerald-400 mb-1 font-bold uppercase tracking-widest">5. Practice</h2>
-                            <p className="text-slate-300 text-sm mb-2">Use the arrow keys to cycle and type.</p>
-                            <div className="text-emerald-300 text-sm">Try typing the word: <span className="text-white font-bold ml-2 tracking-[0.3em] bg-slate-800/80 px-2 py-1 rounded">SUN</span></div>
+                        <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-3' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
+                            <h2 className="text-sm sm:text-lg text-emerald-400 mb-1 font-bold uppercase tracking-widest">5. Practice</h2>
+                            <p className="text-slate-300 text-xs sm:text-sm mb-2">Use the arrow keys to cycle and type.</p>
+                            <div className="text-emerald-300 text-xs sm:text-sm">Try typing the word: <span className="text-white font-bold ml-1 tracking-[0.2em] bg-slate-800/80 px-1 sm:px-2 py-0.5 sm:py-1 rounded">SUN</span></div>
                         </div>
                     )}
                     {stage === 6 && (
-                        <div className="animate-fade-in glass-panel p-6 border-emerald-500/30 shadow-2xl">
-                            <h2 className="text-xl text-emerald-400 mb-2 font-bold uppercase tracking-widest">You're ready! 🎉</h2>
-                            <p className="text-slate-300 text-sm mb-4">You successfully mastered the Arc paradigm.</p>
-                            <button onClick={onComplete} className="px-6 py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 rounded-full font-bold hover:bg-emerald-500/30 transition-colors uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.2)] pointer-events-auto">Enter Practice Area</button>
+                        <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-3' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
+                            <h2 className="text-sm sm:text-xl text-emerald-400 mb-1 sm:mb-2 font-bold uppercase tracking-widest">You're ready! 🎉</h2>
+                            <p className="text-slate-300 text-xs sm:text-sm mb-3 sm:mb-4">You successfully mastered the Arc paradigm.</p>
+                            <button onClick={onComplete} className="px-5 sm:px-6 py-1.5 sm:py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 rounded-full font-bold hover:bg-emerald-500/30 transition-colors uppercase tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.2)] pointer-events-auto text-[10px] sm:text-base">Practice Area</button>
                         </div>
                     )}
                 </div>
