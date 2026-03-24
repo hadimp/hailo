@@ -1308,7 +1308,7 @@
             return (
                 <div className={`w-full h-full bg-[#0b1120] ${mobileLayout ? '' : 'border-[8px] border-slate-900'} overflow-hidden relative pointer-events-none`}>
                     {renderTutorialLegend()}
-                    <div className={`w-full h-full ${mobileLayout ? 'pt-24 pb-8' : `pt-64 ${isMobile ? 'pb-48' : 'pb-8'}`} pointer-events-auto`}>
+                    <div className={`w-full h-full ${mobileLayout ? 'pt-20 pb-4' : `pt-64 ${isMobile ? 'pb-48' : 'pb-8'}`} pointer-events-auto`}>
                         <ArcCore
                             key={`core-${resetKey}`}
                             isActive={true}
@@ -1536,7 +1536,7 @@
             );
         };
 
-        const MobileRemote = ({ isMobile, activeMode, setActiveMode, embedded = false }) => {
+        const MobileRemote = ({ isMobile, activeMode, setActiveMode, embedded = false, compact = false }) => {
             if (!isMobile) return null;
 
             const Button = ({ icon, label, keyName, className = "" }) => (
@@ -1569,7 +1569,7 @@
             const RightIcon = <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>;
 
             const containerClasses = embedded 
-                ? "flex flex-col items-center gap-4 scale-[1] sm:scale-105"
+                ? `flex flex-col items-center gap-4 ${compact ? 'scale-[0.85] origin-bottom mb-[-10px]' : 'scale-[1] sm:scale-105'}`
                 : "fixed bottom-4 left-1/2 -translate-x-1/2 md:bottom-8 z-50 flex flex-col items-center gap-2 p-3 md:p-4 bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-700/80 shadow-[0_10px_40px_rgba(0,0,0,0.5)] scale-[0.85] sm:scale-100 origin-bottom";
 
             return (
@@ -1734,13 +1734,9 @@
                            <TutorialOverlay onComplete={() => setAppState('playground')} mobileLayout={true} />
                         </div>
                         
-                        <div className="shrink-0 w-full bg-slate-900/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-slate-700/80 shadow-[0_-15px_40px_rgba(0,0,0,0.6)] z-50 pt-5 pb-8 flex flex-col">
-                            <div className="flex justify-center mb-5 shrink-0 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                                Interactive Tutorial
-                            </div>
-                            
+                        <div className="shrink-0 w-full bg-slate-900/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-slate-700/80 shadow-[0_-15px_40px_rgba(0,0,0,0.6)] z-50 pt-4 pb-4 flex flex-col">
                             <div className="flex justify-center w-full shrink-0 relative overflow-visible">
-                                <MobileRemote isMobile={true} activeMode={'arc'} setActiveMode={()=>{}} embedded={true} />
+                                <MobileRemote isMobile={true} activeMode={'arc'} setActiveMode={()=>{}} embedded={true} compact={true} />
                             </div>
                         </div>
                     </div>
