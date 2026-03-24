@@ -830,7 +830,7 @@
                     <SharedActiveIndicator isActive={isActive} theme={theme} title={title} />
                     <SharedTypeArea title={title} text={text} targetSentence={targetSentence} isActive={isActive} success={success} theme={theme} />
 
-                    <div className={isMobileDevice ? 'mt-[130px]' : 'mt-[140px] sm:mt-[145px]'}>
+                    <div className={isMobileDevice ? 'mt-4 sm:mt-8' : 'mt-[140px] sm:mt-[145px]'}>
                         <SharedArcRing
                             isActive={isActive}
                             success={success}
@@ -1071,7 +1071,7 @@
                         ⚠️ Please use <strong className="text-blue-400">Arrow Keys</strong> to navigate and <strong className="text-blue-400">Enter</strong> to select.
                     </div>
 
-                    <div className={`flex-1 w-full flex flex-col justify-start items-center ${isMobileDevice ? 'pt-4' : 'pt-4 sm:pt-20 md:pt-[15vh]'} pb-0 sm:pb-4 relative z-20 mt-[-22px] sm:mt-[2px] lg:min-h-[300px]`}>
+                    <div className={`flex-1 w-full flex flex-col justify-start items-center ${isMobileDevice ? 'pt-2 scale-[0.85] origin-top' : 'pt-4 sm:pt-20 md:pt-[15vh] scale-100 origin-top'} pb-0 sm:pb-4 relative z-20 ${isMobileDevice ? 'mt-0' : 'mt-[-22px] sm:mt-[2px]'} lg:min-h-[300px]`}>
                         <div className={`glass-panel p-2 sm:p-4 md:p-6 flex flex-col gap-1 sm:gap-2 md:gap-3 ${isActive ? `${currentTheme.focusPanel.split(' ')[0]}` : ''}`}>
                             {/* Row 1 */}
                             <div className="flex gap-1 sm:gap-1.5 md:gap-2 justify-center">
@@ -1563,8 +1563,13 @@
             );
         };
 
+        // ------------- ARC MOBILE REMOTE -------------
         const MobileRemote = ({ isMobile, activeMode, setActiveMode, embedded = false, compact = false }) => {
             if (!isMobile) return null;
+
+            const containerClass = embedded 
+                ? `w-full ${compact ? 'max-w-[160px]' : 'max-w-[210px] sm:max-w-[240px]'} mx-auto relative` 
+                : "fixed bottom-0 left-0 w-full z-50 pointer-events-none pb-4 sm:pb-8 flex justify-center touch-none";
 
             const Button = ({ icon, label, keyName, className = "" }) => (
                 <button
@@ -1839,7 +1844,7 @@
                         ></div>
                     </div>
 
-                    <div className="flex-1 overflow-hidden relative flex flex-col items-center justify-start mt-4 sm:mt-10 overflow-y-auto w-full">
+                    <div className="flex-1 overflow-hidden relative flex flex-col items-center justify-start mt-2 sm:mt-10 overflow-y-auto w-full pb-4">
                         {activeMode === 'arc' ? (
                             <div className="w-full flex flex-col items-center animate-[fadeIn_0.5s_ease-out]">
                                 <ArcKeyboard
@@ -1867,8 +1872,8 @@
                         )}
                     </div>
                     
-                    <div className="shrink-0 w-full bg-slate-900/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-slate-700/80 shadow-[0_-15px_40px_rgba(0,0,0,0.6)] z-50 py-6 flex flex-col">
-                        <div className="flex justify-center mb-5 shrink-0">
+                    <div className="shrink-0 w-full bg-slate-900/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-slate-700/80 shadow-[0_-15px_40px_rgba(0,0,0,0.6)] z-50 py-4 sm:py-6 flex flex-col">
+                        <div className="flex justify-center mb-3 sm:mb-5 shrink-0">
                             <button
                                 onClick={() => setActiveMode(activeMode === 'arc' ? 'qwerty' : 'arc')}
                                 className={`px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-300 shadow-md active:scale-95
