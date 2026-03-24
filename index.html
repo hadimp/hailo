@@ -537,7 +537,9 @@
             renderOverlay = null,
             removeSpecials = false,
             showMetricsScreen = true,
-            attemptNumber = 1
+            attemptNumber = 1,
+            arcIndex = 0,
+            qwertyIndex = 0
         }) => {
             const [text, setText] = useState("");
             const [layer, setLayer] = useState(0);
@@ -883,7 +885,7 @@
         };
 
         // ------------- QWERTY COMPONENT -------------
-        const QwertyKeyboard = ({ isActive, targetSentence, onComplete, attemptNumber = 1 }) => {
+        const QwertyKeyboard = ({ isActive, targetSentence, onComplete, attemptNumber = 1, arcIndex = 0, qwertyIndex = 0 }) => {
             const [text, setText] = useState("");
             const [isCompleted, setIsCompleted] = useState(false);
             const isMobileDevice = useIsMobile();
@@ -1829,6 +1831,8 @@
                                     targetSentence={arcSentence}
                                     onComplete={handleArcNext}
                                     attemptNumber={arcIndex + 1}
+                                    arcIndex={arcIndex}
+                                    qwertyIndex={qwertyIndex}
                                 />
                             </div>
                         ) : (
@@ -1839,6 +1843,8 @@
                                     targetSentence={qwertySentence}
                                     onComplete={handleQwertyNext}
                                     attemptNumber={qwertyIndex + 1}
+                                    arcIndex={arcIndex}
+                                    qwertyIndex={qwertyIndex}
                                 />
                             </div>
                         )}
