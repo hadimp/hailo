@@ -819,7 +819,7 @@
                     <SharedActiveIndicator isActive={isActive} theme={theme} title={title} />
                     <SharedTypeArea title={title} text={text} targetSentence={targetSentence} isActive={isActive} success={success} theme={theme} />
 
-                    <div className={isMobileDevice ? 'mt-[60px]' : 'mt-[140px] sm:mt-[145px]'}>
+                    <div className={isMobileDevice ? 'mt-[100px]' : 'mt-[140px] sm:mt-[145px]'}>
                         <SharedArcRing
                             isActive={isActive}
                             success={success}
@@ -1502,16 +1502,8 @@
         };
 
         const useIsMobile = () => {
-            const [isMobile, setIsMobile] = useState(false);
-
-            useEffect(() => {
-                const device = getDeviceType();
-                if (device === "mobile" || device === "tablet") {
-                    setIsMobile(true);
-                }
-            }, []);
-
-            return isMobile;
+            const device = getDeviceType();
+            return device === "mobile" || device === "tablet";
         };
 
         // ------------- MOBILE WARNING MODAL -------------
@@ -1785,10 +1777,6 @@
             const [showMobileWarning, setShowMobileWarning] = useState(false);
             const isMobile = useIsMobile();
 
-            if (isMobile) {
-                return <MobileApp />;
-            }
-
             // Track sentences independently so they can be compared fairly side-by-side
             const [arcIndex, setArcIndex] = useState(0);
             const [qwertyIndex, setQwertyIndex] = useState(0);
@@ -1965,8 +1953,13 @@
             );
         };
 
+        const AppRoot = () => {
+            const isMobile = useIsMobile();
+            return isMobile ? <MobileApp /> : <MainApp />;
+        };
+
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<MainApp />);
+        root.render(<AppRoot />);
     </script>
 </body>
 
