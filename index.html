@@ -387,8 +387,9 @@
         // Shared Type Area Component
         const SharedTypeArea = ({ title, text, targetSentence, isActive, success, theme }) => {
             const currentTheme = THEMES[theme];
+            const isMobile = useIsMobile();
             return (
-                <div className="w-full pt-10 sm:pt-10 md:pt-12 px-2 sm:px-4 md:px-8 flex justify-center items-start z-30 shrink-0">
+                <div className={`w-full ${isMobile ? 'pt-4' : 'pt-10 sm:pt-10 md:pt-12'} px-2 sm:px-4 md:px-8 flex justify-center items-start z-30 shrink-0`}>
                     <div className={`glass-panel px-3 sm:px-4 py-3 sm:py-4 w-full max-w-md text-center transition-all duration-300 ${isActive ? `${currentTheme.focusPanel} border-opacity-50` : 'shadow-lg border-slate-700/30'}`}>
                         <h2 className={`text-[9px] sm:text-[10px] font-bold tracking-[0.2em] uppercase mb-2 sm:mb-4 transition-colors ${isActive ? currentTheme.text : 'text-slate-500'}`}>
                             TYPE THIS TEXT:
@@ -422,6 +423,8 @@
         // Shared Active Indicator
         const SharedActiveIndicator = ({ isActive, theme, title }) => {
             const currentTheme = THEMES[theme];
+            const isMobile = useIsMobile();
+            if (isMobile) return null;
 
             // Extract the base paradigm name from titles like "Tutorial: Intro" or "Arc Playground"
             const getDisplayTitle = () => {
@@ -816,7 +819,7 @@
                     <SharedActiveIndicator isActive={isActive} theme={theme} title={title} />
                     <SharedTypeArea title={title} text={text} targetSentence={targetSentence} isActive={isActive} success={success} theme={theme} />
 
-                    <div className="mt-[140px] sm:mt-[145px]">
+                    <div className={isMobileDevice ? 'mt-[60px]' : 'mt-[140px] sm:mt-[145px]'}>
                         <SharedArcRing
                             isActive={isActive}
                             success={success}
@@ -1044,11 +1047,11 @@
                     <SharedActiveIndicator isActive={isActive} theme={theme} title={title} />
                     <SharedTypeArea title="Qwerty Paradigm" text={text} targetSentence={targetSentence} isActive={isActive} success={false} theme={theme} />
 
-                    <div className="mt-2 sm:mt-12 z-40 bg-blue-500/10 border border-blue-500/30 text-blue-300 rounded px-3 py-1 sm:px-4 sm:py-1.5 text-[10px] sm:text-sm font-medium tracking-wide shadow-lg text-center mx-4">
+                    <div className={`${isMobileDevice ? 'hidden' : 'mt-2 sm:mt-12'} z-40 bg-blue-500/10 border border-blue-500/30 text-blue-300 rounded px-3 py-1 sm:px-4 sm:py-1.5 text-[10px] sm:text-sm font-medium tracking-wide shadow-lg text-center mx-4`}>
                         ⚠️ Please use <strong className="text-blue-400">Arrow Keys</strong> to navigate and <strong className="text-blue-400">Enter</strong> to select.
                     </div>
 
-                    <div className="flex-1 w-full flex flex-col justify-start items-center pt-4 sm:pt-20 md:pt-[15vh] pb-0 sm:pb-4 relative z-20 mt-[-22px] sm:mt-[2px] lg:min-h-[300px]">
+                    <div className={`flex-1 w-full flex flex-col justify-start items-center ${isMobileDevice ? 'pt-4' : 'pt-4 sm:pt-20 md:pt-[15vh]'} pb-0 sm:pb-4 relative z-20 mt-[-22px] sm:mt-[2px] lg:min-h-[300px]`}>
                         <div className={`glass-panel p-2 sm:p-4 md:p-6 flex flex-col gap-1 sm:gap-2 md:gap-3 ${isActive ? `${currentTheme.focusPanel.split(' ')[0]}` : ''}`}>
                             {/* Row 1 */}
                             <div className="flex gap-1 sm:gap-1.5 md:gap-2 justify-center">
@@ -1724,16 +1727,11 @@
 
             return (
                 <div className="flex flex-col w-full h-full bg-[#0b1120] overflow-hidden fixed inset-0">
-                    <div className="w-full bg-[#0b1120] flex justify-between items-center px-4 py-3 border-b border-slate-800/50 text-xs font-medium tracking-wide z-10 shrink-0">
-                        <div className="flex flex-col">
-                            <h1 className="text-xl font-bold tracking-wider uppercase text-emerald-400 leading-none mb-1">
-                                Arc
-                            </h1>
-                            <span className="text-[10px] text-slate-500 uppercase tracking-widest">{activeMode} Testing</span>
-                        </div>
-                        <div className="text-slate-400 bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-700/50 shadow-inner">
-                            {activeMode === 'arc' ? arcIndex + 1 : qwertyIndex + 1} / {TARGET_SENTENCES.length}
-                        </div>
+                    <div className="w-full h-1 bg-slate-800 shrink-0">
+                        <div 
+                            className={`h-full transition-all duration-500 ${activeMode === 'arc' ? 'bg-emerald-500' : 'bg-blue-500'}`} 
+                            style={{width: `${((activeMode === 'arc' ? arcIndex : qwertyIndex) / TARGET_SENTENCES.length) * 100}%`}}
+                        ></div>
                     </div>
 
                     <div className="flex-1 overflow-hidden relative flex flex-col items-center justify-start mt-4 sm:mt-10 overflow-y-auto w-full">
