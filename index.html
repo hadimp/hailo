@@ -1156,7 +1156,7 @@
             );
         };
 
-        const TutorialOverlay = ({ onComplete }) => {
+        const TutorialOverlay = ({ onComplete, mobileLayout = false }) => {
             const [stage, setStage] = useState(0);
             const [resetKey, setResetKey] = useState(0);
             const isMobile = useIsMobile();
@@ -1244,7 +1244,7 @@
             };
 
             const renderTutorialLegend = () => (
-                <div className="absolute top-8 left-1/2 -translate-x-1/2 transition-all duration-1000 z-50 flex flex-col items-center w-full px-4 text-center max-w-xl pointer-events-auto">
+                <div className={`absolute ${mobileLayout ? 'top-4' : 'top-8'} left-1/2 -translate-x-1/2 transition-all duration-1000 z-50 flex flex-col items-center w-full px-4 text-center max-w-xl pointer-events-auto`}>
                     {stage > 0 && stage < 6 && (
                         <div className="absolute -top-6 left-0 text-slate-500 text-xs flex items-center gap-1 cursor-pointer hover:text-slate-300 transition-colors" onClick={() => setStage(prev => prev - 1)}>
                             <span>←</span> Back (Esc)
@@ -1306,9 +1306,10 @@
             );
 
             return (
-                <div className="w-full h-full bg-[#0b1120] border-[8px] border-slate-900 overflow-hidden relative pointer-events-none">
+            return (
+                <div className={`w-full h-full bg-[#0b1120] ${mobileLayout ? '' : 'border-[8px] border-slate-900'} overflow-hidden relative pointer-events-none`}>
                     {renderTutorialLegend()}
-                    <div className={`w-full h-full pt-64 ${isMobile ? 'pb-48' : 'pb-8'} pointer-events-auto`}>
+                    <div className={`w-full h-full ${mobileLayout ? 'pt-24 pb-8' : `pt-64 ${isMobile ? 'pb-48' : 'pb-8'}`} pointer-events-auto`}>
                         <ArcCore
                             key={`core-${resetKey}`}
                             isActive={true}
@@ -1600,7 +1601,7 @@
         };
 
         // ------------- MOBILE SPECIFIC VIEWS -------------
-        const MobileLandingPage = ({ onStart }) => (
+        const MobileLandingPage = ({ onStartTutorial, onStartPractice }) => (
             <div className="flex flex-col items-center justify-start pt-[10vh] w-full h-full p-6 relative animate-fade-in overflow-y-auto pb-10">
                 <div className="fixed top-[20%] left-[50%] -translate-x-[50%] w-[400px] h-[400px] bg-emerald-500/10 blur-[90px] rounded-full pointer-events-none"></div>
                 
@@ -1621,12 +1622,20 @@
                         <span>For research purposes, we record anonymous typing metrics (speed, keystrokes, accuracy) during the practice area. No personal information is collected.</span>
                     </div>
                     
-                    <button
-                        onClick={onStart}
-                        className="w-full py-4 rounded-3xl font-bold text-[15px] tracking-widest uppercase transition-all duration-300 bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 shadow-[0_0_30px_rgba(16,185,129,0.2)] active:scale-95 active:bg-emerald-500/30 shrink-0"
-                    >
-                        Start Practicing
-                    </button>
+                    <div className="w-full flex flex-col gap-3 shrink-0">
+                        <button
+                            onClick={onStartTutorial}
+                            className="w-full py-4 rounded-3xl font-bold text-[15px] tracking-widest uppercase transition-all duration-300 bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 shadow-[0_0_30px_rgba(16,185,129,0.2)] active:scale-95 active:bg-emerald-500/30"
+                        >
+                            Start Tutorial
+                        </button>
+                        <button
+                            onClick={onStartPractice}
+                            className="w-full py-4 rounded-3xl font-bold text-[15px] tracking-widest uppercase transition-all duration-300 bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white active:scale-95 border border-slate-700/50"
+                        >
+                            Skip & Practice
+                        </button>
+                    </div>
                 </div>
             </div>
         );
@@ -1711,7 +1720,32 @@
             };
 
             if (appState === 'landing') {
-                return <MobileLandingPage onStart={() => setAppState('playground')} />;
+                return (
+                    <MobileLandingPage 
+                        onStartTutorial={() => setAppState('tutorial')} 
+                        onStartPractice={() => setAppState('playground')} 
+                    />
+                );
+            }
+
+            if (appState === 'tutorial') {
+                return (
+                    <div className="flex flex-col w-full h-full bg-[#0b1120] overflow-hidden fixed inset-0">
+                        <div className="flex-1 overflow-hidden relative flex flex-col items-center justify-start overflow-y-auto w-full">
+                           <TutorialOverlay onComplete={() => setAppState('playground')} mobileLayout={true} />
+                        </div>
+                        
+                        <div className="shrink-0 w-full bg-slate-900/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-slate-700/80 shadow-[0_-15px_40px_rgba(0,0,0,0.6)] z-50 pt-5 pb-8 flex flex-col">
+                            <div className="flex justify-center mb-5 shrink-0 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
+                                Interactive Tutorial
+                            </div>
+                            
+                            <div className="flex justify-center w-full shrink-0 relative overflow-visible">
+                                <MobileRemote isMobile={true} activeMode={'arc'} setActiveMode={()=>{}} embedded={true} />
+                            </div>
+                        </div>
+                    </div>
+                );
             }
 
             if (appState === 'stats') {
