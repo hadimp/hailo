@@ -1919,26 +1919,20 @@
             const [classicIndex, setClassicIndex] = useState(0);
 
             const [arcMetrics, setArcMetrics] = useState(() => {
-                const saved = localStorage.getItem('arcMetrics_desktop');
-                if (saved) return JSON.parse(saved);
-                // Fallback to legacy key if desktop-specific key doesn't exist
-                const legacy = localStorage.getItem('arcMetrics');
-                return legacy ? JSON.parse(legacy) : { wpm: [], errors: [] };
+                const saved = localStorage.getItem('arcMetrics');
+                return saved ? JSON.parse(saved) : { wpm: [], errors: [] };
             });
             const [classicMetrics, setClassicMetrics] = useState(() => {
-                const saved = localStorage.getItem('qwertyMetrics_desktop');
-                if (saved) return JSON.parse(saved);
-                // Fallback to legacy key if desktop-specific key doesn't exist
-                const legacy = localStorage.getItem('qwertyMetrics');
-                return legacy ? JSON.parse(legacy) : { wpm: [], errors: [] };
+                const saved = localStorage.getItem('qwertyMetrics');
+                return saved ? JSON.parse(saved) : { wpm: [], errors: [] };
             });
 
             useEffect(() => {
-                localStorage.setItem('arcMetrics_desktop', JSON.stringify(arcMetrics));
+                localStorage.setItem('arcMetrics', JSON.stringify(arcMetrics));
             }, [arcMetrics]);
 
             useEffect(() => {
-                localStorage.setItem('qwertyMetrics_desktop', JSON.stringify(classicMetrics));
+                localStorage.setItem('qwertyMetrics', JSON.stringify(classicMetrics));
             }, [classicMetrics]);
 
             // Auto-scroll effect for mobile when active mode changes
