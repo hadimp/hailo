@@ -745,12 +745,12 @@
                         <div className={`absolute top-[-20%] left-[-10%] w-[50%] h-[50%] ${currentTheme.glow} blur-[120px] rounded-full pointer-events-none`}></div>
 
                         <div className={`glass-panel ${isMobileDevice ? 'p-6' : 'p-8'} flex flex-col items-center gap-6 ${currentTheme.focusPanel} border-opacity-50 max-w-sm w-full z-20`}>
-                            <h2 className={`text-xl font-bold tracking-widest uppercase ${currentTheme.text}`}>{isMobileDevice ? (arcIndex > qwertyIndex ? "Arc Phase Complete" : "Success!") : "Arc Completed"}</h2>
+                            <h2 className={`text-xl font-bold tracking-widest uppercase ${currentTheme.text}`}>{isMobileDevice ? (arcIndex > classicIndex ? "Arc Phase Complete" : "Success!") : "Arc Completed"}</h2>
 
                             {isMobileDevice ? (
                                 <div className="flex flex-col items-center gap-2 mb-2">
                                     <div className="text-4xl font-light text-white">{wpm} <span className="text-sm uppercase opacity-60">WPM</span></div>
-                                    <div className="text-xs text-slate-400 uppercase tracking-widest">{arcIndex > qwertyIndex ? "Phase 1: Arc Done" : "Speed Evaluated"}</div>
+                                    <div className="text-xs text-slate-400 uppercase tracking-widest">{arcIndex > classicIndex ? "Phase 1: Arc Done" : "Speed Evaluated"}</div>
                                 </div>
                             ) : (
                                 <div className="flex flex-col gap-4 w-full text-slate-300">
@@ -815,7 +815,7 @@
                                 className={`mt-4 px-8 py-4 rounded-full font-bold tracking-[0.2em] uppercase transition-all duration-300 ${currentTheme.active} hover:scale-105 shadow-xl`}
                             >
                                 {isMobileDevice ? 
-                                    (arcIndex > qwertyIndex ? "Try Next: Qwerty (Same Text)" : "Finish Round & Start Next")
+                                    (arcIndex > classicIndex ? "Try Next: Classic (Same Text)" : "Finish Round & Start Next")
                                     : "Next Sentence"}
                             </button>
                         </div>
@@ -886,8 +886,8 @@
             return <ArcCore {...props} title="Arc Paradigm" showMetricsScreen={true} />;
         };
 
-        // ------------- QWERTY COMPONENT -------------
-        const QwertyKeyboard = ({ isActive, targetSentence, onComplete, attemptNumber = 1, arcIndex = 0, qwertyIndex = 0 }) => {
+        // ------------- CLASSIC COMPONENT -------------
+        const ClassicKeyboard = ({ isActive, targetSentence, onComplete, attemptNumber = 1, arcIndex = 0, classicIndex = 0 }) => {
             const [text, setText] = useState("");
             const [isCompleted, setIsCompleted] = useState(false);
             const isMobileDevice = useIsMobile();
@@ -911,7 +911,7 @@
 
             const theme = 'blue';
             const currentTheme = THEMES[theme];
-            const title = "Qwerty Paradigm";
+            const title = "Classic Paradigm";
 
             // Check for completion
             useEffect(() => {
@@ -982,12 +982,12 @@
                         <div className={`absolute top-[-20%] right-[-10%] w-[50%] h-[50%] ${currentTheme.glow} blur-[120px] rounded-full pointer-events-none`}></div>
 
                         <div className={`glass-panel ${isMobileDevice ? 'p-6' : 'p-8'} flex flex-col items-center gap-6 ${currentTheme.focusPanel} border-opacity-50 max-w-sm w-full z-20`}>
-                            <h2 className={`text-xl font-bold tracking-widest uppercase ${currentTheme.text}`}>{isMobileDevice ? (qwertyIndex > arcIndex ? "Qwerty Phase Complete" : "Success!") : "Qwerty Completed"}</h2>
+                            <h2 className={`text-xl font-bold tracking-widest uppercase ${currentTheme.text}`}>{isMobileDevice ? (classicIndex > arcIndex ? "Classic Phase Complete" : "Success!") : "Classic Completed"}</h2>
 
                             {isMobileDevice ? (
                                 <div className="flex flex-col items-center gap-2 mb-2">
                                     <div className="text-4xl font-light text-white">{wpm} <span className="text-sm uppercase opacity-60">WPM</span></div>
-                                    <div className="text-xs text-slate-400 uppercase tracking-widest">{qwertyIndex > arcIndex ? "Phase 1: Qwerty Done" : "Speed Evaluated"}</div>
+                                    <div className="text-xs text-slate-400 uppercase tracking-widest">{classicIndex > arcIndex ? "Phase 1: Classic Done" : "Speed Evaluated"}</div>
                                 </div>
                             ) : (
                                 <div className="flex flex-col gap-4 w-full text-slate-300">
@@ -1017,7 +1017,7 @@
                             <button
                                 onClick={() => {
                                     const payload = {
-                                        paradigm: 'qwerty',
+                                        paradigm: 'classic',
                                         attemptNumber,
                                         sentence: targetSentence,
                                         keystrokes,
@@ -1065,7 +1065,7 @@
                     <div className={`absolute top-[-20%] right-[-10%] w-[50%] h-[50%] ${currentTheme.glow} blur-[120px] rounded-full pointer-events-none`}></div>
 
                     <SharedActiveIndicator isActive={isActive} theme={theme} title={title} />
-                    <SharedTypeArea title="Qwerty Paradigm" text={text} targetSentence={targetSentence} isActive={isActive} success={false} theme={theme} />
+                    <SharedTypeArea title="Classic Paradigm" text={text} targetSentence={targetSentence} isActive={isActive} success={false} theme={theme} />
 
                     <div className={`${isMobileDevice ? 'hidden' : 'mt-2 sm:mt-12'} z-40 bg-blue-500/10 border border-blue-500/30 text-blue-300 rounded px-3 py-1 sm:px-4 sm:py-1.5 text-[10px] sm:text-sm font-medium tracking-wide shadow-lg text-center mx-4`}>
                         ⚠️ Please use <strong className="text-blue-400">Arrow Keys</strong> to navigate and <strong className="text-blue-400">Enter</strong> to select.
@@ -1128,7 +1128,7 @@
                                 <div className="w-16 h-16 rounded-full bg-blue-500/20 border border-blue-500/50 flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.2)]">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-400"><rect width="20" height="16" x="2" y="4" rx="2" ry="2"></rect><path d="M6 8h.001"></path><path d="M10 8h.001"></path><path d="M14 8h.001"></path><path d="M18 8h.001"></path><path d="M8 12h.001"></path><path d="M12 12h.001"></path><path d="M16 12h.001"></path><path d="M7 16h10"></path></svg>
                                 </div>
-                                <span className="text-blue-300 font-bold uppercase tracking-widest text-sm bg-slate-900/80 px-4 py-2 rounded-full border border-blue-500/30">Tap to Switch to Qwerty</span>
+                                <span className="text-blue-300 font-bold uppercase tracking-widest text-sm bg-slate-900/80 px-4 py-2 rounded-full border border-blue-500/30">Tap to Switch to Classic</span>
                             </div>
                         </div>
                     )}
@@ -1147,7 +1147,7 @@
                             Arc Paradigm
                         </h1>
                         <p className="text-lg text-slate-300/80 mb-6 leading-relaxed font-light">
-                            Welcome! Typing on Smart TVs, game consoles, and VR devices with older paradigms is slow and frustrating. This platform is designed to introduce you to a faster way to type using only directional inputs. Learn the fundamentals of the <strong className="text-emerald-400 font-medium">Arc</strong> paradigm, and test your skills against a classic <strong className="text-blue-400 font-medium">Qwerty</strong> baseline.
+                            Welcome! Typing on Smart TVs, game consoles, and VR devices with older paradigms is slow and frustrating. This platform is designed to introduce you to a faster way to type using only directional inputs. Learn the fundamentals of the <strong className="text-emerald-400 font-medium">Arc</strong> paradigm, and test your skills against a <strong className="text-blue-400 font-medium">Classic</strong> baseline.
                         </p>
 
                         <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg px-4 py-3 mb-10 w-full max-w-lg text-sm text-slate-400">
@@ -1373,19 +1373,19 @@
             );
         };
 
-        const StatsDashboard = ({ arcMetrics, qwertyMetrics }) => {
+        const StatsDashboard = ({ arcMetrics, classicMetrics }) => {
             const calculateAverage = (arr) => arr.length ? (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : 0;
 
             const avgArcWPM = calculateAverage(arcMetrics.wpm);
-            const avgQwertyWPM = calculateAverage(qwertyMetrics.wpm);
+            const avgClassicWPM = calculateAverage(classicMetrics.wpm);
 
             const avgArcErrors = calculateAverage(arcMetrics.errors);
-            const avgQwertyErrors = calculateAverage(qwertyMetrics.errors);
+            const avgClassicErrors = calculateAverage(classicMetrics.errors);
 
             // Determine max WPM for proportional bar charts (minimum 60 to look good)
-            const maxWPM = Math.max(60, avgArcWPM, avgQwertyWPM);
+            const maxWPM = Math.max(60, avgArcWPM, avgClassicWPM);
             const arcHeight = `${(avgArcWPM / maxWPM) * 100}%`;
-            const qwertyHeight = `${(avgQwertyWPM / maxWPM) * 100}%`;
+            const classicHeight = `${(avgClassicWPM / maxWPM) * 100}%`;
 
             return (
                 <div className="flex flex-col items-center justify-center w-full h-full bg-[#0b1120] border-[8px] border-slate-900 text-white animate-fade-in p-4 md:p-8">
@@ -1406,9 +1406,9 @@
                             <h2 className="text-xl font-medium text-slate-300 mb-2">Average Speed (WPM)</h2>
                             <p className="text-xs text-slate-500 uppercase tracking-widest mb-6">Words Per Minute</p>
                             <div className="flex justify-center items-end gap-8 h-48 w-full">
-                                <div className="w-20 md:w-24 bg-blue-500/20 border border-blue-400/50 shadow-[0_0_20px_rgba(59,130,246,0.1)] rounded-t-lg relative flex flex-col justify-end items-center pb-2 transition-all duration-1000" style={{ height: qwertyHeight }}>
-                                    <span className="absolute -top-8 text-xl font-bold text-blue-300">{avgQwertyWPM}</span>
-                                    <span className="text-xs text-blue-200 uppercase font-bold tracking-wider mb-[-2.5rem]">Qwerty</span>
+                                <div className="w-20 md:w-24 bg-blue-500/20 border border-blue-400/50 shadow-[0_0_20px_rgba(59,130,246,0.1)] rounded-t-lg relative flex flex-col justify-end items-center pb-2 transition-all duration-1000" style={{ height: classicHeight }}>
+                                    <span className="absolute -top-8 text-xl font-bold text-blue-300">{avgClassicWPM}</span>
+                                    <span className="text-xs text-blue-200 uppercase font-bold tracking-wider mb-[-2.5rem]">Classic</span>
                                 </div>
                                 <div className="w-20 md:w-24 bg-emerald-500/20 border border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.1)] rounded-t-lg relative flex flex-col justify-end items-center pb-2 transition-all duration-1000 delay-300" style={{ height: arcHeight }}>
                                     <span className="absolute -top-8 text-xl font-bold text-emerald-300">{avgArcWPM}</span>
@@ -1422,8 +1422,8 @@
                             <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-800">
                                 <h3 className="text-sm uppercase tracking-wider text-slate-500 mb-2">Avg Errors Per Sentence</h3>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-blue-300"><span className="text-slate-500 mr-2">Q:</span>{avgQwertyErrors}</span>
-                                    <span className="text-emerald-300"><span className="text-slate-500 mr-2">S:</span>{avgArcErrors}</span>
+                                    <span className="text-blue-300"><span className="text-slate-500 mr-2">C:</span>{avgClassicErrors}</span>
+                                    <span className="text-emerald-300"><span className="text-slate-500 mr-2">A:</span>{avgArcErrors}</span>
                                 </div>
                             </div>
 
@@ -1505,30 +1505,30 @@
                                     </div>
                                 </div>
 
-                                {/* Qwerty Column */}
+                                {/* Classic Column */}
                                 <div className="flex-1 bg-blue-900/10 border border-blue-500/20 rounded-xl p-6 relative overflow-hidden">
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-bl-full pointer-events-none"></div>
-                                    <h3 className="text-xl font-bold text-blue-400 mb-6 uppercase tracking-wider relative z-10">Qwerty Top 5</h3>
+                                    <h3 className="text-xl font-bold text-blue-400 mb-6 uppercase tracking-wider relative z-10">Classic Top 5</h3>
                                     <div className="space-y-3 relative z-10">
-                                        {data.qwerty?.top?.map((wpm, i) => (
+                                        {data.classic?.top?.map((wpm, i) => (
                                             <div key={i} className="flex justify-between items-center bg-slate-900/50 px-4 py-3 rounded-lg border border-blue-500/10">
                                                 <span className="text-slate-500 font-mono">#{i + 1}</span>
                                                 <span className="text-blue-300 font-bold text-xl">{wpm.toFixed(1)} <span className="text-xs text-blue-500 font-normal uppercase">WPM</span></span>
                                             </div>
                                         ))}
-                                        {(!data.qwerty?.top || data.qwerty.top.length === 0) && <p className="text-slate-500 italic">No runs recorded.</p>}
+                                        {(!data.classic?.top || data.classic.top.length === 0) && <p className="text-slate-500 italic">No runs recorded.</p>}
                                     </div>
                                     <div className="mt-8 pt-6 border-t border-blue-500/20 relative z-10">
                                         <div className="flex justify-between items-center mb-1">
                                             <span className="text-sm uppercase tracking-wider text-slate-400">Community Avg Speed</span>
-                                            <span className="text-slate-200 font-mono text-lg">{data.qwerty.avgWpm} wpm</span>
+                                            <span className="text-slate-200 font-mono text-lg">{data.classic.avgWpm} wpm</span>
                                         </div>
                                         <div className="flex justify-end mb-4">
                                             <span className="text-[10px] text-slate-500 uppercase tracking-widest">Words Per Minute</span>
                                         </div>
                                         <div className="flex justify-between items-center">
                                             <span className="text-sm uppercase tracking-wider text-slate-400">Community Avg Errors</span>
-                                            <span className="text-slate-200 font-mono text-lg">{data.qwerty.avgErrors}</span>
+                                            <span className="text-slate-200 font-mono text-lg">{data.classic.avgErrors}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1565,7 +1565,7 @@
                         <div className="space-y-2">
                             <h2 className="text-xl font-bold tracking-tight text-amber-400 uppercase">Mobile Testing Guard</h2>
                             <p className="text-slate-300 text-sm leading-relaxed">
-                                To compare these paradigms objectively, we recommend testing <span className="text-emerald-400 font-bold">BOTH</span> Arc and Qwerty.
+                                To compare these paradigms objectively, we recommend testing <span className="text-emerald-400 font-bold">BOTH</span> Arc and Classic.
                             </p>
                             <p className="text-slate-400 text-xs italic">
                                 Note: This website isn't optimized for mobile testing.
@@ -1631,13 +1631,13 @@
                     {!embedded && (
                         <>
                             <button
-                                onClick={() => setActiveMode(activeMode === 'arc' ? 'qwerty' : 'arc')}
+                                onClick={() => setActiveMode(activeMode === 'arc' ? 'classic' : 'arc')}
                                 className={`mt-1 px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-[0.15em] border transition-all duration-300 select-none touch-manipulation shadow-lg animate-pulse-subtle
                                     ${activeMode === 'arc'
                                         ? 'bg-blue-600/20 border-blue-500/50 text-blue-300 hover:bg-blue-600/30'
                                         : 'bg-emerald-600/20 border-emerald-500/50 text-emerald-300 hover:bg-emerald-600/30'}`}
                             >
-                                {activeMode === 'arc' ? 'Switch to Qwerty' : 'Switch to Arc'}
+                                {activeMode === 'arc' ? 'Switch to Classic' : 'Switch to Arc'}
                             </button>
                             <div className="text-[9px] text-slate-500 font-bold uppercase tracking-[0.2em] mt-1 opacity-60">Control Panel</div>
                         </>
@@ -1658,7 +1658,7 @@
                     <div className="w-16 h-1 bg-emerald-500/50 mb-6 rounded-full"></div>
                     
                     <p className="text-sm text-slate-300/90 mb-6 leading-relaxed font-light px-2 text-left">
-                        Welcome! Typing on Smart TVs, game consoles, and VR devices with older paradigms is slow and frustrating. This platform is designed to introduce you to a faster way to type using only directional inputs. Learn the fundamentals of the <strong className="text-emerald-400 font-medium">Arc</strong> paradigm, and test your skills against a classic <strong className="text-blue-400 font-medium">Qwerty</strong> baseline.
+                        Welcome! Typing on Smart TVs, game consoles, and VR devices with older paradigms is slow and frustrating. This platform is designed to introduce you to a faster way to type using only directional inputs. Learn the fundamentals of the <strong className="text-emerald-400 font-medium">Arc</strong> paradigm, and test your skills against a <strong className="text-blue-400 font-medium">Classic</strong> baseline.
                     </p>
 
                     <div className="bg-slate-800/80 border border-slate-700/80 rounded-lg px-4 py-4 mb-10 w-full text-xs text-slate-400 text-left shadow-lg flex items-start gap-2">
@@ -1692,12 +1692,12 @@
             </div>
         );
 
-        const MobileStatsDashboard = ({ arcMetrics, qwertyMetrics, onClose }) => {
+        const MobileStatsDashboard = ({ arcMetrics, classicMetrics, onClose }) => {
             const calculateAverage = (arr) => arr.length ? (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : 0;
             const avgArcWPM = calculateAverage(arcMetrics.wpm);
-            const avgQwertyWPM = calculateAverage(qwertyMetrics.wpm);
+            const avgClassicWPM = calculateAverage(classicMetrics.wpm);
             const avgArcErrors = calculateAverage(arcMetrics.errors);
-            const avgQwertyErrors = calculateAverage(qwertyMetrics.errors);
+            const avgClassicErrors = calculateAverage(classicMetrics.errors);
 
             return (
                 <div className="flex flex-col items-center justify-center w-full h-full p-6 animate-fade-in text-white relative">
@@ -1725,12 +1725,12 @@
                         <div className="bg-blue-900/20 border border-blue-500/30 rounded-3xl p-6 flex justify-between items-center text-blue-300 shadow-xl relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-[100px] pointer-events-none"></div>
                             <div className="flex flex-col relative z-10">
-                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-blue-500 mb-1">Qwerty WPM</span>
-                                <span className="text-4xl font-light">{avgQwertyWPM}</span>
+                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-blue-500 mb-1">Classic WPM</span>
+                                <span className="text-4xl font-light">{avgClassicWPM}</span>
                             </div>
                             <div className="flex flex-col items-end relative z-10">
                                 <span className="text-[10px] uppercase tracking-[0.2em] text-blue-500 mb-1">Errors</span>
-                                <span className="text-2xl font-light opacity-80">{avgQwertyErrors}</span>
+                                <span className="text-2xl font-light opacity-80">{avgClassicErrors}</span>
                             </div>
                         </div>
 
@@ -1750,13 +1750,13 @@
             const [activeMode, setActiveMode] = useState('arc');
             
             const [arcIndex, setArcIndex] = useState(0);
-            const [qwertyIndex, setQwertyIndex] = useState(0);
+            const [classicIndex, setClassicIndex] = useState(0);
 
             const [arcMetrics, setArcMetrics] = useState(() => {
                 const saved = localStorage.getItem('arcMetrics');
                 return saved ? JSON.parse(saved) : { wpm: [], errors: [] };
             });
-            const [qwertyMetrics, setQwertyMetrics] = useState(() => {
+            const [classicMetrics, setClassicMetrics] = useState(() => {
                 const saved = localStorage.getItem('qwertyMetrics');
                 return saved ? JSON.parse(saved) : { wpm: [], errors: [] };
             });
@@ -1766,28 +1766,28 @@
             }, [arcMetrics]);
 
             useEffect(() => {
-                localStorage.setItem('qwertyMetrics', JSON.stringify(qwertyMetrics));
-            }, [qwertyMetrics]);
+                localStorage.setItem('qwertyMetrics', JSON.stringify(classicMetrics));
+            }, [classicMetrics]);
 
             useEffect(() => {
-                if (arcIndex > 0 && qwertyIndex > 0 && arcIndex >= TARGET_SENTENCES.length && qwertyIndex >= TARGET_SENTENCES.length) {
+                if (arcIndex > 0 && classicIndex > 0 && arcIndex >= TARGET_SENTENCES.length && classicIndex >= TARGET_SENTENCES.length) {
                     setAppState('stats');
                 }
-            }, [arcIndex, qwertyIndex]);
+            }, [arcIndex, classicIndex]);
 
             const handleArcNext = (metrics) => {
                 if (metrics) {
                     setArcMetrics(prev => ({ wpm: [...prev.wpm, parseFloat(metrics.wpm)], errors: [...prev.errors, metrics.backspaceCount] }));
                 }
                 setArcIndex(prev => prev + 1);
-                setActiveMode('qwerty');
+                setActiveMode('classic');
             };
 
-            const handleQwertyNext = (metrics) => {
+            const handleClassicNext = (metrics) => {
                 if (metrics) {
-                    setQwertyMetrics(prev => ({ wpm: [...prev.wpm, parseFloat(metrics.wpm)], errors: [...prev.errors, metrics.backspaceCount] }));
+                    setClassicMetrics(prev => ({ wpm: [...prev.wpm, parseFloat(metrics.wpm)], errors: [...prev.errors, metrics.backspaceCount] }));
                 }
-                setQwertyIndex(prev => prev + 1);
+                setClassicIndex(prev => prev + 1);
                 setActiveMode('arc');
             };
 
@@ -1814,7 +1814,7 @@
                     <div className="flex flex-col w-full h-full bg-[#0b1120] overflow-hidden fixed inset-0">
                         <MobileStatsDashboard 
                             arcMetrics={arcMetrics} 
-                            qwertyMetrics={qwertyMetrics} 
+                            classicMetrics={classicMetrics} 
                             onClose={() => setAppState('landing')} 
                         />
                     </div>
@@ -1822,14 +1822,14 @@
             }
 
             const arcSentence = TARGET_SENTENCES[arcIndex % TARGET_SENTENCES.length];
-            const qwertySentence = TARGET_SENTENCES[qwertyIndex % TARGET_SENTENCES.length];
+            const classicSentence = TARGET_SENTENCES[classicIndex % TARGET_SENTENCES.length];
 
             return (
                 <div className="flex flex-col w-full h-full bg-[#0b1120] overflow-hidden fixed inset-0">
                     <div className="w-full flex justify-between items-center px-6 py-2 bg-slate-900 border-b border-slate-800 z-50 shrink-0">
                         <div className="text-[10px] items-center gap-2 flex text-emerald-500 uppercase tracking-[0.2em] font-bold">
                             <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse"></span>
-                            Round {Math.min(arcIndex, qwertyIndex) + 1}
+                            Round {Math.min(arcIndex, classicIndex) + 1}
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -1852,7 +1852,7 @@
                     <div className="w-full h-1 bg-slate-800 shrink-0">
                         <div 
                             className={`h-full transition-all duration-500 ${activeMode === 'arc' ? 'bg-emerald-500' : 'bg-blue-500'}`} 
-                            style={{width: `${((activeMode === 'arc' ? arcIndex : qwertyIndex) / TARGET_SENTENCES.length) * 100}%`}}
+                            style={{width: `${((activeMode === 'arc' ? arcIndex : classicIndex) / TARGET_SENTENCES.length) * 100}%`}}
                         ></div>
                     </div>
 
@@ -1866,19 +1866,19 @@
                                     onComplete={handleArcNext}
                                     attemptNumber={arcIndex + 1}
                                     arcIndex={arcIndex}
-                                    qwertyIndex={qwertyIndex}
+                                    classicIndex={classicIndex}
                                 />
                             </div>
                         ) : (
                             <div className="w-full flex flex-col items-center animate-[fadeIn_0.5s_ease-out]">
-                                <QwertyKeyboard
-                                    key={`qwerty-${qwertyIndex}`}
+                                <ClassicKeyboard
+                                    key={`classic-${classicIndex}`}
                                     isActive={true}
-                                    targetSentence={qwertySentence}
-                                    onComplete={handleQwertyNext}
-                                    attemptNumber={qwertyIndex + 1}
+                                    targetSentence={classicSentence}
+                                    onComplete={handleClassicNext}
+                                    attemptNumber={classicIndex + 1}
                                     arcIndex={arcIndex}
-                                    qwertyIndex={qwertyIndex}
+                                    classicIndex={classicIndex}
                                 />
                             </div>
                         )}
@@ -1887,13 +1887,13 @@
                     <div className="shrink-0 w-full bg-slate-900/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-slate-700/80 shadow-[0_-15px_40px_rgba(0,0,0,0.6)] z-50 pt-3 pb-8 sm:py-6 flex flex-col">
                         <div className="flex justify-center mb-2 sm:mb-5 shrink-0">
                             <button
-                                onClick={() => setActiveMode(activeMode === 'arc' ? 'qwerty' : 'arc')}
+                                onClick={() => setActiveMode(activeMode === 'arc' ? 'classic' : 'arc')}
                                 className={`px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-300 shadow-md active:scale-95
                                     ${activeMode === 'arc'
                                         ? 'bg-blue-600/20 border border-blue-500/50 text-blue-300'
                                         : 'bg-emerald-600/20 border border-emerald-500/50 text-emerald-300'}`}
                             >
-                                {activeMode === 'arc' ? 'Switch to Qwerty' : 'Switch to Arc'}
+                                {activeMode === 'arc' ? 'Switch to Classic' : 'Switch to Arc'}
                             </button>
                         </div>
                         
@@ -1915,13 +1915,13 @@
 
             // Track sentences independently so they can be compared fairly side-by-side
             const [arcIndex, setArcIndex] = useState(0);
-            const [qwertyIndex, setQwertyIndex] = useState(0);
+            const [classicIndex, setClassicIndex] = useState(0);
 
             const [arcMetrics, setArcMetrics] = useState(() => {
                 const saved = localStorage.getItem('arcMetrics_desktop');
                 return saved ? JSON.parse(saved) : { wpm: [], errors: [] };
             });
-            const [qwertyMetrics, setQwertyMetrics] = useState(() => {
+            const [classicMetrics, setClassicMetrics] = useState(() => {
                 const saved = localStorage.getItem('qwertyMetrics_desktop');
                 return saved ? JSON.parse(saved) : { wpm: [], errors: [] };
             });
@@ -1931,8 +1931,8 @@
             }, [arcMetrics]);
 
             useEffect(() => {
-                localStorage.setItem('qwertyMetrics_desktop', JSON.stringify(qwertyMetrics));
-            }, [qwertyMetrics]);
+                localStorage.setItem('qwertyMetrics_desktop', JSON.stringify(classicMetrics));
+            }, [classicMetrics]);
 
             // Auto-scroll effect for mobile when active mode changes
             const arcRef = React.useRef(null);
@@ -1945,9 +1945,9 @@
                             try {
                                 arcRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
                             } catch (e) { }
-                        } else if (activeMode === 'qwerty' && qwertyRef.current) {
+                        } else if (activeMode === 'classic' && classicRef.current) {
                             try {
-                                qwertyRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                classicRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
                             } catch (e) { }
                         }
                     }, 150);
@@ -1956,17 +1956,17 @@
 
             // If user finishes both tests, go to Stats
             useEffect(() => {
-                if (arcIndex >= TARGET_SENTENCES.length && qwertyIndex >= TARGET_SENTENCES.length) {
+                if (arcIndex >= TARGET_SENTENCES.length && classicIndex >= TARGET_SENTENCES.length) {
                     setAppState('stats');
                 }
-            }, [arcIndex, qwertyIndex]);
+            }, [arcIndex, classicIndex]);
 
             // Add Tab listener to switch panels
             useEffect(() => {
                 const handleTab = (e) => {
                     if (e.key === 'Tab' && appState === 'playground') {
                         e.preventDefault();
-                        setActiveMode(prev => prev === 'arc' ? 'qwerty' : 'arc');
+                        setActiveMode(prev => prev === 'arc' ? 'classic' : 'arc');
                     }
                 };
                 window.addEventListener('keydown', handleTab);
@@ -1983,14 +1983,14 @@
                 setArcIndex(prev => prev + 1);
             };
 
-            const handleQwertyNext = (metrics) => {
+            const handleClassicNext = (metrics) => {
                 if (metrics) {
-                    setQwertyMetrics(prev => ({
+                    setClassicMetrics(prev => ({
                         wpm: [...prev.wpm, parseFloat(metrics.wpm)],
                         errors: [...prev.errors, metrics.backspaceCount]
                     }));
                 }
-                setQwertyIndex(prev => prev + 1);
+                setClassicIndex(prev => prev + 1);
             };
 
             if (appState === 'landing') {
@@ -2018,11 +2018,11 @@
             }
 
             if (appState === 'stats') {
-                return <StatsDashboard arcMetrics={arcMetrics} qwertyMetrics={qwertyMetrics} />
+                return <StatsDashboard arcMetrics={arcMetrics} classicMetrics={classicMetrics} />
             }
 
             const arcSentence = TARGET_SENTENCES[arcIndex % TARGET_SENTENCES.length];
-            const qwertySentence = TARGET_SENTENCES[qwertyIndex % TARGET_SENTENCES.length];
+            const classicSentence = TARGET_SENTENCES[classicIndex % TARGET_SENTENCES.length];
 
             return (
                 <div className="flex flex-col w-full h-full bg-slate-900 border-[8px] border-slate-900 overflow-hidden box-border">
@@ -2048,9 +2048,9 @@
                                 onClick={() => {
                                     setAppState('landing');
                                     setArcIndex(0);
-                                    setQwertyIndex(0);
+                                    setClassicIndex(0);
                                     setArcMetrics({ wpm: [], errors: [] });
-                                    setQwertyMetrics({ wpm: [], errors: [] });
+                                    setClassicMetrics({ wpm: [], errors: [] });
                                 }}
                                 className="px-1.5 py-1 sm:px-3 sm:py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded text-[9px] sm:text-[10px] md:text-xs uppercase tracking-wider transition-colors flex items-center gap-1.5"
                             >
@@ -2084,20 +2084,20 @@
 
                         {/* Mobile Scroll Indicator (Qwerty -> Arc) - hidden, MobileRemote handles switching */}
 
-                        {/* Right Panel: Qwerty */}
+                        {/* Right Panel: Classic */}
                         <div
-                            ref={qwertyRef}
-                            className={`flex-1 relative transition-all duration-500 cursor-pointer overflow-hidden rounded-xl border transition-all duration-300 ${activeMode === 'qwerty' ? `bg-[#0b1120] border-blue-500/20 shadow-[0_0_40px_rgba(59,130,246,0.1)]` : 'bg-slate-900 border-slate-800/50'} ${isMobile && activeMode !== 'qwerty' ? 'hidden' : ''}`}
+                            ref={classicRef}
+                            className={`flex-1 relative transition-all duration-500 cursor-pointer overflow-hidden rounded-xl border transition-all duration-300 ${activeMode === 'classic' ? `bg-[#0b1120] border-blue-500/20 shadow-[0_0_40px_rgba(59,130,246,0.1)]` : 'bg-slate-900 border-slate-800/50'} ${isMobile && activeMode !== 'classic' ? 'hidden' : ''}`}
                             onClick={() => {
-                                setActiveMode('qwerty');
+                                setActiveMode('classic');
                                 window.focus();
                             }}
                         >
-                            <QwertyKeyboard
-                                isActive={activeMode === 'qwerty'}
-                                targetSentence={qwertySentence}
-                                onComplete={handleQwertyNext}
-                                attemptNumber={qwertyIndex + 1}
+                            <ClassicKeyboard
+                                isActive={activeMode === 'classic'}
+                                targetSentence={classicSentence}
+                                onComplete={handleClassicNext}
+                                attemptNumber={classicIndex + 1}
                             />
                         </div>
                     </div>
