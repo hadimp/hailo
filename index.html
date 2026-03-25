@@ -290,8 +290,8 @@
             }
         }
 
-        /* QWERTY Styles */
-        .qwerty-key {
+        /* CLASSIC Styles */
+        .classic-key {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -430,7 +430,7 @@
             const getDisplayTitle = () => {
                 if (!title) return '';
                 if (title.toLowerCase().includes('arc')) return 'ARC';
-                if (title.toLowerCase().includes('qwerty')) return 'QWERTY';
+                if (title.toLowerCase().includes('classic')) return 'CLASSIC';
                 return title;
             };
 
@@ -539,7 +539,7 @@
             showMetricsScreen = true,
             attemptNumber = 1,
             arcIndex = 0,
-            qwertyIndex = 0
+            classicIndex = 0
         }) => {
             const [text, setText] = useState("");
             const [layer, setLayer] = useState(0);
@@ -1052,7 +1052,7 @@
                                 className={`mt-4 px-8 py-4 rounded-full font-bold tracking-[0.2em] uppercase transition-all duration-300 ${currentTheme.active} hover:scale-105 shadow-xl`}
                             >
                                 {isMobileDevice ? 
-                                    (qwertyIndex > arcIndex ? "Try Next: Arc (Same Text)" : "Finish Round & Start Next")
+                                    (classicIndex > arcIndex ? "Try Next: Arc (Same Text)" : "Finish Round & Start Next")
                                     : "Next Sentence"}
                             </button>
                         </div>
@@ -1077,7 +1077,7 @@
                             <div className="flex gap-1 sm:gap-1.5 md:gap-2 justify-center">
                                 {keyboardLayout[0].map((k, idx) => (
                                     <div key={'r0' + idx}
-                                        className={`w-7 h-9 sm:w-8 sm:h-10 md:w-10 md:h-12 text-[10px] sm:text-xs md:text-sm qwerty-key ${focusRow === 0 && focusCol === idx ? `${currentTheme.active.split(' ')[0]} border-${theme}-400 shadow-[0_0_15px_rgba(59,130,246,0.4)] text-white scale-105 z-10` : ''}`}>
+                                        className={`w-7 h-9 sm:w-8 sm:h-10 md:w-10 md:h-12 text-[10px] sm:text-xs md:text-sm classic-key ${focusRow === 0 && focusCol === idx ? `${currentTheme.active.split(' ')[0]} border-${theme}-400 shadow-[0_0_15px_rgba(59,130,246,0.4)] text-white scale-105 z-10` : ''}`}>
                                         {k}
                                     </div>
                                 ))}
@@ -1086,7 +1086,7 @@
                             <div className="flex gap-1 sm:gap-1.5 md:gap-2 justify-center ml-2 md:ml-4">
                                 {keyboardLayout[1].map((k, idx) => (
                                     <div key={'r1' + idx}
-                                        className={`w-7 h-9 sm:w-8 sm:h-10 md:w-10 md:h-12 text-[10px] sm:text-xs md:text-sm qwerty-key ${focusRow === 1 && focusCol === idx ? `${currentTheme.active.split(' ')[0]} border-${theme}-400 shadow-[0_0_15px_rgba(59,130,246,0.4)] text-white scale-105 z-10` : ''}`}>
+                                        className={`w-7 h-9 sm:w-8 sm:h-10 md:w-10 md:h-12 text-[10px] sm:text-xs md:text-sm classic-key ${focusRow === 1 && focusCol === idx ? `${currentTheme.active.split(' ')[0]} border-${theme}-400 shadow-[0_0_15px_rgba(59,130,246,0.4)] text-white scale-105 z-10` : ''}`}>
                                         {k === 'DEL' ? <span className="text-lg md:text-xl">⌫</span> : k}
                                     </div>
                                 ))}
@@ -1095,14 +1095,14 @@
                             <div className="flex gap-1 sm:gap-1.5 md:gap-2 justify-center ml-4 md:ml-10">
                                 {keyboardLayout[2].map((k, idx) => (
                                     <div key={'r2' + idx}
-                                        className={`w-7 h-9 sm:w-8 sm:h-10 md:w-10 md:h-12 text-[10px] sm:text-xs md:text-sm qwerty-key ${focusRow === 2 && focusCol === idx ? `${currentTheme.active.split(' ')[0]} border-${theme}-400 shadow-[0_0_15px_rgba(59,130,246,0.4)] text-white scale-105 z-10` : ''}`}>
+                                        className={`w-7 h-9 sm:w-8 sm:h-10 md:w-10 md:h-12 text-[10px] sm:text-xs md:text-sm classic-key ${focusRow === 2 && focusCol === idx ? `${currentTheme.active.split(' ')[0]} border-${theme}-400 shadow-[0_0_15px_rgba(59,130,246,0.4)] text-white scale-105 z-10` : ''}`}>
                                         {k}
                                     </div>
                                 ))}
                             </div>
                             {/* Row 4 (Space) */}
                             <div className="flex gap-1 sm:gap-1.5 md:gap-2 justify-center mt-1 sm:mt-2">
-                                <div className={`w-[240px] sm:w-[280px] md:w-80 h-9 sm:h-10 md:h-12 text-[10px] sm:text-xs md:text-sm qwerty-key ${focusRow === 3 ? `${currentTheme.active.split(' ')[0]} border-${theme}-400 shadow-[0_0_15px_rgba(59,130,246,0.4)] text-white scale-105 z-10` : ''}`}>
+                                <div className={`w-[240px] sm:w-[280px] md:w-80 h-9 sm:h-10 md:h-12 text-[10px] sm:text-xs md:text-sm classic-key ${focusRow === 3 ? `${currentTheme.active.split(' ')[0]} border-${theme}-400 shadow-[0_0_15px_rgba(59,130,246,0.4)] text-white scale-105 z-10` : ''}`}>
                                     SPACE
                                 </div>
                             </div>
@@ -1908,7 +1908,7 @@
         // ------------- SPLIT SCREEN ORCHESTRATOR -------------
         const MainApp = () => {
             const [appState, setAppState] = useState('landing'); // 'landing', 'tutorial', 'playground', 'stats'
-            const [activeMode, setActiveMode] = useState('arc'); // 'arc' or 'qwerty'
+            const [activeMode, setActiveMode] = useState('arc'); // 'arc' or 'classic'
             const [showLeaderboard, setShowLeaderboard] = useState(false);
             const [showMobileWarning, setShowMobileWarning] = useState(false);
             const isMobile = useIsMobile();
@@ -1936,7 +1936,7 @@
 
             // Auto-scroll effect for mobile when active mode changes
             const arcRef = React.useRef(null);
-            const qwertyRef = React.useRef(null);
+            const classicRef = React.useRef(null);
 
             useEffect(() => {
                 if (isMobile && appState === 'playground') {
@@ -2080,9 +2080,9 @@
                             />
                         </div>
 
-                        {/* Mobile Scroll Indicator (Arc -> Qwerty) - hidden, MobileRemote handles switching */}
+                        {/* Mobile Scroll Indicator (Arc -> Classic) - hidden, MobileRemote handles switching */}
 
-                        {/* Mobile Scroll Indicator (Qwerty -> Arc) - hidden, MobileRemote handles switching */}
+                        {/* Mobile Scroll Indicator (Classic -> Arc) - hidden, MobileRemote handles switching */}
 
                         {/* Right Panel: Classic */}
                         <div
