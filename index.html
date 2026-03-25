@@ -1920,11 +1920,17 @@
 
             const [arcMetrics, setArcMetrics] = useState(() => {
                 const saved = localStorage.getItem('arcMetrics_desktop');
-                return saved ? JSON.parse(saved) : { wpm: [], errors: [] };
+                if (saved) return JSON.parse(saved);
+                // Fallback to legacy key if desktop-specific key doesn't exist
+                const legacy = localStorage.getItem('arcMetrics');
+                return legacy ? JSON.parse(legacy) : { wpm: [], errors: [] };
             });
             const [classicMetrics, setClassicMetrics] = useState(() => {
                 const saved = localStorage.getItem('qwertyMetrics_desktop');
-                return saved ? JSON.parse(saved) : { wpm: [], errors: [] };
+                if (saved) return JSON.parse(saved);
+                // Fallback to legacy key if desktop-specific key doesn't exist
+                const legacy = localStorage.getItem('qwertyMetrics');
+                return legacy ? JSON.parse(legacy) : { wpm: [], errors: [] };
             });
 
             useEffect(() => {
