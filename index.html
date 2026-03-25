@@ -1391,51 +1391,47 @@
                 <div className="flex flex-col items-center justify-center w-full h-full bg-[#0b1120] border-[8px] border-slate-900 text-white animate-fade-in p-4 md:p-8">
                     <div className="absolute top-[20%] left-[50%] -translate-x-[50%] w-[600px] h-[600px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none"></div>
 
-                    <div className="p-4 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6 text-4xl shadow-[0_0_30px_rgba(59,130,246,0.15)] z-10">📊</div>
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent tracking-tight z-10 text-center">Study Complete!</h1>
-                    <p className="text-lg md:text-xl text-slate-400 mb-6 text-center max-w-lg font-light z-10">Thank you for participating. Your typing statistics have been securely recorded.</p>
-
-                    <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg px-4 py-3 mb-10 text-sm text-slate-400 z-10">
-                        <span className="text-blue-400 mr-2">ℹ️</span>
-                        Metrics shown below have been recorded anonymously for our research.
+                    <div className="p-4 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6 shadow-[0_0_30px_rgba(59,130,246,0.15)] z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-400">
+                            <line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" />
+                        </svg>
                     </div>
+                    <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent z-10 tracking-tight text-center">Results</h1>
+                    <p className="text-slate-400 text-sm font-light mb-10 z-10">Testing complete.</p>
 
-                    <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 md:p-8 max-w-4xl w-full z-10 flex flex-col md:flex-row gap-8 md:gap-12">
-                        {/* Speed Chart Area */}
-                        <div className="flex-1 flex flex-col items-center border-b md:border-b-0 md:border-r border-slate-700/50 pb-8 md:pb-0 md:pr-8">
-                            <h2 className="text-xl font-medium text-slate-300 mb-2">Average Speed (WPM)</h2>
-                            <p className="text-xs text-slate-500 uppercase tracking-widest mb-6 px-4 py-1 bg-slate-900 rounded-full">Word Per Minute</p>
-                            <div className="flex justify-center items-end gap-10 h-48 w-full mt-4">
-                                <div className="w-16 md:w-20 bg-blue-500/20 border border-blue-400/50 shadow-[0_0_20px_rgba(59,130,246,0.1)] rounded-t-lg relative flex flex-col justify-end items-center pb-2 transition-all duration-1000" style={{ height: classicHeight }}>
-                                    <span className="absolute -top-8 text-xl font-bold text-blue-300">{avgClassicWPM}</span>
-                                    <span className="text-[10px] text-blue-200 uppercase font-bold tracking-wider mb-[-2.5rem]">Classic</span>
-                                </div>
-                                <div className="w-16 md:w-20 bg-emerald-500/20 border border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.1)] rounded-t-lg relative flex flex-col justify-end items-center pb-2 transition-all duration-1000 delay-300" style={{ height: arcHeight }}>
-                                    <span className="absolute -top-8 text-xl font-bold text-emerald-300">{avgArcWPM}</span>
-                                    <span className="text-[10px] text-emerald-200 uppercase font-bold tracking-wider mb-[-2.5rem]">Arc</span>
-                                </div>
+                    <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-8 max-w-4xl w-full z-10 flex flex-col md:flex-row gap-8">
+                        {/* Arc Card */}
+                        <div className="flex-1 bg-emerald-900/20 border border-emerald-500/30 rounded-3xl p-8 flex justify-between items-center text-emerald-300 shadow-xl relative overflow-hidden h-44">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-bl-[120px] pointer-events-none"></div>
+                            <div className="flex flex-col relative z-10">
+                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-emerald-500 mb-2">Arc Words Per Minute</span>
+                                <span className="text-6xl font-light tabular-nums tracking-tight">{avgArcWPM}</span>
+                            </div>
+                            <div className="flex flex-col items-end relative z-10">
+                                <span className="text-[10px] uppercase tracking-[0.2em] text-emerald-500 mb-2">Average Errors</span>
+                                <span className="text-3xl font-light opacity-80 tabular-nums">{avgArcErrors}</span>
                             </div>
                         </div>
 
-                        {/* Error Chart Area */}
-                        <div className="flex-1 flex flex-col items-center">
-                            <h2 className="text-xl font-medium text-slate-300 mb-2">Average Errors</h2>
-                            <p className="text-xs text-slate-500 uppercase tracking-widest mb-6 px-4 py-1 bg-slate-900 rounded-full">Per Sentence</p>
-                            <div className="flex justify-center items-end gap-10 h-48 w-full mt-4">
-                                <div className="w-16 md:w-20 bg-blue-500/10 border border-blue-400/30 rounded-t-lg relative flex flex-col justify-end items-center pb-2 transition-all duration-1000 delay-150" style={{ height: `${Math.max(10, (avgClassicErrors / Math.max(1, avgClassicErrors, avgArcErrors, 10)) * 100)}%` }}>
-                                    <span className="absolute -top-8 text-xl font-bold text-blue-300">{avgClassicErrors}</span>
-                                    <span className="text-[10px] text-blue-200 uppercase font-bold tracking-wider mb-[-2.5rem]">Classic</span>
-                                </div>
-                                <div className="w-16 md:w-20 bg-emerald-500/10 border border-emerald-400/30 rounded-t-lg relative flex flex-col justify-end items-center pb-2 transition-all duration-1000 delay-450" style={{ height: `${Math.max(10, (avgArcErrors / Math.max(1, avgClassicErrors, avgArcErrors, 10)) * 100)}%` }}>
-                                    <span className="absolute -top-8 text-xl font-bold text-emerald-300">{avgArcErrors}</span>
-                                    <span className="text-[10px] text-emerald-200 uppercase font-bold tracking-wider mb-[-2.5rem]">Arc</span>
-                                </div>
+                        {/* Classic Card */}
+                        <div className="flex-1 bg-blue-900/20 border border-blue-500/30 rounded-3xl p-8 flex justify-between items-center text-blue-300 shadow-xl relative overflow-hidden h-44">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-bl-[120px] pointer-events-none"></div>
+                            <div className="flex flex-col relative z-10">
+                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-blue-500 mb-2">Classic Words Per Minute</span>
+                                <span className="text-6xl font-light tabular-nums tracking-tight">{avgClassicWPM}</span>
+                            </div>
+                            <div className="flex flex-col items-end relative z-10">
+                                <span className="text-[10px] uppercase tracking-[0.2em] text-blue-500 mb-2">Average Errors</span>
+                                <span className="text-3xl font-light opacity-80 tabular-nums">{avgClassicErrors}</span>
                             </div>
                         </div>
                     </div>
 
                     <div className="flex flex-col items-center gap-4 mt-8 z-10 w-full max-w-lg">
-                        <button className="w-full md:w-auto px-10 py-4 rounded-full font-bold tracking-widest uppercase transition-all duration-300 bg-blue-600 hover:bg-blue-500 text-white shadow-[0_4px_20px_rgba(37,99,235,0.4)] active:scale-95 text-sm" onClick={() => window.location.reload()}>
+                        <button 
+                            className="px-10 py-4 rounded-full font-bold tracking-widest uppercase transition-all duration-300 bg-blue-600 hover:bg-blue-500 text-white shadow-[0_4px_20px_rgba(37,99,235,0.4)] active:scale-95 text-sm" 
+                            onClick={() => window.location.reload()}
+                        >
                             Start New Session
                         </button>
                     </div>
@@ -1718,11 +1714,11 @@
                         <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-3xl p-6 flex justify-between items-center text-emerald-300 shadow-xl relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-[100px] pointer-events-none"></div>
                             <div className="flex flex-col relative z-10">
-                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-emerald-500 mb-1">Arc WPM</span>
+                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-emerald-500 mb-1">Arc Words Per Minute</span>
                                 <span className="text-4xl font-light">{avgArcWPM}</span>
                             </div>
                             <div className="flex flex-col items-end relative z-10">
-                                <span className="text-[10px] uppercase tracking-[0.2em] text-emerald-500 mb-1">Errors</span>
+                                <span className="text-[10px] uppercase tracking-[0.2em] text-emerald-500 mb-1">Average Errors</span>
                                 <span className="text-2xl font-light opacity-80">{avgArcErrors}</span>
                             </div>
                         </div>
@@ -1730,11 +1726,11 @@
                         <div className="bg-blue-900/20 border border-blue-500/30 rounded-3xl p-6 flex justify-between items-center text-blue-300 shadow-xl relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-[100px] pointer-events-none"></div>
                             <div className="flex flex-col relative z-10">
-                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-blue-500 mb-1">Classic WPM</span>
+                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-blue-500 mb-1">Classic Words Per Minute</span>
                                 <span className="text-4xl font-light">{avgClassicWPM}</span>
                             </div>
                             <div className="flex flex-col items-end relative z-10">
-                                <span className="text-[10px] uppercase tracking-[0.2em] text-blue-500 mb-1">Errors</span>
+                                <span className="text-[10px] uppercase tracking-[0.2em] text-blue-500 mb-1">Average Errors</span>
                                 <span className="text-2xl font-light opacity-80">{avgClassicErrors}</span>
                             </div>
                         </div>
