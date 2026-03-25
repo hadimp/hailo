@@ -1349,7 +1349,15 @@
                             renderOverlay={mobileLayout ? () => null : null}
                         />
                     </div>
-                    {!mobileLayout && <MobileRemote isMobile={isMobile} />}
+                    {mobileLayout ? (
+                        <div className="shrink-0 w-full bg-slate-900/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-slate-700/80 shadow-[0_-15px_40px_rgba(0,0,0,0.6)] z-50 py-3 sm:py-6 flex flex-col pointer-events-auto">
+                            <div className="flex justify-center w-full shrink-0 relative overflow-visible">
+                                <MobileRemote isMobile={true} activeMode="arc" setActiveMode={()=>{}} embedded={true} />
+                            </div>
+                        </div>
+                    ) : (
+                        !mobileLayout && <MobileRemote isMobile={isMobile} />
+                    )}
                 </div>
             );
         };
@@ -1990,11 +1998,14 @@
             }
 
             if (appState === 'tutorial') {
-                return <TutorialOverlay onComplete={() => {
-                    localStorage.setItem('hasCompletedTutorial', 'true');
-                    setAppState('playground');
-                    if (isMobile) setShowMobileWarning(true);
-                }} />
+                return <TutorialOverlay 
+                    onComplete={() => {
+                        localStorage.setItem('hasCompletedTutorial', 'true');
+                        setAppState('playground');
+                        if (isMobile) setShowMobileWarning(true);
+                    }} 
+                    mobileLayout={isMobile}
+                />
             }
 
             if (appState === 'stats') {
