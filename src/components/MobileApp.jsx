@@ -141,6 +141,42 @@ window.MobileApp = () => {
             </div>
 
             <div className="shrink-0 w-full bg-slate-900/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-slate-700/80 shadow-[0_-15px_40px_rgba(0,0,0,0.6)] z-50 pt-3 pb-8 sm:py-6 flex flex-col">
+
+                {/* Legend */}
+                <div className="flex justify-center mb-2 px-2">
+                    {activeMode === 'arc' ? (
+                        <div className="flex flex-wrap gap-2 justify-center text-[9px] text-slate-400 glass-panel px-3 py-1.5 shadow-lg">
+                            <div className="flex items-center gap-1">
+                                <div className="px-1 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 font-mono text-[9px] text-emerald-400">↑←→</div>
+                                <span>Select</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <div className="px-1 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 font-mono text-[9px]">↓</div>
+                                <span>Cycle</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <div className="px-1 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 font-mono text-[9px] text-rose-300">Hold ↓</div>
+                                <span>Del</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <div className="px-1 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 font-mono text-[9px] text-green-300">↵</div>
+                                <span>Space</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex flex-wrap gap-2 justify-center text-[9px] text-slate-400 glass-panel px-3 py-1.5 shadow-lg">
+                            <div className="flex items-center gap-1">
+                                <div className="px-1 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 font-mono text-[9px] text-blue-400">↑↓←→</div>
+                                <span>Move</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <div className="px-1 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 font-mono text-[9px] text-green-300">↵</div>
+                                <span>Select</span>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
                 <div className="flex justify-center mb-2 sm:mb-5 shrink-0">
                     <button
                         onClick={() => setActiveMode(activeMode === 'arc' ? 'classic' : 'arc')}

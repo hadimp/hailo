@@ -320,7 +320,7 @@ const ArcCore = ({
             {renderOverlay ? (
                 renderOverlay()
             ) : (
-                <div className={`mt-2 sm:mt-4 transition-all duration-1000 z-30 w-full flex justify-center px-2 pb-8 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                <div className={`${isMobileDevice ? 'hidden' : 'mt-2 sm:mt-4'} transition-all duration-1000 z-30 w-full flex justify-center px-2 pb-8 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                     <div className="flex flex-wrap gap-2 sm:gap-4 justify-center text-[9px] sm:text-[11px] lg:text-[13px] text-slate-400 glass-panel px-3 sm:px-4 py-2 sm:py-3 shadow-xl max-w-[95%]">
                         <div className="flex items-center gap-1 sm:gap-2">
                             <div className={`px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[9px] sm:text-xs ${currentTheme.accent}`}>↑←→</div>
