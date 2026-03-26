@@ -2078,7 +2078,13 @@
             }
 
             if (appState === 'stats') {
-                return <StatsDashboard arcMetrics={arcMetrics} classicMetrics={classicMetrics} />
+                return (
+                    <StatsDashboard 
+                        arcMetrics={arcMetrics} 
+                        classicMetrics={classicMetrics} 
+                        onClose={() => setAppState('landing')}
+                    />
+                );
             }
 
             const arcSentence = TARGET_SENTENCES[arcIndex % TARGET_SENTENCES.length];
