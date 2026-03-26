@@ -299,7 +299,7 @@ const ArcCore = ({
     }
 
     return (
-        <div className={`flex flex-col items-center gap-6 sm:gap-4 pt-0 w-full h-auto relative transition-all duration-500 ${isActive ? 'opacity-100 scale-100' : 'opacity-40 grayscale-[0.8] mix-blend-screen pointer-events-none scale-[0.97]'}`}>
+        <div className={`flex flex-col items-center gap-6 sm:gap-4 pt-4 w-full h-auto relative transition-all duration-500 ${isActive ? 'opacity-100 scale-100' : 'opacity-40 grayscale-[0.8] mix-blend-screen pointer-events-none scale-[0.97]'}`}>
             <div className={`absolute top-[-20%] left-[-10%] w-[50%] h-[50%] ${currentTheme.glow} blur-[120px] rounded-full pointer-events-none`}></div>
 
             <SharedActiveIndicator isActive={isActive} theme={theme} title={title} />
