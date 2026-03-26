@@ -4,17 +4,17 @@ const { useState, useEffect, useRef } = React;
 
 window.MainApp = () => {
     const [appState, setAppState] = useState('landing'); // 'landing', 'tutorial', 'playground', 'stats'
-    const [activeMode, setActiveMode] = useState('arc'); // 'arc' or 'classic'
+    const [activeMode, setActiveMode] = useState('hailo'); // 'hailo' or 'classic'
     const [showLeaderboard, setShowLeaderboard] = useState(false);
     const [showMobileWarning, setShowMobileWarning] = useState(false);
     const isMobile = useIsMobile();
 
     // Track sentences independently so they can be compared fairly side-by-side
-    const [arcIndex, setArcIndex] = useState(0);
+    const [hailoIndex, setHailoIndex] = useState(0);
     const [classicIndex, setClassicIndex] = useState(0);
 
-    const [arcMetrics, setArcMetrics] = useState(() => {
-        const saved = localStorage.getItem('arcMetrics');
+    const [hailoMetrics, setHailoMetrics] = useState(() => {
+        const saved = localStorage.getItem('hailoMetrics');
         return saved ? JSON.parse(saved) : { wpm: [], errors: [] };
     });
     const [classicMetrics, setClassicMetrics] = useState(() => {
@@ -23,23 +23,23 @@ window.MainApp = () => {
     });
 
     useEffect(() => {
-        localStorage.setItem('arcMetrics', JSON.stringify(arcMetrics));
-    }, [arcMetrics]);
+        localStorage.setItem('hailoMetrics', JSON.stringify(hailoMetrics));
+    }, [hailoMetrics]);
 
     useEffect(() => {
         localStorage.setItem('qwertyMetrics', JSON.stringify(classicMetrics));
     }, [classicMetrics]);
 
     // Auto-scroll effect for mobile when active mode changes
-    const arcRef = useRef(null);
+    const hailoRef = useRef(null);
     const classicRef = useRef(null);
 
     useEffect(() => {
         if (isMobile && appState === 'playground') {
             setTimeout(() => {
-                if (activeMode === 'arc' && arcRef.current) {
+                if (activeMode === 'hailo' && hailoRef.current) {
                     try {
-                        arcRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        hailoRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     } catch (e) { }
                 } else if (activeMode === 'classic' && classicRef.current) {
                     try {
@@ -52,31 +52,31 @@ window.MainApp = () => {
 
     // If user finishes both tests, go to Stats
     useEffect(() => {
-        if (arcIndex >= TARGET_SENTENCES.length && classicIndex >= TARGET_SENTENCES.length) {
+        if (hailoIndex >= TARGET_SENTENCES.length && classicIndex >= TARGET_SENTENCES.length) {
             setAppState('stats');
         }
-    }, [arcIndex, classicIndex]);
+    }, [hailoIndex, classicIndex]);
 
     // Add Tab listener to switch panels
     useEffect(() => {
         const handleTab = (e) => {
             if (e.key === 'Tab' && appState === 'playground') {
                 e.preventDefault();
-                setActiveMode(prev => prev === 'arc' ? 'classic' : 'arc');
+                setActiveMode(prev => prev === 'hailo' ? 'classic' : 'hailo');
             }
         };
         window.addEventListener('keydown', handleTab);
         return () => window.removeEventListener('keydown', handleTab);
     }, [appState]);
 
-    const handleArcNext = (metrics) => {
+    const handleHailoNext = (metrics) => {
         if (metrics) {
-            setArcMetrics(prev => ({
+            setHailoMetrics(prev => ({
                 wpm: [...prev.wpm, parseFloat(metrics.wpm)],
                 errors: [...prev.errors, metrics.backspaceCount]
             }));
         }
-        setArcIndex(prev => prev + 1);
+        setHailoIndex(prev => prev + 1);
     };
 
     const handleClassicNext = (metrics) => {
@@ -116,14 +116,14 @@ window.MainApp = () => {
     if (appState === 'stats') {
         return (
             <StatsDashboard 
-                arcMetrics={arcMetrics} 
+                hailoMetrics={hailoMetrics} 
                 classicMetrics={classicMetrics} 
                 onClose={() => setAppState('landing')}
             />
         );
     }
 
-    const arcSentence = TARGET_SENTENCES[arcIndex % TARGET_SENTENCES.length];
+    const hailoSentence = TARGET_SENTENCES[hailoIndex % TARGET_SENTENCES.length];
     const classicSentence = TARGET_SENTENCES[classicIndex % TARGET_SENTENCES.length];
 
     return (
@@ -132,7 +132,7 @@ window.MainApp = () => {
             <div className="w-full bg-slate-900 p-2 md:p-3 flex justify-between items-center text-xs md:text-sm font-medium tracking-wide border-b border-slate-800 overflow-x-auto">
                 <div className="flex items-center gap-2 sm:gap-4 shrink-0">
                     <h1 className="text-sm sm:text-lg md:text-xl font-bold tracking-wider uppercase text-emerald-400">
-                        Arc
+                        Hailo
                     </h1>
                     <div className="h-3 sm:h-4 w-px bg-slate-700"></div>
                     <div className="text-[10px] sm:text-xs md:text-sm font-medium tracking-wide text-slate-300">
@@ -149,9 +149,9 @@ window.MainApp = () => {
                     <button
                         onClick={() => {
                             setAppState('landing');
-                            setArcIndex(0);
+                            setHailoIndex(0);
                             setClassicIndex(0);
-                            setArcMetrics({ wpm: [], errors: [] });
+                            setHailoMetrics({ wpm: [], errors: [] });
                             setClassicMetrics({ wpm: [], errors: [] });
                         }}
                         className="px-1.5 py-1 sm:px-3 sm:py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded text-[9px] sm:text-[10px] md:text-xs uppercase tracking-wider transition-colors flex items-center gap-1.5"
@@ -165,20 +165,20 @@ window.MainApp = () => {
             </div>
 
             <div className={`flex flex-col md:flex-row flex-1 gap-2 md:gap-4 p-2 md:p-0 pt-2 md:pt-4 ${isMobile ? 'pb-64' : ''}`}>
-                {/* Left Panel: Arc */}
+                {/* Left Panel: Hailo */}
                 <div
-                    ref={arcRef}
-                    className={`flex-1 relative transition-all duration-500 cursor-pointer overflow-hidden rounded-xl border transition-all duration-300 ${activeMode === 'arc' ? `bg-[#0b1120] border-emerald-500/20 shadow-[0_0_40px_rgba(16,185,129,0.1)]` : 'bg-slate-900 border-slate-800/50'} ${isMobile && activeMode !== 'arc' ? 'hidden' : ''}`}
+                    ref={hailoRef}
+                    className={`flex-1 relative transition-all duration-500 cursor-pointer overflow-hidden rounded-xl border transition-all duration-300 ${activeMode === 'hailo' ? `bg-[#0b1120] border-emerald-500/20 shadow-[0_0_40px_rgba(16,185,129,0.1)]` : 'bg-slate-900 border-slate-800/50'} ${isMobile && activeMode !== 'hailo' ? 'hidden' : ''}`}
                     onClick={() => {
-                        setActiveMode('arc');
+                        setActiveMode('hailo');
                         window.focus();
                     }}
                 >
-                    <ArcKeyboard
-                        isActive={activeMode === 'arc'}
-                        targetSentence={arcSentence}
-                        onComplete={handleArcNext}
-                        attemptNumber={arcIndex + 1}
+                    <HailoKeyboard
+                        isActive={activeMode === 'hailo'}
+                        targetSentence={hailoSentence}
+                        onComplete={handleHailoNext}
+                        attemptNumber={hailoIndex + 1}
                     />
                 </div>
 

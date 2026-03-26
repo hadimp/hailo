@@ -13,7 +13,7 @@ window.MobilePlaygroundWarning = ({ onProceed }) => {
                 <div className="space-y-2">
                     <h2 className="text-xl font-bold tracking-tight text-amber-400 uppercase">Mobile Testing Guard</h2>
                     <p className="text-slate-300 text-sm leading-relaxed">
-                        To compare these paradigms objectively, we recommend testing <span className="text-emerald-400 font-bold">BOTH</span> Arc and Classic.
+                        To compare these paradigms objectively, we recommend testing <span className="text-emerald-400 font-bold">BOTH</span> Hailo and Classic.
                     </p>
                     <p className="text-slate-400 text-xs italic">
                         Note: This website isn't optimized for mobile testing.
@@ -78,13 +78,13 @@ window.MobileRemote = ({ isMobile, activeMode, setActiveMode, embedded = false, 
             {!embedded && (
                 <>
                     <button
-                        onClick={() => setActiveMode(activeMode === 'arc' ? 'classic' : 'arc')}
+                        onClick={() => setActiveMode(activeMode === 'hailo' ? 'classic' : 'hailo')}
                         className={`mt-1 px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-[0.15em] border transition-all duration-300 select-none touch-manipulation shadow-lg animate-pulse-subtle
-                            ${activeMode === 'arc'
+                            ${activeMode === 'hailo'
                                 ? 'bg-blue-600/20 border-blue-500/50 text-blue-300 hover:bg-blue-600/30'
                                 : 'bg-emerald-600/20 border-emerald-500/50 text-emerald-300 hover:bg-emerald-600/30'}`}
                     >
-                        {activeMode === 'arc' ? 'Switch to Classic' : 'Switch to Arc'}
+                        {activeMode === 'hailo' ? 'Switch to Classic' : 'Switch to Hailo'}
                     </button>
                     <div className="text-[9px] text-slate-500 font-bold uppercase tracking-[0.2em] mt-1 opacity-60">Control Panel</div>
                 </>
@@ -92,3 +92,4 @@ window.MobileRemote = ({ isMobile, activeMode, setActiveMode, embedded = false, 
         </div>
     );
 };
+

@@ -10,10 +10,10 @@ window.generateSessionId = function () {
 
 // Ensure the user has a cross-session anonymous ID stored
 window.getOrCreateUserId = function () {
-    let uid = localStorage.getItem('arc_user_id');
+    let uid = localStorage.getItem('hailo_user_id');
     if (!uid) {
         uid = window.generateSessionId();
-        localStorage.setItem('arc_user_id', uid);
+        localStorage.setItem('hailo_user_id', uid);
     }
     return uid;
 };
@@ -23,7 +23,7 @@ window.GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwk6
 
 /**
  * Format and send telemetry data for a completed typing trial
- * @param {Object} metrics - Data object emitted by ArcCore or QwertyCore
+ * @param {Object} metrics - Data object emitted by HailoCore or QwertyCore
  */
 window.recordSession = async function (metrics) {
     if (!window.GOOGLE_SHEETS_WEBHOOK_URL) {
@@ -73,3 +73,4 @@ window.fetchLeaderboard = async function () {
         return null;
     }
 };
+

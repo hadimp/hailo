@@ -8,10 +8,10 @@ window.LandingPage = ({ onStartTutorial, onSkip, onShowStats }) => {
 
             <div className="z-10 flex flex-col items-center text-center max-w-2xl">
                 <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-br from-emerald-300 to-emerald-600 bg-clip-text text-transparent mb-6 tracking-tight">
-                    Arc Paradigm
+                    Hailo Paradigm
                 </h1>
                 <p className="text-lg text-slate-300/80 mb-6 leading-relaxed font-light">
-                    Welcome! Typing on Smart TVs, game consoles, and VR devices with older paradigms is slow and frustrating. This platform is designed to introduce you to a faster way to type using only directional inputs. Learn the fundamentals of the <strong className="text-emerald-400 font-medium">Arc</strong> paradigm, and test your skills against a <strong className="text-blue-400 font-medium">Classic</strong> baseline.
+                    Welcome! Typing on Smart TVs, game consoles, and VR devices with older paradigms is slow and frustrating. This platform is designed to introduce you to a faster way to type using only directional inputs. Learn the fundamentals of the <strong className="text-emerald-400 font-medium">Hailo</strong> paradigm, and test your skills against a <strong className="text-blue-400 font-medium">Classic</strong> baseline.
                 </p>
 
                 <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg px-4 py-3 mb-10 w-full max-w-lg text-sm text-slate-400">
@@ -30,7 +30,7 @@ window.LandingPage = ({ onStartTutorial, onSkip, onShowStats }) => {
                     </button>
                     <button
                         onClick={onSkip}
-                        className="px-8 py-4 rounded-full font-bold tracking-wider uppercase transition-all duration-300 bg-blue-500/10 text-blue-300 border border-blue-400/50 shadow-[0_0_20px_rgba(59,130,246,0.1)] hover:scale-105 hover:bg-blue-500/20"
+                        className="px-8 py-4 rounded-full font-bold tracking-wider uppercase transition-all duration-300 bg-blue-500/10 text-blue-300 border border-blue-400/50 shadow-[0_0_20px_rgba(59,130,246,0.15)] hover:scale-105 hover:bg-blue-500/20"
                     >
                         Enter Research Suite
                     </button>
@@ -53,12 +53,12 @@ window.MobileLandingPage = ({ onStartTutorial, onStartPractice, onShowStats }) =
 
         <div className="z-10 flex flex-col items-center text-center max-w-sm">
             <h1 className="text-5xl font-bold bg-gradient-to-br from-emerald-300 to-emerald-600 bg-clip-text text-transparent mb-6 tracking-tight drop-shadow-lg">
-                Arc
+                Hailo
             </h1>
             <div className="w-16 h-1 bg-emerald-500/50 mb-6 rounded-full"></div>
 
             <p className="text-sm text-slate-300/90 mb-6 leading-relaxed font-light px-2 text-left">
-                Welcome! Typing on Smart TVs, game consoles, and VR devices with older paradigms is slow and frustrating. This platform is designed to introduce you to a faster way to type using only directional inputs. Learn the fundamentals of the <strong className="text-emerald-400 font-medium">Arc</strong> paradigm, and test your skills against a <strong className="text-blue-400 font-medium">Classic</strong> baseline.
+                Welcome! Typing on Smart TVs, game consoles, and VR devices with older paradigms is slow and frustrating. This platform is designed to introduce you to a faster way to type using only directional inputs. Learn the fundamentals of the <strong className="text-emerald-400 font-medium">Hailo</strong> paradigm, and test your skills against a <strong className="text-blue-400 font-medium">Classic</strong> baseline.
             </p>
 
             <div className="bg-slate-800/80 border border-slate-700/80 rounded-lg px-4 py-4 mb-10 w-full text-xs text-slate-400 text-left shadow-lg flex items-start gap-2">
@@ -91,3 +91,4 @@ window.MobileLandingPage = ({ onStartTutorial, onStartPractice, onShowStats }) =
         </div>
     </div>
 );
+

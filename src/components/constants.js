@@ -1,4 +1,4 @@
-// Theme definitions for Arc (emerald) and Classic (blue) paradigms
+// Theme definitions for Hailo (emerald) and Classic (blue) paradigms
 window.THEMES = {
     blue: {
         text: 'text-blue-400',

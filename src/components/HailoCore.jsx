@@ -1,11 +1,11 @@
-// ArcCore - the core Arc keyboard engine with prediction, key handling, and metrics
+// HailoCore - the core Hailo keyboard engine with prediction, key handling, and metrics
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-const ArcCore = ({
+const HailoCore = ({
     isActive,
     targetSentence,
     onComplete,
-    title = "Arc",
+    title = "Hailo",
     interceptKey = null,
     interceptKeyUp = null,
     onTextChange = null,
@@ -13,7 +13,7 @@ const ArcCore = ({
     removeSpecials = false,
     showMetricsScreen = true,
     attemptNumber = 1,
-    arcIndex = 0,
+    hailoIndex = 0,
     classicIndex = 0
 }) => {
     const [text, setText] = useState("");
@@ -220,12 +220,12 @@ const ArcCore = ({
                 <div className={`absolute top-[-20%] left-[-10%] w-[50%] h-[50%] ${currentTheme.glow} blur-[120px] rounded-full pointer-events-none`}></div>
 
                 <div className={`glass-panel ${isMobileDevice ? 'p-6' : 'p-8'} flex flex-col items-center gap-6 ${currentTheme.focusPanel} border-opacity-50 max-w-sm w-full z-20`}>
-                    <h2 className={`text-xl font-bold tracking-widest uppercase ${currentTheme.text}`}>{isMobileDevice ? (arcIndex > classicIndex ? "Arc Phase Complete" : "Success!") : "Arc Completed"}</h2>
+                    <h2 className={`text-xl font-bold tracking-widest uppercase ${currentTheme.text}`}>{isMobileDevice ? (hailoIndex > classicIndex ? "Hailo Phase Complete" : "Success!") : "Hailo Completed"}</h2>
 
                     {isMobileDevice ? (
                         <div className="flex flex-col items-center gap-2 mb-2">
                             <div className="text-4xl font-light text-white">{wpm} <span className="text-sm uppercase opacity-60">WPM</span></div>
-                            <div className="text-xs text-slate-400 uppercase tracking-widest">{arcIndex > classicIndex ? "Phase 1: Arc Done" : "Speed Evaluated"}</div>
+                            <div className="text-xs text-slate-400 uppercase tracking-widest">{hailoIndex > classicIndex ? "Phase 1: Hailo Done" : "Speed Evaluated"}</div>
                         </div>
                     ) : (
                         <div className="flex flex-col gap-4 w-full text-slate-300">
@@ -255,7 +255,7 @@ const ArcCore = ({
                     <button
                         onClick={() => {
                             const payload = {
-                                paradigm: 'arc',
+                                paradigm: 'hailo',
                                 attemptNumber,
                                 sentence: targetSentence,
                                 keystrokes,
@@ -290,7 +290,7 @@ const ArcCore = ({
                         className={`mt-4 px-8 py-4 rounded-full font-bold tracking-[0.2em] uppercase transition-all duration-300 ${currentTheme.active} hover:scale-105 shadow-xl`}
                     >
                         {isMobileDevice ?
-                            (arcIndex > classicIndex ? "Try Next: Classic (Same Text)" : "Finish Round & Start Next")
+                            (hailoIndex > classicIndex ? "Try Next: Classic (Same Text)" : "Finish Round & Start Next")
                             : "Next Sentence"}
                     </button>
                 </div>
@@ -306,7 +306,7 @@ const ArcCore = ({
             <SharedTypeArea title={title} text={text} targetSentence={targetSentence} isActive={isActive} success={success} theme={theme} />
 
             <div className={isMobileDevice ? 'mt-[140px]' : 'mt-[210px]'}>
-                <SharedArcRing
+                <SharedHailoRing
                     isActive={isActive}
                     success={success}
                     theme={theme}
@@ -348,7 +348,7 @@ const ArcCore = ({
                         <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/50 flex items-center justify-center shadow-[0_0_30px_rgba(16,185,129,0.2)]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-400"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"></path><path d="m7.5 4.21 4.5 2.6a2 2 0 0 0 2 0l4.5-2.6"></path></svg>
                         </div>
-                        <span className="text-emerald-300 font-bold uppercase tracking-widest text-sm bg-slate-900/80 px-4 py-2 rounded-full border border-emerald-500/30">Tap to Switch to Arc</span>
+                        <span className="text-emerald-300 font-bold uppercase tracking-widest text-sm bg-slate-900/80 px-4 py-2 rounded-full border border-emerald-500/30">Tap to Switch to Hailo</span>
                     </div>
                 </div>
             )}
@@ -356,8 +356,9 @@ const ArcCore = ({
     );
 };
 
-// ArcKeyboard wrapper
-window.ArcCore = ArcCore;
-window.ArcKeyboard = (props) => {
-    return <ArcCore {...props} title="Arc Paradigm" showMetricsScreen={true} />;
+// HailoKeyboard wrapper
+window.HailoCore = HailoCore;
+window.HailoKeyboard = (props) => {
+    return <HailoCore {...props} title="Hailo Paradigm" showMetricsScreen={true} />;
 };
+

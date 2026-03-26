@@ -1,5 +1,5 @@
-// Shared Arc Visual Ring - circular letter display with particle animations
-window.SharedArcRing = ({ isActive, success, theme, letters, layer, particles, cycleKey }) => {
+// Shared Hailo Visual Ring - circular letter display with particle animations
+window.SharedHailoRing = ({ isActive, success, theme, letters, layer, particles, cycleKey }) => {
     const currentTheme = THEMES[theme];
 
     const maxLayers = Math.ceil((letters.length || 26) / 3);
@@ -74,3 +74,4 @@ window.SharedArcRing = ({ isActive, success, theme, letters, layer, particles, c
         </div>
     );
 };
+

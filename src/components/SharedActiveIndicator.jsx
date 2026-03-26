@@ -4,10 +4,10 @@ window.SharedActiveIndicator = ({ isActive, theme, title }) => {
     const isMobile = useIsMobile();
     if (isMobile) return null;
 
-    // Extract the base paradigm name from titles like "Tutorial: Intro" or "Arc Playground"
+    // Extract the base paradigm name from titles like "Tutorial: Intro" or "Hailo Playground"
     const getDisplayTitle = () => {
         if (!title) return '';
-        if (title.toLowerCase().includes('arc')) return 'ARC';
+        if (title.toLowerCase().includes('hailo')) return 'HAILO';
         if (title.toLowerCase().includes('classic')) return 'CLASSIC';
         return title;
     };

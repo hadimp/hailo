@@ -3,13 +3,13 @@ const { useState, useEffect } = React;
 
 window.MobileApp = () => {
     const [appState, setAppState] = useState('landing');
-    const [activeMode, setActiveMode] = useState('arc');
+    const [activeMode, setActiveMode] = useState('hailo');
 
-    const [arcIndex, setArcIndex] = useState(0);
+    const [hailoIndex, setHailoIndex] = useState(0);
     const [classicIndex, setClassicIndex] = useState(0);
 
-    const [arcMetrics, setArcMetrics] = useState(() => {
-        const saved = localStorage.getItem('arcMetrics');
+    const [hailoMetrics, setHailoMetrics] = useState(() => {
+        const saved = localStorage.getItem('hailoMetrics');
         return saved ? JSON.parse(saved) : { wpm: [], errors: [] };
     });
     const [classicMetrics, setClassicMetrics] = useState(() => {
@@ -18,24 +18,24 @@ window.MobileApp = () => {
     });
 
     useEffect(() => {
-        localStorage.setItem('arcMetrics', JSON.stringify(arcMetrics));
-    }, [arcMetrics]);
+        localStorage.setItem('hailoMetrics', JSON.stringify(hailoMetrics));
+    }, [hailoMetrics]);
 
     useEffect(() => {
         localStorage.setItem('qwertyMetrics', JSON.stringify(classicMetrics));
     }, [classicMetrics]);
 
     useEffect(() => {
-        if (arcIndex > 0 && classicIndex > 0 && arcIndex >= TARGET_SENTENCES.length && classicIndex >= TARGET_SENTENCES.length) {
+        if (hailoIndex > 0 && classicIndex > 0 && hailoIndex >= TARGET_SENTENCES.length && classicIndex >= TARGET_SENTENCES.length) {
             setAppState('stats');
         }
-    }, [arcIndex, classicIndex]);
+    }, [hailoIndex, classicIndex]);
 
-    const handleArcNext = (metrics) => {
+    const handleHailoNext = (metrics) => {
         if (metrics) {
-            setArcMetrics(prev => ({ wpm: [...prev.wpm, parseFloat(metrics.wpm)], errors: [...prev.errors, metrics.backspaceCount] }));
+            setHailoMetrics(prev => ({ wpm: [...prev.wpm, parseFloat(metrics.wpm)], errors: [...prev.errors, metrics.backspaceCount] }));
         }
-        setArcIndex(prev => prev + 1);
+        setHailoIndex(prev => prev + 1);
         setActiveMode('classic');
     };
 
@@ -44,7 +44,7 @@ window.MobileApp = () => {
             setClassicMetrics(prev => ({ wpm: [...prev.wpm, parseFloat(metrics.wpm)], errors: [...prev.errors, metrics.backspaceCount] }));
         }
         setClassicIndex(prev => prev + 1);
-        setActiveMode('arc');
+        setActiveMode('hailo');
     };
 
     if (appState === 'landing') {
@@ -69,7 +69,7 @@ window.MobileApp = () => {
         return (
             <div className="flex flex-col w-full h-full bg-[#0b1120] overflow-hidden fixed inset-0">
                 <MobileStatsDashboard
-                    arcMetrics={arcMetrics}
+                    hailoMetrics={hailoMetrics}
                     classicMetrics={classicMetrics}
                     onClose={() => setAppState('landing')}
                 />
@@ -77,7 +77,7 @@ window.MobileApp = () => {
         );
     }
 
-    const arcSentence = TARGET_SENTENCES[arcIndex % TARGET_SENTENCES.length];
+    const hailoSentence = TARGET_SENTENCES[hailoIndex % TARGET_SENTENCES.length];
     const classicSentence = TARGET_SENTENCES[classicIndex % TARGET_SENTENCES.length];
 
     return (
@@ -85,7 +85,7 @@ window.MobileApp = () => {
             <div className="w-full flex justify-between items-center px-6 py-2 bg-slate-900 border-b border-slate-800 z-50 shrink-0">
                 <div className="text-[10px] items-center gap-2 flex text-emerald-500 uppercase tracking-[0.2em] font-bold">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse"></span>
-                    Round {Math.min(arcIndex, classicIndex) + 1}
+                    Round {Math.min(hailoIndex, classicIndex) + 1}
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -107,21 +107,21 @@ window.MobileApp = () => {
             </div>
             <div className="w-full h-1 bg-slate-800 shrink-0">
                 <div
-                    className={`h-full transition-all duration-500 ${activeMode === 'arc' ? 'bg-emerald-500' : 'bg-blue-500'}`}
-                    style={{ width: `${((activeMode === 'arc' ? arcIndex : classicIndex) / TARGET_SENTENCES.length) * 100}%` }}
+                    className={`h-full transition-all duration-500 ${activeMode === 'hailo' ? 'bg-emerald-500' : 'bg-blue-500'}`}
+                    style={{ width: `${((activeMode === 'hailo' ? hailoIndex : classicIndex) / TARGET_SENTENCES.length) * 100}%` }}
                 ></div>
             </div>
 
             <div className="flex-1 overflow-hidden relative flex flex-col items-center justify-start mt-2 sm:mt-10 overflow-y-auto w-full pb-4">
-                {activeMode === 'arc' ? (
+                {activeMode === 'hailo' ? (
                     <div className="w-full flex flex-col items-center animate-[fadeIn_0.5s_ease-out]">
-                        <ArcKeyboard
-                            key={`arc-${arcIndex}`}
+                        <HailoKeyboard
+                            key={`hailo-${hailoIndex}`}
                             isActive={true}
-                            targetSentence={arcSentence}
-                            onComplete={handleArcNext}
-                            attemptNumber={arcIndex + 1}
-                            arcIndex={arcIndex}
+                            targetSentence={hailoSentence}
+                            onComplete={handleHailoNext}
+                            attemptNumber={hailoIndex + 1}
+                            hailoIndex={hailoIndex}
                             classicIndex={classicIndex}
                         />
                     </div>
@@ -133,7 +133,7 @@ window.MobileApp = () => {
                             targetSentence={classicSentence}
                             onComplete={handleClassicNext}
                             attemptNumber={classicIndex + 1}
-                            arcIndex={arcIndex}
+                            hailoIndex={hailoIndex}
                             classicIndex={classicIndex}
                         />
                     </div>
@@ -144,7 +144,7 @@ window.MobileApp = () => {
 
                 {/* Legend */}
                 <div className="flex justify-center mb-2 px-2">
-                    {activeMode === 'arc' ? (
+                    {activeMode === 'hailo' ? (
                         <div className="flex flex-wrap gap-2 justify-center text-[9px] text-slate-400 glass-panel px-3 py-1.5 shadow-lg">
                             <div className="flex items-center gap-1">
                                 <div className="px-1 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 font-mono text-[9px] text-emerald-400">↑←→</div>
@@ -179,13 +179,13 @@ window.MobileApp = () => {
 
                 <div className="flex justify-center mb-2 sm:mb-5 shrink-0">
                     <button
-                        onClick={() => setActiveMode(activeMode === 'arc' ? 'classic' : 'arc')}
+                        onClick={() => setActiveMode(activeMode === 'hailo' ? 'classic' : 'hailo')}
                         className={`px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-300 shadow-md active:scale-95
-                            ${activeMode === 'arc'
+                            ${activeMode === 'hailo'
                                 ? 'bg-blue-600/20 border border-blue-500/50 text-blue-300'
                                 : 'bg-emerald-600/20 border border-emerald-500/50 text-emerald-300'}`}
                     >
-                        {activeMode === 'arc' ? 'Switch to Classic' : 'Switch to Arc'}
+                        {activeMode === 'hailo' ? 'Switch to Classic' : 'Switch to Hailo'}
                     </button>
                 </div>
 
@@ -196,3 +196,4 @@ window.MobileApp = () => {
         </div>
     );
 };
+

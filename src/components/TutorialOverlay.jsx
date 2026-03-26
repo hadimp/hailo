@@ -1,4 +1,4 @@
-// TutorialOverlay - multi-stage interactive tutorial for the Arc paradigm
+// TutorialOverlay - multi-stage interactive tutorial for the Hailo paradigm
 const { useState, useEffect } = React;
 
 window.TutorialOverlay = ({ onComplete, onHome, mobileLayout = false }) => {
@@ -97,7 +97,7 @@ window.TutorialOverlay = ({ onComplete, onHome, mobileLayout = false }) => {
             )}
             {stage === 0 && (
                 <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-4' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
-                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-4`}>Instead of hunting for letters, Arc predicts what you want to type. You only need the four arrow keys.</p>
+                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-4`}>Instead of hunting for letters, Hailo predicts what you want to type. You only need the four arrow keys.</p>
                     <button onClick={() => setStage(1)} className="px-6 py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 rounded-full font-bold hover:bg-emerald-500/30 transition-colors uppercase tracking-wider text-xs sm:text-base shadow-[0_0_15px_rgba(16,185,129,0.2)]">Got It (Enter)</button>
                 </div>
             )}
@@ -136,7 +136,7 @@ window.TutorialOverlay = ({ onComplete, onHome, mobileLayout = false }) => {
             )}
             {stage === 6 && (
                 <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-4' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
-                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-4`}>You successfully mastered the Arc paradigm.</p>
+                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-4`}>You successfully mastered the Hailo paradigm.</p>
                     <button onClick={onComplete} className="px-6 py-2 bg-blue-500/10 text-blue-300 border border-blue-400/50 rounded-full font-bold hover:bg-blue-500/20 transition-colors uppercase tracking-wider shadow-[0_0_15px_rgba(59,130,246,0.15)] pointer-events-auto text-xs sm:text-base">Enter Research Suite</button>
                 </div>
             )}
@@ -165,7 +165,7 @@ window.TutorialOverlay = ({ onComplete, onHome, mobileLayout = false }) => {
             <div className="w-full pointer-events-none relative flex-1">
                 {renderTutorialLegend()}
                 <div className={`w-full h-full ${mobileLayout ? 'pt-[120px] pb-0' : `pt-64 ${isMobile ? 'pb-48' : 'pb-8'}`} pointer-events-auto`}>
-                    <ArcCore
+                    <HailoCore
                         key={`core-${resetKey}`}
                         isActive={true}
                         targetSentence={stage >= 5 ? "sun" : ""}
@@ -183,7 +183,7 @@ window.TutorialOverlay = ({ onComplete, onHome, mobileLayout = false }) => {
             {mobileLayout ? (
                 <div className="shrink-0 w-full bg-slate-900/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-slate-700/80 shadow-[0_-15px_40px_rgba(0,0,0,0.6)] z-50 pt-4 pb-32 sm:py-6 flex flex-col pointer-events-auto">
                     <div className="flex justify-center w-full shrink-0 relative overflow-visible">
-                        <MobileRemote isMobile={true} activeMode="arc" setActiveMode={() => { }} embedded={true} />
+                        <MobileRemote isMobile={true} activeMode="hailo" setActiveMode={() => { }} embedded={true} />
                     </div>
                 </div>
             ) : (
@@ -192,3 +192,4 @@ window.TutorialOverlay = ({ onComplete, onHome, mobileLayout = false }) => {
         </div>
     );
 };
+

@@ -1,5 +1,5 @@
 /**
- * Google Apps Script Webhook for Arc Telemetry
+ * Google Apps Script Webhook for Hailo Telemetry
  * 
  * INSTRUCTIONS:
  * 1. Go to script.google.com and create a new project.
@@ -79,7 +79,7 @@ function doGet(e) {
         if (values.length <= 1) {
             // No data yet
             return ContentService.createTextOutput(JSON.stringify({
-                arc: { top: [], avgWpm: 0, avgErrors: 0 },
+                hailo: { top: [], avgWpm: 0, avgErrors: 0 },
                 qwerty: { top: [], avgWpm: 0, avgErrors: 0 }
             }))
                 .setMimeType(ContentService.MimeType.JSON);
@@ -92,7 +92,7 @@ function doGet(e) {
         const wpmIdx = headers.indexOf("WPM");
         const bckspcIdx = headers.indexOf("Backspace Count");
 
-        let arcScores = [];
+        let hailoScores = [];
         let qwertyScores = [];
 
         rows.forEach(row => {
@@ -100,8 +100,8 @@ function doGet(e) {
             const wpm = parseFloat(row[wpmIdx]) || 0;
             const errors = parseInt(row[bckspcIdx]) || 0;
 
-            if (paradigm === 'arc') {
-                arcScores.push({ wpm, errors });
+            if (paradigm === 'hailo') {
+                hailoScores.push({ wpm, errors });
             } else if (paradigm === 'qwerty') {
                 qwertyScores.push({ wpm, errors });
             }
@@ -122,7 +122,7 @@ function doGet(e) {
         };
 
         const result = {
-            arc: processStats(arcScores),
+            hailo: processStats(hailoScores),
             qwerty: processStats(qwertyScores)
         };
 
@@ -136,3 +136,4 @@ function doGet(e) {
             .setMimeType(ContentService.MimeType.JSON);
     }
 }
+

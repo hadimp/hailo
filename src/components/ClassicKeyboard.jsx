@@ -1,7 +1,7 @@
 // ClassicKeyboard - QWERTY grid keyboard with arrow-key navigation
 const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-window.ClassicKeyboard = ({ isActive, targetSentence, onComplete, attemptNumber = 1, arcIndex = 0, classicIndex = 0 }) => {
+window.ClassicKeyboard = ({ isActive, targetSentence, onComplete, attemptNumber = 1, hailoIndex = 0, classicIndex = 0 }) => {
     const [text, setText] = useState("");
     const [isCompleted, setIsCompleted] = useState(false);
     const isMobileDevice = useIsMobile();
@@ -95,12 +95,12 @@ window.ClassicKeyboard = ({ isActive, targetSentence, onComplete, attemptNumber 
                 <div className={`absolute top-[-20%] right-[-10%] w-[50%] h-[50%] ${currentTheme.glow} blur-[120px] rounded-full pointer-events-none`}></div>
 
                 <div className={`glass-panel ${isMobileDevice ? 'p-6' : 'p-8'} flex flex-col items-center gap-6 ${currentTheme.focusPanel} border-opacity-50 max-w-sm w-full z-20`}>
-                    <h2 className={`text-xl font-bold tracking-widest uppercase ${currentTheme.text}`}>{isMobileDevice ? (classicIndex > arcIndex ? "Classic Phase Complete" : "Success!") : "Classic Completed"}</h2>
+                    <h2 className={`text-xl font-bold tracking-widest uppercase ${currentTheme.text}`}>{isMobileDevice ? (classicIndex > hailoIndex ? "Classic Phase Complete" : "Success!") : "Classic Completed"}</h2>
 
                     {isMobileDevice ? (
                         <div className="flex flex-col items-center gap-2 mb-2">
                             <div className="text-4xl font-light text-white">{wpm} <span className="text-sm uppercase opacity-60">WPM</span></div>
-                            <div className="text-xs text-slate-400 uppercase tracking-widest">{classicIndex > arcIndex ? "Phase 1: Classic Done" : "Speed Evaluated"}</div>
+                            <div className="text-xs text-slate-400 uppercase tracking-widest">{classicIndex > hailoIndex ? "Phase 1: Classic Done" : "Speed Evaluated"}</div>
                         </div>
                     ) : (
                         <div className="flex flex-col gap-4 w-full text-slate-300">
@@ -165,7 +165,7 @@ window.ClassicKeyboard = ({ isActive, targetSentence, onComplete, attemptNumber 
                         className={`mt-4 px-8 py-4 rounded-full font-bold tracking-[0.2em] uppercase transition-all duration-300 ${currentTheme.active} hover:scale-105 shadow-xl`}
                     >
                         {isMobileDevice ?
-                            (classicIndex > arcIndex ? "Try Next: Arc (Same Text)" : "Finish Round & Start Next")
+                            (classicIndex > hailoIndex ? "Try Next: Hailo (Same Text)" : "Finish Round & Start Next")
                             : "Next Sentence"}
                     </button>
                 </div>
