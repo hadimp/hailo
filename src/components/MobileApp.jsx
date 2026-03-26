@@ -140,7 +140,7 @@ window.MobileApp = () => {
                 )}
             </div>
 
-            <div className="shrink-0 w-full bg-slate-900/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-slate-700/80 shadow-[0_-15px_40px_rgba(0,0,0,0.6)] z-50 pt-3 pb-8 sm:py-6 flex flex-col">
+            <div className="shrink-0 w-full bg-slate-900/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-slate-700/80 shadow-[0_-15px_40px_rgba(0,0,0,0.6)] z-50 pt-3 pb-3 sm:py-6 flex flex-col">
 
                 {/* Legend */}
                 <div className="flex justify-center mb-2 px-2">
