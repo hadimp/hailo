@@ -305,7 +305,7 @@ const ArcCore = ({
             <SharedActiveIndicator isActive={isActive} theme={theme} title={title} />
             <SharedTypeArea title={title} text={text} targetSentence={targetSentence} isActive={isActive} success={success} theme={theme} />
 
-            <div className={isMobileDevice ? 'mt-[130px] sm:mt-32' : 'mt-[140px] sm:mt-[145px]'}>
+            <div className={isMobileDevice ? 'mt-[70px] sm:mt-32' : 'mt-[140px] sm:mt-[145px]'}>
                 <SharedArcRing
                     isActive={isActive}
                     success={success}
@@ -321,22 +321,22 @@ const ArcCore = ({
                 renderOverlay()
             ) : (
                 <div className={`mt-2 sm:mt-4 transition-all duration-1000 z-30 w-full flex justify-center px-2 pb-8 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                    <div className="flex flex-wrap gap-3 sm:gap-4 justify-center text-[9px] sm:text-[11px] lg:text-[13px] text-slate-400 glass-panel px-3 sm:px-4 py-2 sm:py-3 shadow-xl">
-                        <div className="flex items-center gap-1.5 sm:gap-2">
+                    <div className="flex flex-wrap gap-2 sm:gap-4 justify-center text-[9px] sm:text-[11px] lg:text-[13px] text-slate-400 glass-panel px-3 sm:px-4 py-2 sm:py-3 shadow-xl max-w-[95%]">
+                        <div className="flex items-center gap-1 sm:gap-2">
                             <div className={`px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[9px] sm:text-xs ${currentTheme.accent}`}>↑←→</div>
-                            <span>Select Letter</span>
+                            <span>{isMobileDevice ? 'Select' : 'Select Letter'}</span>
                         </div>
-                        <div className="flex items-center gap-1.5 sm:gap-2">
+                        <div className="flex items-center gap-1 sm:gap-2">
                             <div className="px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[9px] sm:text-xs">↓</div>
-                            <span>Cycle Layer</span>
+                            <span>{isMobileDevice ? 'Cycle' : 'Cycle Layer'}</span>
                         </div>
-                        <div className="flex items-center gap-1.5 sm:gap-2">
+                        <div className="flex items-center gap-1 sm:gap-2">
                             <div className="px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[9px] sm:text-[10px] text-rose-300">Hold ↓</div>
-                            <span>Delete</span>
+                            <span>{isMobileDevice ? 'Del' : 'Delete'}</span>
                         </div>
-                        <div className="flex items-center gap-1.5 sm:gap-2">
+                        <div className="flex items-center gap-1 sm:gap-2">
                             <div className="px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[9px] sm:text-[10px] text-green-300">Enter</div>
-                            <span>Space</span>
+                            <span>{isMobileDevice ? 'Space' : 'Space'}</span>
                         </div>
                     </div>
                 </div>
