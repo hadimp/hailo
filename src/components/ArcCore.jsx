@@ -320,23 +320,23 @@ const ArcCore = ({
             {renderOverlay ? (
                 renderOverlay()
             ) : (
-                <div className={`${isMobileDevice ? 'hidden' : 'mt-6 sm:mt-10'} transition-all duration-1000 z-30 w-full flex justify-center px-4 pb-8 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                    <div className="flex flex-row flex-nowrap gap-3 md:gap-6 justify-center text-[10px] lg:text-[12px] text-slate-400 glass-panel px-6 py-2 shadow-xl whitespace-nowrap">
-                        <div className="flex items-center gap-2">
-                            <div className={`px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs ${currentTheme.accent}`}>↑←→</div>
-                            <span>Select</span>
+                <div className={`${isMobileDevice ? 'hidden' : 'mt-2 sm:mt-4'} transition-all duration-1000 z-30 w-full flex justify-center px-2 pb-8 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                    <div className="flex flex-wrap gap-3 sm:gap-4 justify-center text-[9px] sm:text-[11px] lg:text-[13px] text-slate-400 glass-panel px-3 sm:px-4 py-2 sm:py-3 shadow-xl">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                            <div className={`px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[9px] sm:text-xs ${currentTheme.accent}`}>↑←→</div>
+                            <span>Select Letter</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <div className="px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-xs">↓</div>
-                            <span>Cycle</span>
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                            <div className="px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[9px] sm:text-xs">↓</div>
+                            <span>Cycle Layer</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <div className="px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[10px] text-rose-300">Hold ↓</div>
-                            <span className="text-[10px] text-slate-400 uppercase tracking-wider">Del</span>
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                            <div className="px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[9px] sm:text-[10px] text-rose-300">Hold ↓</div>
+                            <span>Delete</span>
                         </div>
-                        <div className="flex items-center gap-2 text-slate-500 opacity-60">
-                            <div className="px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[10px]">Enter</div>
-                            <span className="text-[10px]">Space</span>
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                            <div className="px-1.5 py-0.5 bg-slate-800/80 rounded border border-slate-700/50 shadow-inner font-mono text-[9px] sm:text-[10px] text-green-300">Enter</div>
+                            <span>Space</span>
                         </div>
                     </div>
                 </div>
