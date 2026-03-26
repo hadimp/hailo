@@ -1403,8 +1403,8 @@
                             <line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" />
                         </svg>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent z-10 tracking-tight text-center">Results</h1>
-                    <p className="text-slate-400 text-sm font-light mb-10 z-10">Testing complete.</p>
+                    <h1 className="text-4xl md:text-5xl font-bold mb-10 bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent z-10 tracking-tight text-center">Results</h1>
+                    
                     
                     <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8 z-10">
                         {/* Arc Dashboard Card */}
@@ -1422,15 +1422,17 @@
                                     <span className="text-[10px] text-emerald-500/60 uppercase tracking-widest font-bold mb-1">Average Errors</span>
                                     <span className="text-2xl font-light text-emerald-300/80">{avgArcErrors}</span>
                                 </div>
-                                {globalStats?.arc && (
-                                    <div className="text-right">
-                                        <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-1">Community Avg</span>
-                                        <div className="flex flex-col items-end">
-                                            <span className="text-lg font-mono text-emerald-500/60">{globalStats.arc.avgWpm} WPM</span>
-                                            <span className="text-[11px] text-slate-600">Err: {globalStats.arc.avgErrors}</span>
-                                        </div>
-                                    </div>
-                                )}
+                                <div className="text-right min-h-[44px]">
+                                    {globalStats?.arc && (
+                                        <>
+                                            <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-1">Community Avg</span>
+                                            <div className="flex flex-col items-end animate-fade-in">
+                                                <span className="text-lg font-mono text-emerald-500/60">{globalStats.arc.avgWpm} WPM</span>
+                                                <span className="text-[12px] text-emerald-500/40 font-bold uppercase tracking-tighter">Errors: {globalStats.arc.avgErrors}</span>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                         </div>
 
@@ -1449,15 +1451,17 @@
                                     <span className="text-[10px] text-blue-400/60 uppercase tracking-widest font-bold mb-1">Average Errors</span>
                                     <span className="text-2xl font-light text-blue-300/80">{avgClassicErrors}</span>
                                 </div>
-                                {(globalStats?.qwerty || globalStats?.classic) && (
-                                    <div className="text-right">
-                                        <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-1">Community Avg</span>
-                                        <div className="flex flex-col items-end">
-                                            <span className="text-lg font-mono text-blue-400/60">{(globalStats.qwerty || globalStats.classic).avgWpm} WPM</span>
-                                            <span className="text-[11px] text-slate-600">Err: {(globalStats.qwerty || globalStats.classic).avgErrors}</span>
-                                        </div>
-                                    </div>
-                                )}
+                                <div className="text-right min-h-[44px]">
+                                    {(globalStats?.qwerty || globalStats?.classic) && (
+                                        <>
+                                            <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-1">Community Avg</span>
+                                            <div className="flex flex-col items-end animate-fade-in">
+                                                <span className="text-lg font-mono text-blue-400/60">{(globalStats.qwerty || globalStats.classic).avgWpm} WPM</span>
+                                                <span className="text-[12px] text-blue-400/40 font-bold uppercase tracking-tighter">Errors: {(globalStats.qwerty || globalStats.classic).avgErrors}</span>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1754,8 +1758,8 @@
                             <line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" />
                         </svg>
                     </div>
-                    <h2 className="text-4xl font-bold mb-3 bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent z-10 tracking-tight">Results</h2>
-                    <p className="text-slate-400 text-sm font-light mb-8 z-10">Testing complete.</p>
+                    <h2 className="text-4xl font-bold mb-10 bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent z-10 tracking-tight">Results</h2>
+                    
                     
                     <div className="w-full max-w-[320px] flex flex-col gap-5 z-10">
                         {/* Arc Dashboard Card */}
@@ -1764,11 +1768,14 @@
                             <div className="flex flex-col relative z-10">
                                 <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-emerald-500 mb-1">Arc Words Per Minute</span>
                                 <span className="text-4xl font-light">{avgArcWPM}</span>
-                                {globalStats?.arc && (
-                                    <div className="mt-2 text-[10px] uppercase tracking-wider text-emerald-500/60 font-medium border-t border-emerald-500/10 pt-1">
-                                        Community Avg: {globalStats.arc.avgWpm} WPM
-                                    </div>
-                                )}
+                                <div className="min-h-[24px]">
+                                    {globalStats?.arc && (
+                                        <div className="mt-2 text-[10px] uppercase tracking-wider text-emerald-500/60 font-medium border-t border-emerald-500/10 pt-1 animate-fade-in flex justify-between gap-4">
+                                            <span>Community Avg: {globalStats.arc.avgWpm} WPM</span>
+                                            <span className="text-emerald-500/40">Err: {globalStats.arc.avgErrors}</span>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                             <div className="flex flex-col items-end relative z-10">
                                 <span className="text-[10px] uppercase tracking-[0.2em] text-emerald-500 mb-1">Errors</span>
@@ -1782,11 +1789,14 @@
                             <div className="flex flex-col relative z-10">
                                 <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-blue-500 mb-1">Classic Words Per Minute</span>
                                 <span className="text-4xl font-light">{avgClassicWPM}</span>
-                                {(globalStats?.qwerty || globalStats?.classic) && (
-                                    <div className="mt-2 text-[10px] uppercase tracking-wider text-blue-500/60 font-medium border-t border-blue-500/10 pt-1">
-                                        Community Avg: {(globalStats.qwerty || globalStats.classic).avgWpm} WPM
-                                    </div>
-                                )}
+                                <div className="min-h-[24px]">
+                                    {(globalStats?.qwerty || globalStats?.classic) && (
+                                        <div className="mt-2 text-[10px] uppercase tracking-wider text-blue-500/60 font-medium border-t border-blue-500/10 pt-1 animate-fade-in flex justify-between gap-4">
+                                            <span>Community Avg: {(globalStats.qwerty || globalStats.classic).avgWpm} WPM</span>
+                                            <span className="text-blue-500/40">Err: {(globalStats.qwerty || globalStats.classic).avgErrors}</span>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                             <div className="flex flex-col items-end relative z-10">
                                 <span className="text-[10px] uppercase tracking-[0.2em] text-blue-500 mb-1">Errors</span>
