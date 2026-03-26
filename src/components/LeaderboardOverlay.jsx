@@ -44,25 +44,25 @@ window.LeaderboardOverlay = ({ onClose }) => {
                             <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-bl-full pointer-events-none"></div>
                             <h3 className="text-xl font-bold text-emerald-400 mb-6 uppercase tracking-wider relative z-10">Hailo Top 5</h3>
                             <div className="space-y-3 relative z-10">
-                                {data.hailo?.top?.map((wpm, i) => (
+                                {(data.hailo || data.arc)?.top?.map((wpm, i) => (
                                     <div key={i} className="flex justify-between items-center bg-slate-900/50 px-4 py-3 rounded-lg border border-emerald-500/10">
                                         <span className="text-slate-500 font-mono">#{i + 1}</span>
                                         <span className="text-emerald-300 font-bold text-xl">{wpm.toFixed(1)} <span className="text-xs text-emerald-500 font-normal uppercase">WPM</span></span>
                                     </div>
                                 ))}
-                                {(!data.hailo?.top || data.hailo.top.length === 0) && <p className="text-slate-500 italic">No runs recorded.</p>}
+                                {(!(data.hailo || data.arc)?.top || (data.hailo || data.arc).top.length === 0) && <p className="text-slate-500 italic">No runs recorded.</p>}
                             </div>
                             <div className="mt-8 pt-6 border-t border-emerald-500/20 relative z-10">
                                 <div className="flex justify-between items-center mb-1">
                                     <span className="text-sm uppercase tracking-wider text-slate-400">Community Avg Speed</span>
-                                    <span className="text-slate-200 font-mono text-lg">{data.hailo.avgWpm} wpm</span>
+                                    <span className="text-slate-200 font-mono text-lg">{(data.hailo || data.arc).avgWpm} wpm</span>
                                 </div>
                                 <div className="flex justify-end mb-4">
                                     <span className="text-[10px] text-slate-500 uppercase tracking-widest">Words Per Minute</span>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-sm uppercase tracking-wider text-slate-400">Community Avg Errors</span>
-                                    <span className="text-slate-200 font-mono text-lg">{data.hailo.avgErrors}</span>
+                                    <span className="text-slate-200 font-mono text-lg">{(data.hailo || data.arc).avgErrors}</span>
                                 </div>
                             </div>
                         </div>

@@ -52,12 +52,12 @@ window.StatsDashboard = ({ hailoMetrics, classicMetrics, onClose }) => {
                             <span className="text-2xl font-light text-emerald-300/80">{avgHailoErrors}</span>
                         </div>
                         <div className="text-right min-h-[44px]">
-                            {globalStats?.hailo && (
+                            {(globalStats?.hailo || globalStats?.arc) && (
                                 <>
                                     <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-1">Community Avg</span>
                                     <div className="flex flex-col items-end animate-fade-in">
-                                        <span className="text-lg font-mono text-emerald-500/60">{globalStats.hailo.avgWpm} WPM</span>
-                                        <span className="text-[12px] text-emerald-500/40 font-bold uppercase tracking-tighter">Errors: {globalStats.hailo.avgErrors}</span>
+                                        <span className="text-lg font-mono text-emerald-500/60">{(globalStats.hailo || globalStats.arc).avgWpm} WPM</span>
+                                        <span className="text-[12px] text-emerald-500/40 font-bold uppercase tracking-tighter">Errors: {(globalStats.hailo || globalStats.arc).avgErrors}</span>
                                     </div>
                                 </>
                             )}
@@ -148,10 +148,10 @@ window.MobileStatsDashboard = ({ hailoMetrics, classicMetrics, onClose }) => {
                         </div>
                         <span className="text-4xl font-light">{avgHailoWPM}</span>
                         <div className="min-h-[24px]">
-                            {globalStats?.hailo && (
+                            {(globalStats?.hailo || globalStats?.arc) && (
                                 <div className="mt-2 text-[10px] uppercase tracking-wider text-emerald-500/60 font-medium border-t border-emerald-500/10 pt-1 animate-fade-in flex justify-between gap-4">
-                                    <span>Community Avg: {globalStats.hailo.avgWpm} WPM</span>
-                                    <span className="text-emerald-500/40">Err: {globalStats.hailo.avgErrors}</span>
+                                    <span>Community Avg: {(globalStats.hailo || globalStats.arc).avgWpm} WPM</span>
+                                    <span className="text-emerald-500/40">Err: {(globalStats.hailo || globalStats.arc).avgErrors}</span>
                                 </div>
                             )}
                         </div>
