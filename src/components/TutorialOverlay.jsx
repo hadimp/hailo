@@ -96,46 +96,46 @@ window.TutorialOverlay = ({ onComplete, onHome, mobileLayout = false }) => {
                 </div>
             )}
             {stage === 0 && (
-                <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-4' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
-                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-4`}>Instead of hunting for letters, Hailo predicts what you want to type. You only need the four arrow keys.</p>
+                <div className={`animate-fade-in glass-panel ${mobileLayout ? 'py-2.5 px-3' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
+                    <p className={`text-slate-300 ${mobileLayout ? 'text-[13px] leading-tight' : 'text-sm'} mb-2`}>Instead of hunting for letters, Hailo predicts what you want to type. You only need the four arrow keys.</p>
                     <button onClick={() => setStage(1)} className="px-6 py-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 rounded-full font-bold hover:bg-emerald-500/30 transition-colors uppercase tracking-wider text-xs sm:text-base shadow-[0_0_15px_rgba(16,185,129,0.2)]">Got It (Enter)</button>
                 </div>
             )}
             {stage === 1 && (
-                <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-4' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
-                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-3`}>Press the <strong className="text-emerald-300">DOWN Arrow</strong> to flip through layers of predictions.</p>
+                <div className={`animate-fade-in glass-panel ${mobileLayout ? 'py-2.5 px-3' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
+                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-1.5`}>Press the <strong className="text-emerald-300">DOWN Arrow</strong> to flip through layers of predictions.</p>
                     <div className="text-emerald-400/80 font-bold uppercase tracking-widest text-[11px] sm:text-xs animate-pulse border border-emerald-500/30 px-4 py-1.5 rounded-full inline-block text-xs">Press Down Arrow</div>
                     {!mobileLayout && <div className="text-slate-500 text-[10px] uppercase tracking-widest mt-3">Or press Enter to skip</div>}
                 </div>
             )}
             {stage === 2 && (
-                <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-4' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
-                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-3`}>Press <strong className="text-emerald-300">UP, RIGHT, or LEFT</strong> to instantly type the letter in that slot.</p>
+                <div className={`animate-fade-in glass-panel ${mobileLayout ? 'py-2.5 px-3' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
+                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-1.5`}>Press <strong className="text-emerald-300">UP, RIGHT, or LEFT</strong> to instantly type the letter in that slot.</p>
                     <div className="text-emerald-400/80 font-bold uppercase tracking-widest text-[11px] sm:text-xs animate-pulse border border-emerald-500/30 px-4 py-1.5 rounded-full inline-block text-xs">Press Up, Left, Right</div>
                     {!mobileLayout && <div className="text-slate-500 text-[10px] uppercase tracking-widest mt-3">Or press Enter to skip</div>}
                 </div>
             )}
             {stage === 3 && (
-                <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-4' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
-                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-3`}>Press <strong className="text-emerald-300">ENTER</strong> to type a space.</p>
+                <div className={`animate-fade-in glass-panel ${mobileLayout ? 'py-2.5 px-3' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
+                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-1.5`}>Press <strong className="text-emerald-300">ENTER</strong> to type a space.</p>
                     <div className="text-emerald-400/80 font-bold uppercase tracking-widest text-[11px] sm:text-xs animate-pulse border border-emerald-500/30 px-4 py-1.5 rounded-full inline-block text-xs">Press Enter</div>
                 </div>
             )}
             {stage === 4 && (
-                <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-4' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
-                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-3`}>Press and <strong className="text-rose-300">Hold DOWN Arrow</strong> to delete characters.</p>
+                <div className={`animate-fade-in glass-panel ${mobileLayout ? 'py-2.5 px-3' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
+                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-1.5`}>Press and <strong className="text-rose-300">Hold DOWN Arrow</strong> to delete characters.</p>
                     <div className="text-rose-400/80 font-bold uppercase tracking-widest text-[11px] sm:text-xs animate-pulse border border-rose-500/30 px-4 py-1.5 rounded-full inline-block text-xs">Hold Down Arrow</div>
                     {!mobileLayout && <div className="text-slate-500 text-[10px] uppercase tracking-widest mt-3">Clear the text to continue, or press Enter</div>}
                 </div>
             )}
             {stage === 5 && (
-                <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-4' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
-                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-3`}>Use the arrow keys to cycle and type.</p>
+                <div className={`animate-fade-in glass-panel ${mobileLayout ? 'py-2.5 px-3' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
+                    <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-1.5`}>Use the arrow keys to cycle and type.</p>
                     <div className={`text-emerald-300 ${mobileLayout ? 'text-sm' : 'text-sm'}`}>Try typing the word: <span className="text-white font-bold ml-1 tracking-[0.2em] bg-slate-800/80 px-2 py-1 rounded">SUN</span></div>
                 </div>
             )}
             {stage === 6 && (
-                <div className={`animate-fade-in glass-panel ${mobileLayout ? 'p-4' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
+                <div className={`animate-fade-in glass-panel ${mobileLayout ? 'py-2.5 px-3' : 'p-6'} border-emerald-500/30 shadow-2xl w-full`}>
                     <p className={`text-slate-300 ${mobileLayout ? 'text-sm' : 'text-sm'} mb-4`}>You successfully mastered the Hailo paradigm.</p>
                     <button onClick={onComplete} className="px-6 py-2 bg-blue-500/10 text-blue-300 border border-blue-400/50 rounded-full font-bold hover:bg-blue-500/20 transition-colors uppercase tracking-wider shadow-[0_0_15px_rgba(59,130,246,0.15)] pointer-events-auto text-xs sm:text-base">Enter Research Suite</button>
                 </div>
@@ -164,7 +164,7 @@ window.TutorialOverlay = ({ onComplete, onHome, mobileLayout = false }) => {
             {renderMobileHeader()}
             <div className="w-full pointer-events-none relative flex-1">
                 {renderTutorialLegend()}
-                <div className={`w-full pointer-events-auto flex flex-col items-center flex-1 ${mobileLayout ? 'pt-14' : 'pt-64'}`}>
+                <div className={`w-full pointer-events-auto flex flex-col items-center flex-1 ${mobileLayout ? 'pt-[110px]' : 'pt-64'}`}>
                     <HailoCore
                         key={`core-${resetKey}`}
                         isActive={true}
