@@ -160,11 +160,11 @@ window.TutorialOverlay = ({ onComplete, onHome, mobileLayout = false }) => {
     );
 
     return (
-        <div className={`w-full h-full bg-[#0b1120] ${mobileLayout ? '' : 'border-[8px] border-slate-900'} overflow-hidden relative pointer-events-none flex flex-col`}>
+        <div className={`w-full h-full bg-[#0b1120] ${mobileLayout ? 'fixed inset-0' : 'relative border-[8px] border-slate-900'} overflow-hidden pointer-events-none flex flex-col`}>
             {renderMobileHeader()}
             <div className="w-full pointer-events-none relative flex-1">
                 {renderTutorialLegend()}
-                <div className={`w-full h-full ${mobileLayout ? 'pt-[120px] pb-0' : `pt-64 ${isMobile ? 'pb-48' : 'pb-8'}`} pointer-events-auto`}>
+                <div className={`w-full pointer-events-auto flex flex-col items-center flex-1 ${mobileLayout ? 'pt-14' : 'pt-64'}`}>
                     <HailoCore
                         key={`core-${resetKey}`}
                         isActive={true}
@@ -181,7 +181,7 @@ window.TutorialOverlay = ({ onComplete, onHome, mobileLayout = false }) => {
                 </div>
             </div>
             {mobileLayout ? (
-                <div className="shrink-0 w-full bg-slate-900/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-slate-700/80 shadow-[0_-15px_40px_rgba(0,0,0,0.6)] z-50 pt-4 pb-32 sm:py-6 flex flex-col pointer-events-auto">
+                <div className="shrink-0 w-full bg-slate-900/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-slate-700/80 shadow-[0_-15px_40px_rgba(0,0,0,0.6)] z-50 pt-3 pb-3 sm:py-6 flex flex-col pointer-events-auto">
                     <div className="flex justify-center w-full shrink-0 relative overflow-visible">
                         <MobileRemote isMobile={true} activeMode="hailo" setActiveMode={() => { }} embedded={true} />
                     </div>
