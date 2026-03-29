@@ -23,27 +23,6 @@ The Hailo paradigm uses a hierarchical prediction system. Instead of hunting for
 - **Space (Enter/Center):** Submit a space.
 - **Delete (Long-press Down):** Quickly clear characters.
 
-## Key Features
-
-- **Predictive Engine:** Uses bigrams and letter frequencies to suggest the most likely next characters in real-time.
-- **Interactive Tutorial:** A step-by-step guided onboarding experience to help users master the paradigm in minutes.
-- **Research Suite:** A built-in benchmarking tool to compare Hailo performance against a **Classic QWERTY** baseline.
-- **Stats Dashboard:** Tracks Words Per Minute (WPM), accuracy, and total keystrokes to visualize progress.
-- **Mobile Remote:** A companion mobile interface that turns any smartphone into a responsive controller for the Hailo interface.
-
-## Local Development
-
-Since Hailo is built with a CDN-based architecture, you can run it without any complex build steps.
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/hadimp/hailo.git
-   ```
-2. Open `index.html` in your browser, or use a simple local server:
-   ```bash
-   npx serve .
-   ```
-
 ---
 
 *Hailo is currently in a research phase. Anonymous metrics are collected during sessions to help optimize the paradigm.*
