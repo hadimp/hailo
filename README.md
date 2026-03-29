@@ -1,12 +1,14 @@
 # Hailo Paradigm
 
-<div align="center">
-  <p>A faster way to type using only directional inputs, designed for Smart TVs, Game Consoles, and VR devices.</p>
+<p align="center">
+  A faster way to type using only directional inputs, designed for Smart TVs, Game Consoles, and VR devices.
+</p>
 
-  <video src="https://github.com/hadimp/hailo/raw/main/video/typing_w_hailo.mp4" width="100%" controls>
-    Your browser does not support the video tag. You can <a href="video/typing_w_hailo.mp4">view the video here</a>.
-  </video>
-</div>
+<video src="https://raw.githubusercontent.com/hadimp/hailo/main/video/typing_w_hailo.mp4" width="100%" controls muted loop autoplay></video>
+
+<p align="center">
+  <a href="https://github.com/hadimp/hailo/blob/main/video/typing_w_hailo.mp4">View the Demo Video</a>
+</p>
 
 ---
 
