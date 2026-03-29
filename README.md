@@ -4,11 +4,7 @@
   A faster way to type using only directional inputs, designed for Smart TVs, Game Consoles, and VR devices.
 </p>
 
-<video src="https://raw.githubusercontent.com/hadimp/hailo/main/video/typing_w_hailo.mp4" width="100%" controls muted loop autoplay></video>
-
-<p align="center">
-  <a href="https://github.com/hadimp/hailo/blob/main/video/typing_w_hailo.mp4">View the Demo Video</a>
-</p>
+https://github.com/user-attachments/assets/ecd64a64-85e5-4186-a128-cd505203f61d
 
 ---
 
