@@ -33,13 +33,6 @@ The Hailo paradigm uses a hierarchical prediction system. Instead of hunting for
 - **Stats Dashboard:** Tracks Words Per Minute (WPM), accuracy, and total keystrokes to visualize progress.
 - **Mobile Remote:** A companion mobile interface that turns any smartphone into a responsive controller for the Hailo interface.
 
-## Tech Stack
-
-- **Frontend:** React (via CDN for zero-build deployment)
-- **Styling:** Tailwind CSS
-- **Engine:** Custom Trie-based predictor with bigram support
-- **Animation:** CSS Transitions & Framer-like micro-interactions
-
 ## Local Development
 
 Since Hailo is built with a CDN-based architecture, you can run it without any complex build steps.
